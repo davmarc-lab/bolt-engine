@@ -6,6 +6,8 @@
 #include <vector>
 
 class VBO {
+  private:
+    GLuint m_id;
 
   public:
     VBO() = default;
@@ -26,14 +28,14 @@ class VBO {
     }
 
     /**
-     * @brief Binds the VBO.
-     */
-    void bind() const { glBindBuffer(GL_ARRAY_BUFFER, this->m_id); }
-
-    /**
      * @brief Generates the buffer for the VBO.
      */
-    void genBuffer() { glGenBuffers(1, &this->m_id); }
+    inline void genBuffer() { glGenBuffers(1, &this->m_id); }
+
+    /**
+     * @brief Binds the VBO.
+     */
+    inline void bind() const { glBindBuffer(GL_ARRAY_BUFFER, this->m_id); }
 
     /**
      * @brief Sets up the data for the buffer.
@@ -41,7 +43,7 @@ class VBO {
      * @param size The size in bytes of the data.
      * @param usage The usage type, default GL_STATIC_DRAW.
      */
-    void setup(const GLfloat *vertices, GLsizeiptr size, GLenum usage = GL_STATIC_DRAW);
+    void setup(const GLfloat *vertices, const GLsizeiptr &size, const GLenum &usage = GL_STATIC_DRAW);
 
     /**
      * @brief Sets up the data for the buffer.
@@ -50,7 +52,7 @@ class VBO {
      * @param size The size in bytes of the data.
      * @param usage The usage type, default GL_STATIC_DRAW.
      */
-    template <typename T> void setup(const T *vertices, GLsizeiptr size, GLenum usage = GL_STATIC_DRAW) {
+    template <typename T> void setup(const T *vertices, const GLsizeiptr &size, const GLenum &usage = GL_STATIC_DRAW) {
         this->bind();
         glBufferData(GL_ARRAY_BUFFER, size, vertices, usage);
     }
@@ -61,7 +63,7 @@ class VBO {
      * @param vertices A std::vector of something to use as data.
      * @param usage The usage type, default GL_STATIC_DRAW.
      */
-    template <typename T> void setup(const std::vector<T> &vertices, GLenum usage = GL_STATIC_DRAW) {
+    template <typename T> void setup(const std::vector<T> &vertices, const GLenum &usage = GL_STATIC_DRAW) {
         this->bind();
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(T), vertices.data(), usage);
     }
@@ -75,7 +77,7 @@ class VBO {
      * @param offset The offset into the buffer object's data store where data
      *  replacement will begin, measured in bytes.
      */
-    template <typename T> void setupSubData(const T *vertices, GLsizeiptr size, GLintptr offset = 0) {
+    template <typename T> void setupSubData(const T *vertices, const GLsizeiptr &size, const GLintptr &offset = 0) {
         this->bind();
         glBufferSubData(GL_ARRAY_BUFFER, offset, size, vertices);
     }
@@ -88,7 +90,7 @@ class VBO {
      * @param offset The offset into the buffer object's data store where data
      *  replacement will begin, measured in bytes.
      */
-    template <typename T> void setupSubData(const std::vector<T> &vertices, GLintptr offset = 0) {
+    template <typename T> void setupSubData(const std::vector<T> &vertices, const GLintptr &offset = 0) {
         this->bind();
         glBufferSubData(GL_ARRAY_BUFFER, offset, vertices.size() * sizeof(T), vertices.data());
     }
@@ -97,7 +99,4 @@ class VBO {
      * @brief Unbinds the VBO.
      */
     void unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
-
-  private:
-    GLuint m_id{};
 };

@@ -31,10 +31,10 @@ struct VAO {
     void bind() const { glBindVertexArray(this->m_id); }
 
 
-    void linkAttrib(const VBO &vbo, GLuint layout, GLuint components, GLenum type, GLsizei stride, void *offset,
-                    GLboolean normalize = GL_FALSE) const;
+    void linkAttrib(const VBO &vbo, const GLuint& layout, const GLuint& components, const GLenum& type, const GLsizei& stride, void *offset,
+                    const GLboolean& normalize = GL_FALSE) const;
 
-    void linkAttribFast(GLuint layout, GLuint components, GLenum type, GLsizei stride, void *offset, GLboolean normalize = GL_FALSE) const;
+    void linkAttribFast(const GLuint& layout, const GLuint& components, const GLenum& type, const GLsizei& stride, void *offset, const GLboolean& normalize = GL_FALSE) const;
 
     void genVertexArray();
 
