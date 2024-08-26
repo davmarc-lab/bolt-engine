@@ -24,19 +24,19 @@ struct FrameBuffer {
 
     void rescaleRenderBuffer(const float &width, const float &height);
 
-    GLuint bind();
+    GLuint bind() const;
 
-    void unbind();
+    void unbind() const;
 
     inline void setWidth(const float &width) { this->m_width = width; }
 
-    inline float getWidth() { return this->m_width; }
+    inline float getWidth() const { return this->m_width; }
 
     inline void setHeight(const float &height) { this->m_height = height; }
 
-    inline float getHeight() { return this->m_height; }
+    inline float getHeight() const { return this->m_height; }
 
-    inline GLuint getTextureId() { return this->m_tex; }
+    inline GLuint getTextureId() const { return this->m_tex; }
 
     ~FrameBuffer() {
         glDeleteFramebuffers(1, &this->m_fbo);

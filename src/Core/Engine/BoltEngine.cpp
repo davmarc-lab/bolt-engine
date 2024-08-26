@@ -57,7 +57,7 @@ void BoltEngine::run() {
 
 void BoltEngine::stop() { this->m_isRunning = false; }
 
-bool BoltEngine::isRunning() { return (this->m_isRunning && !this->m_Opengl->shouldWindowClose()); }
+bool BoltEngine::isRunning() const { return (this->m_isRunning && !this->m_Opengl->shouldWindowClose()); }
 
 BoltEngine::~BoltEngine() {
     std::cout << "Closing Engine!\n";

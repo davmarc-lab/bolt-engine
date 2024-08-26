@@ -2,16 +2,15 @@
 
 #include "IGPanel.hpp"
 
-#include "../../../../includes/Const.hpp"
-
 #include <mutex>
 
 class ImGuiLeftPanel : public ImGuiPanel {
-    private:
-    inline static ImGuiLeftPanel* pointer = nullptr;
+  private:
+    inline static ImGuiLeftPanel *pointer = nullptr;
     inline static std::mutex mutex;
 
     ImGuiLeftPanel() {}
+
   public:
     ImGuiLeftPanel(ImGuiLeftPanel &other) = delete;
 
@@ -26,8 +25,8 @@ class ImGuiLeftPanel : public ImGuiPanel {
     }
 
     virtual void init() override {
-        this->m_pos = { IG_LEFT_XPOS, IG_LEFT_YPOS };
-        this->m_size = { IG_LEFT_WIDTH, WIN_HEIGHT };
+        this->m_pos = {IG_LEFT_XPOS, IG_LEFT_YPOS};
+        this->m_size = {IG_LEFT_WIDTH, WIN_HEIGHT};
     }
 
     virtual void render() override {

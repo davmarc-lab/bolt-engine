@@ -27,7 +27,7 @@ class BoltEngine : public Engine {
 
     virtual void run() override;
 
-    virtual bool isRunning() override;
+    virtual bool isRunning() const override;
 
     virtual ~BoltEngine() override;
 };

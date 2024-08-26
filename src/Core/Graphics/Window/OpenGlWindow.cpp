@@ -4,8 +4,8 @@
 
 #include "../../Input/KeyboardManager.hpp"
 
-#include "IGPanel/IGFrameBuffer.hpp"
-#include "IGPanel/IGLeftPanel.hpp"
+#include "../ImGui/IGFrameBuffer.hpp"
+#include "../ImGui/IGLeftPanel.hpp"
 
 #include <iostream>
 
@@ -94,9 +94,7 @@ void OpenGlWindow::init() {
     mainFrameBuffer->init();
 }
 
-void OpenGlWindow::pollEvents() {
-    glfwPollEvents();
-}
+void OpenGlWindow::pollEvents() { glfwPollEvents(); }
 
 void OpenGlWindow::render() {
     mainFrameBuffer->bind();

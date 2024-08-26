@@ -43,7 +43,7 @@ void FrameBuffer::rescaleRenderBuffer(const float &width, const float &height) {
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, this->m_rbo);
 }
 
-GLuint FrameBuffer::bind() {
+GLuint FrameBuffer::bind() const {
     glBindFramebuffer(GL_FRAMEBUFFER, this->m_fbo);
 
     glEnable(GL_DEPTH_TEST);
@@ -52,4 +52,4 @@ GLuint FrameBuffer::bind() {
     return this->m_fbo;
 }
 
-void FrameBuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+void FrameBuffer::unbind() const { glBindFramebuffer(GL_FRAMEBUFFER, 0); }

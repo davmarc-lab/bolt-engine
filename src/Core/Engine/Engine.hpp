@@ -16,7 +16,7 @@ class Engine {
 
     virtual void run() = 0;
 
-    virtual bool isRunning() = 0;
+    virtual bool isRunning() const = 0;
 
     virtual ~Engine() {}
 };

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../../../../includes/ImGui.hpp"
-#include "../../../../includes/Structs.hpp"
+#include "../../../includes/Const.hpp"
+#include "../../../includes/ImGui.hpp"
+#include "../../../includes/Structs.hpp"
 
 class ImGuiPanel {
   protected:

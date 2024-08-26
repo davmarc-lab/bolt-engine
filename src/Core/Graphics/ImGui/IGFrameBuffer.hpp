@@ -2,9 +2,7 @@
 
 #include "IGPanel.hpp"
 
-#include "../../../../includes/Const.hpp"
-
-#include "../../Buffers/FrameBuffer.hpp"
+#include "../../../Platform/OpenGl/Buffers/FrameBuffer.hpp"
 
 #include <memory>
 #include <mutex>
