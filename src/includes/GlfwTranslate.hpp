@@ -1,4 +1,4 @@
-#pragma once
+/* #pragma once
 
 #include "KeyboardEnums.hpp"
 #include "OpenGl.hpp"
@@ -58,4 +58,4 @@ class Translator {
     inline static KeyPress translateGLFWKey(int key, int scancode, int action, int mod) {
         return KeyPress{getKey(key), scancode, getAction(action), getMod(mod)};
     }
-};
+}; */

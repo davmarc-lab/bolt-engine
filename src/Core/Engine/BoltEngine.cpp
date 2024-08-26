@@ -1,7 +1,8 @@
 #include "BoltEngine.hpp"
 
-#include "../Event/KeyboardEvent.hpp"
 #include "../Input/KeyboardManager.hpp"
+
+#include <iostream>
 
 auto km = KeyboardManager::instance();
 
@@ -14,7 +15,9 @@ void BoltEngine::init() {
 
 void BoltEngine::handleInput() {
     // Process all key pressed in this frame.
-    KeyboardEvent::instance()->handle(KeyboardManager::instance()->getLastKey());
+    if (km->isKeyPressed(Key::KEY_W) == KeyAction::KEY_PRESS) {
+        std::cout << "W Pressed\n";
+    }
 }
 
 void BoltEngine::update() {}

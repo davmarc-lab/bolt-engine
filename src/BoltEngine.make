@@ -68,6 +68,7 @@ OBJECTS := \
 	$(OBJDIR)/BoltEngine.o \
 	$(OBJDIR)/FrameBuffer.o \
 	$(OBJDIR)/OpenGlWindow.o \
+	$(OBJDIR)/GlfwInput.o \
 	$(OBJDIR)/imgui.o \
 	$(OBJDIR)/imgui_demo.o \
 	$(OBJDIR)/imgui_draw.o \
@@ -143,6 +144,9 @@ $(OBJDIR)/FrameBuffer.o: Core/Graphics/Buffers/FrameBuffer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/OpenGlWindow.o: Core/Graphics/Window/OpenGlWindow.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/GlfwInput.o: Platform/Input/GlfwInput.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/imgui.o: dependencies/include/imgui/imgui.cpp

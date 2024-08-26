@@ -26,6 +26,7 @@ void glfwKeyboardCallback(GLFWwindow *window, int key, int scancode, int action,
     if (key == GLFW_KEY_ESCAPE) {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
+
     // ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mod);
 }
 
@@ -95,7 +96,6 @@ void OpenGlWindow::init() {
 
 void OpenGlWindow::pollEvents() {
     glfwPollEvents();
-    KeyboardManager::instance()->pollKeyPressed();
 }
 
 void OpenGlWindow::render() {
