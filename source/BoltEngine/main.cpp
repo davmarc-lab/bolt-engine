@@ -5,6 +5,5 @@ int main() {
 
     engine->init();
     engine->run();
-    
     return 0;
 }
