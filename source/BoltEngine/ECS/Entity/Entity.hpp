@@ -4,20 +4,22 @@
 
 #include "../../includes/Math.hpp"
 
+#include <memory>
 #include <set>
 #include <type_traits>
 
 class Entity {
   private:
-    unsigned int m_id;
+    const unsigned int m_id;
 
-    std::set<Component> m_components;
+    // TODO : Check if is correct to use unique_ptr 
+    std::set<std::unique_ptr<Component>> m_components;
 
     EntityInfo m_info;
 
   public:
-    inline void setId(const int &id) { this->m_id = id; }
-
+    Entity(const int& id) : m_id(id) {}
+    
     inline const unsigned int &getId() { return this->m_id; }
 
     inline void setPosition(const glm::vec3 &pos) { this->m_info.position = pos; }
@@ -34,9 +36,12 @@ class Entity {
 
     void addComponent(const Component &component);
 
-    template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type * = nullptr> bool removeComponent();
+    template <typename T, std::enable_if_t<std::is_base_of_v<Component, T>> * = nullptr> bool removeComponent() {}
+    
+    template <typename T, std::enable_if_t<std::is_base_of_v<Component, T>> * = nullptr> const T &getSingleComponent() const {}
 
-    template <typename T, typename std::enable_if<std::is_base_of<Component, T>::value>::type * = nullptr> const T &getSingleComponent() const;
+    const std::set<std::unique_ptr<Component>> &getAllComponents() const { return this->m_components; }
 
-    const std::set<Component> &getAllComponents() const { return this->m_components; }
+    // TODO : Change destructor
+    ~Entity() = default;
 };

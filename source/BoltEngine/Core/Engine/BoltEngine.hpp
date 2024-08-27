@@ -7,12 +7,12 @@
 #include <memory>
 
 class BoltEngine : public Engine {
-  private:
+private:
     std::shared_ptr<OpenGlWindow> m_Opengl = OpenGlWindow::instance();
 
     bool m_isRunning;
 
-  public:
+public:
     virtual void init() override;
 
     virtual void prepareLoop() override;
