@@ -10,6 +10,8 @@ class ImGuiPanel {
 
     WinSize m_size;
 
+    bool m_firstDraw = true;
+
   public:
     virtual void init() = 0;
 

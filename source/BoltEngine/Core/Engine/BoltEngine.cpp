@@ -27,10 +27,10 @@ void BoltEngine::render() {
     this->m_Opengl->render();
 
     // ImGui render
-    this->m_Opengl->renderImGui();
+    // this->m_Opengl->renderImGui();
 
     // Create ImGui backup if needed
-    this->m_Opengl->makeGlfwContextBackup();
+    // this->m_Opengl->makeGlfwContextBackup();
 
     // Swap buffer
     this->m_Opengl->swapBuffers();
@@ -38,7 +38,7 @@ void BoltEngine::render() {
 
 void BoltEngine::prepareLoop() {
     this->m_Opengl->pollEvents();
-    this->m_Opengl->prepareImGuiRender();
+    // this->m_Opengl->prepareImGuiRender();
 }
 
 void BoltEngine::run() {

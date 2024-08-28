@@ -4,9 +4,6 @@
 
 #include "../../Input/KeyboardManager.hpp"
 
-#include "../ImGui/IGFrameBuffer.hpp"
-#include "../ImGui/IGLeftPanel.hpp"
-
 #include <iostream>
 
 void glfwErrorCallback(int code, const char *description) {
@@ -72,53 +69,19 @@ void OpenGlWindow::init() {
 
     // Enable V-Sync
     glfwSwapInterval(1);
-
-    // Init ImGui
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    this->m_imGuiIo = &ImGui::GetIO();
-    m_imGuiIo->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-    m_imGuiIo->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
-    m_imGuiIo->ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking Feature
-    // mImGuiIo->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable MultiViewport Feature
-
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
-    ImGui_ImplOpenGL3_Init();
-
-    // init all imgui windows
-    ImGuiLeftPanel::instance()->init();
-    ImGuiFramePanel::instance()->init();
-
-    // main framebuffer
-    mainFrameBuffer->init();
 }
 
-void OpenGlWindow::pollEvents() { glfwPollEvents(); }
+void OpenGlWindow::pollEvents() { 
+    glfwGetWindowSize(this->m_window, &this->m_size.x, &this->m_size.y);
+    glfwPollEvents(); }
 
 void OpenGlWindow::render() {
     glClearColor(0.f, 0.f, 0.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void OpenGlWindow::renderImGui() {
-    // ImGui render
-
-    ImGuiLeftPanel::instance()->render();
-    ImGuiFramePanel::instance()->render();
-
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
 
 void OpenGlWindow::destroy() {
-    mainFrameBuffer.reset();
-
-    // clear imgui
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-
     // clear opengl
     glfwTerminate();
 }

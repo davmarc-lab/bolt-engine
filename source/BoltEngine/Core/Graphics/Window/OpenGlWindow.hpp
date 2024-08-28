@@ -1,7 +1,8 @@
 #pragma once
 
 #include "../../../includes/OpenGl.hpp"
-#include "../../../includes/ImGui.hpp"
+
+#include "../../../includes/Structs.hpp"
 
 #include <memory>
 #include <mutex>
@@ -12,8 +13,8 @@ class OpenGlWindow {
     inline static std::mutex mutex;
 
     GLFWwindow *m_window;
-    GLFWwindow *m_backupContext;
-    ImGuiIO *m_imGuiIo;
+
+    WinSize m_size;
 
     OpenGlWindow() {}
 
@@ -34,27 +35,9 @@ class OpenGlWindow {
 
     inline bool shouldWindowClose() { return glfwWindowShouldClose(this->m_window); }
 
-    inline void prepareImGuiRender() {
-        // Prepare ImGui Render
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-    }
-
     void render();
 
-    void renderImGui();
-
     inline GLFWwindow *getCurentContext() { return this->m_window; }
-
-    inline void makeGlfwContextBackup() {
-        if (this->m_imGuiIo->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-            this->m_backupContext = glfwGetCurrentContext();
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-            glfwMakeContextCurrent(this->m_backupContext);
-        }
-    }
 
     void pollEvents();
 
@@ -62,7 +45,12 @@ class OpenGlWindow {
 
     inline void closeWindow() { glfwSetWindowShouldClose(this->m_window, GL_TRUE); }
 
+    void init();
+
     void destroy();
 
-    void init();
+    inline float getWindowWidth() { return static_cast<float>(this->m_size.x); }
+
+    inline float getWindowHeight() { return static_cast<float>(this->m_size.y); }
+
 };

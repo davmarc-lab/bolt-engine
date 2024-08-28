@@ -2,6 +2,7 @@
 
 #include "IGPanel.hpp"
 
+#include <iostream>
 #include <mutex>
 
 class ImGuiLeftPanel : public ImGuiPanel {
@@ -30,9 +31,13 @@ class ImGuiLeftPanel : public ImGuiPanel {
     }
 
     virtual void render() override {
-        ImGui::SetNextWindowPos(ImVec2(this->m_pos.x, this->m_pos.y));
-        ImGui::SetNextWindowSize(ImVec2(this->m_size.x, this->m_size.y));
         ImGui::Begin("Main");
+
+        if (this->m_firstDraw) {
+            ImGui::SetWindowPos(ImVec2(this->m_pos.x, this->m_pos.y));
+            ImGui::SetWindowSize(ImVec2(this->m_size.x, this->m_size.y));
+            this->m_firstDraw = false;
+        }
 
         ImGui::End();
     }

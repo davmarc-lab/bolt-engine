@@ -42,6 +42,7 @@ public:
     bool removeEntity(const unsigned int &id);
 
     template <typename T, std::enable_if_t<std::is_base_of_v<Component, T>> * = nullptr>
-    void filterEntitiesFromComponent() {
+    inline void filterEntitiesFromComponent() {
+        std::cout << "Not implemented\n";
     }
 };
