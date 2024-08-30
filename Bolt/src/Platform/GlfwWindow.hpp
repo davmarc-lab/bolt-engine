@@ -9,44 +9,43 @@
 #include <GLFW/glfw3.h>
 
 namespace Bolt {
-    class GlfwWindow : public Window {
-    private:
-        inline static std::shared_ptr<GlfwWindow> s_pointer;
-        inline static std::mutex s_mutex;
-        
-        GLFWwindow* m_context = nullptr;
-        std::string m_windowTitle = "a";
+	class GlfwWindow : public Window {
+		private:
+			inline static std::shared_ptr<GlfwWindow> s_pointer;
+			inline static std::mutex s_mutex;
 
-        void init();
-        
-        GlfwWindow() : m_windowTitle("Bolt Engine") {
-            this->setPosition({0, 0});
-            this->setSize({1600, 900});
-            this->init();
-        }
-        
-    public:
-        GlfwWindow(GlfwWindow &other) = delete;
+			GLFWwindow* m_context = nullptr;
+			std::string m_windowTitle = "a";
 
-        void operator=(const GlfwWindow &other) = delete;
-        
-        inline static std::shared_ptr<GlfwWindow> instance() {
-            if (s_pointer == nullptr) {
-                std::shared_ptr<GlfwWindow> copy(new GlfwWindow());
-                copy.swap(s_pointer);
-            }
+			GlfwWindow() : m_windowTitle("Bolt Engine") {
+				this->setPosition({0, 0});
+				this->setSize({1600, 900});
+			}
 
-            return s_pointer;
-        }
+		public:
+			GlfwWindow(GlfwWindow& other) = delete;
 
-        virtual void setVsync(bool enabled) override;
+			void operator=(const GlfwWindow& other) = delete;
 
-        virtual void onUpdate() override;
+			inline static std::shared_ptr<GlfwWindow> instance() {
+				if (s_pointer == nullptr) {
+					std::shared_ptr<GlfwWindow> copy(new GlfwWindow());
+					copy.swap(s_pointer);
+				}
 
-        virtual void onRender() override;
+				return s_pointer;
+			}
 
-        bool shouldWindowClose() const;
+			virtual void setVsync(const bool& enabled) override;
 
-        void destroy() const;
-    };
+			virtual void onUpdate() override;
+
+			virtual void onRender() override;
+
+			void init();
+
+			bool shouldWindowClose() const;
+
+			void destroy() const;
+	};
 }

@@ -6,21 +6,21 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 
 namespace Bolt {
-
 	class BOLT_API Log {
-	private:
-		static std::shared_ptr<spdlog::logger> s_coreLogger;
-		static std::shared_ptr<spdlog::logger> s_clientLogger;
-	public:
-		Log() {}
+		private:
+			static std::shared_ptr<spdlog::logger> s_coreLogger;
+			static std::shared_ptr<spdlog::logger> s_clientLogger;
 
-		~Log() {}
+		public:
+			Log() {}
 
-		static void init();
+			~Log() {}
 
-		static std::shared_ptr<spdlog::logger>& getCoreLogger() { return s_coreLogger; }
+			static void init();
 
-		static std::shared_ptr<spdlog::logger>& getClientLogger() { return s_clientLogger; }
+			static std::shared_ptr<spdlog::logger>& getCoreLogger() { return s_coreLogger; }
+
+			static std::shared_ptr<spdlog::logger>& getClientLogger() { return s_clientLogger; }
 	};
 }
 

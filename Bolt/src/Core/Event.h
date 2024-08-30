@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 class Event {
-public:
-    Event() {}
+	public:
+		Event() {}
 
-    ~Event() = default;
+		~Event() = default;
 };

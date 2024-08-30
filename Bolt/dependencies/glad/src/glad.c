@@ -38,6 +38,8 @@ void _post_call_callback_default_gl(const char *name, void *funcptr, int len_arg
     error_code = glad_glGetError();
 
     if (error_code != GL_NO_ERROR) {
+    	// Needs to test the wrapper debug callback
+        fprintf(stdout, "BOOLT - Do you really nedd this callback?\n");
         fprintf(stderr, "ERROR %d in %s\n", error_code, name);
     }
 }

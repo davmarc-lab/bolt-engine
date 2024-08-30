@@ -3,14 +3,13 @@
 #include <Core/Core.hpp>
 
 namespace Bolt {
-
 	class BOLT_API Application {
-	public:
-		Application() {}
+		public:
+			Application() {}
 
-		void run();
+			void run();
 
-		~Application() {}
+			~Application() {}
 	};
 
 	Application* createApplication();

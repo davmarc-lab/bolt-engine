@@ -3,26 +3,25 @@
 #include <Core/Event.hpp>
 
 namespace Bolt {
-    
-    class Layer {
-    private:
-        bool m_isFocused = false;
-    public:
-        Layer() = default;
+	class Layer {
+		private:
+			bool m_isFocused = false;
 
-        virtual ~Layer() = default;
+		public:
+			Layer() = default;
 
-        const bool& isFocused() const;
+			virtual ~Layer() = default;
 
-        virtual void onAttach() = 0;
+			const bool& isFocused() const;
 
-        virtual void onDetach() = 0;
+			virtual void onAttach() = 0;
 
-        virtual void onUpdate() = 0;
+			virtual void onDetach() = 0;
 
-        virtual void onRender() = 0;
+			virtual void onUpdate() = 0;
 
-        virtual void onEvent(const Event& e) = 0;
-    };
-    
+			virtual void onRender() = 0;
+
+			virtual void onEvent(const Event& e) = 0;
+	};
 }
