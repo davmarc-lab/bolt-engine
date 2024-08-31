@@ -4,7 +4,6 @@
 #include <Platform/GlfwWindow.hpp>
 
 namespace Bolt {
-
 	void LayerManager::addLayer(const std::shared_ptr<Layer>& layer) {
 		this->m_layers.push_back(layer);
 		layer->onAttach();

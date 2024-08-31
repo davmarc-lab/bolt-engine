@@ -4,7 +4,6 @@
 #include <Platform/ImGuiLayer.hpp>
 
 namespace Bolt {
-
 	void ImGuiDockSpace::onEvent(const Event& e) {}
 
 	void ImGuiDockSpace::onRender() {

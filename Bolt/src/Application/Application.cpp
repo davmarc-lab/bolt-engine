@@ -5,14 +5,14 @@
 
 void Bolt::Application::run() {
 	const auto lm = LayerManager::instance();
-
+	
 	// This window is unique.
 	const auto w = GlfwWindow::instance();
 	lm->addLayer(w);
-
+	
 	// Creates ImGui context and create the basic UI
 	ImGuiFactory::createBasicUi();
-
+	
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
 		lm->execute([e](const std::shared_ptr<Layer>& l) { l->onEvent(e); });
