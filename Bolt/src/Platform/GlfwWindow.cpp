@@ -138,7 +138,6 @@ namespace Bolt {
 		// Enable some parameters
 		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
 
-		glfwMaximizeWindow(this->m_context);
 		{
 			int width, height;
 			glfwGetWindowSize(this->m_context, &width, &height);
