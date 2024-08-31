@@ -8,44 +8,47 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "Core/Log.hpp"
+
 namespace Bolt {
 	class GlfwWindow : public Window {
-		private:
-			inline static std::shared_ptr<GlfwWindow> s_pointer;
-			inline static std::mutex s_mutex;
+	private:
+		inline static std::shared_ptr<GlfwWindow> s_pointer;
+		inline static std::mutex s_mutex;
 
-			GLFWwindow* m_context = nullptr;
-			std::string m_windowTitle = "a";
+		GLFWwindow* m_context = nullptr;
+		std::string m_windowTitle = "a";
 
-			GlfwWindow() : m_windowTitle("Bolt Engine") {
-				this->setPosition({0, 0});
-				this->setSize({1600, 900});
+		GlfwWindow() : m_windowTitle("Bolt Engine") {
+			this->setPosition({0, 0});
+			this->setSize({1600, 900});
+			BT_WARN_CORE("You should implement this like a layer so you can create multiple windows.");
+		}
+
+	public:
+		GlfwWindow(GlfwWindow& other) = delete;
+
+		void operator=(const GlfwWindow& other) = delete;
+
+		inline static std::shared_ptr<GlfwWindow> instance() {
+			if (s_pointer == nullptr) {
+				std::shared_ptr<GlfwWindow> copy(new GlfwWindow());
+				copy.swap(s_pointer);
 			}
 
-		public:
-			GlfwWindow(GlfwWindow& other) = delete;
+			return s_pointer;
+		}
 
-			void operator=(const GlfwWindow& other) = delete;
+		virtual void setVsync(const bool& enabled) override;
 
-			inline static std::shared_ptr<GlfwWindow> instance() {
-				if (s_pointer == nullptr) {
-					std::shared_ptr<GlfwWindow> copy(new GlfwWindow());
-					copy.swap(s_pointer);
-				}
+		virtual void onUpdate() override;
 
-				return s_pointer;
-			}
+		virtual void onRender() override;
 
-			virtual void setVsync(const bool& enabled) override;
+		void init();
 
-			virtual void onUpdate() override;
+		bool shouldWindowClose() const;
 
-			virtual void onRender() override;
-
-			void init();
-
-			bool shouldWindowClose() const;
-
-			void destroy() const;
+		void destroy() const;
 	};
 }

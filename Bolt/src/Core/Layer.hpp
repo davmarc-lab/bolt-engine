@@ -1,27 +1,29 @@
 ﻿#pragma once
 
+#include <string>
 #include <Core/Event.hpp>
 
 namespace Bolt {
 	class Layer {
-		private:
-			bool m_isFocused = false;
+	protected:
+		std::string m_layerName;
+		bool m_isFocused = false;
 
-		public:
-			Layer() = default;
+	public:
+		Layer(std::string name);
 
-			virtual ~Layer() = default;
+		virtual ~Layer() = default;
 
-			const bool& isFocused() const;
+		const bool& isFocused() const;
 
-			virtual void onAttach() = 0;
+		virtual void onAttach() {}
 
-			virtual void onDetach() = 0;
+		virtual void onDetach() {}
 
-			virtual void onUpdate() = 0;
+		virtual void onEvent(const Event& e) {}
 
-			virtual void onRender() = 0;
+		virtual void onUpdate() {}
 
-			virtual void onEvent(const Event& e) = 0;
+		virtual void onRender() {}
 	};
 }

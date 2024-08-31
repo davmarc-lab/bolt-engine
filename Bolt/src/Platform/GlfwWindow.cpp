@@ -68,9 +68,8 @@ namespace Bolt {
 	}
 
 	void GlfwWindow::init() {
-		BT_INFO_CORE("Is Better to run GlfwWindow::init() out of the constructor.");
 		// Init GLFW window
-		BT_INFO_CORE("Initializing window called \"{0}\"", this->m_windowTitle);
+		BT_INFO_CORE("Initializing GLFW context");
 		glfwInit();
 
 		// Error callback function must use the logger
@@ -94,7 +93,7 @@ namespace Bolt {
 		glfwMakeContextCurrent(this->m_context);
 
 		// Init glad loader
-		if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 			BT_ERROR_CORE("Failed to initialize GLAD.");
 			glfwTerminate();
 			BT_INFO_CORE("To be replaced with event.");

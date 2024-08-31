@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\Event.h" />
+    <ClInclude Include="src\Core\Event.hpp" />
     <ClInclude Include="src\Core\Layer.hpp" />
     <ClInclude Include="src\Core\Log.hpp" />
     <ClInclude Include="src\Application\Application.hpp" />
@@ -20,13 +20,23 @@
     <ClInclude Include="src\Core\Structs.hpp" />
     <ClInclude Include="src\Core\Window.hpp" />
     <ClInclude Include="src\EntryPoint\EntryPoint.hpp" />
+    <ClInclude Include="src\ImGui\ImGuiLayer.hpp" />
     <ClInclude Include="src\Platform\GlfwWindow.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\glad\src\glad.c" />
+    <ClCompile Include="dependencies\imgui\imgui.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_demo.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_draw.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_tables.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Core\Event.cpp" />
+    <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />
     <ClCompile Include="src\Application\Application.cpp" />
+    <ClCompile Include="src\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Platform\GlfwWindow.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
