@@ -2,7 +2,8 @@
 
 #include <Core/Log.hpp>
 
-#include <iostream>
+#include <format>
+#include <string>
 
 namespace Bolt {
 
@@ -32,28 +33,25 @@ namespace Bolt {
 		}
 	}
 
-	// This should be a macro
-	// const char* prepareErrorMessage(const GLuint& id,
-	// 	const char* message,
-	// 	const GLenum& source,
-	// 	const GLenum& type) {
-	// 	return NULL;
-	// }
-
 	// TODO : Try to implement a macro for the string created (or use streams)
 	void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, const char* message, const void* userParam) {
 		// ignore non-significant error/warning codes
 		if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
-		switch (severity) {
-			case GL_DEBUG_SEVERITY_LOW: BT_WARN_CORE("GLFW Debug Output:\nCode ({0}): {1}\nSource: {2}\nType: {3}\n", id, message, getErrorSource(source), getErrorType(type));
-				break;
-			case GL_DEBUG_SEVERITY_MEDIUM: BT_ERROR_CORE("GLFW Debug Output:\nCode ({0}): {1}\nSource: {2}\nType: {3}\n", id, message, getErrorSource(source), getErrorType(type));
-				break;
-			case GL_DEBUG_SEVERITY_HIGH: BT_CRITICAL_CORE("GLFW Debug Output:\nCode ({0}): {1}\nSource: {2}\nType: {3}\n", id, message, getErrorSource(source), getErrorType(type));
-				break;
-			default: BT_INFO_CORE("GLFW Debug Output:\nCode ({0}): {1}\nSource: {2}\nType: {3}\n", id, message, getErrorSource(source), getErrorType(type));
-				break;
+		// It should be fine using a temporary string to print debug information.
+		{
+			const auto msg = "GLFW Debug Output:\n" + std::string("Code (") + std::to_string(id) + "): " + message + "\n" + "Source: " + getErrorSource(source) + "\n" + "Type: " + getErrorType(type) + "\n" + "File: " + __FILE__ + " (" + std::to_string(__LINE__) + ")";
+
+			switch (severity) {
+				case GL_DEBUG_SEVERITY_LOW: BT_WARN_CORE(msg);
+					break;
+				case GL_DEBUG_SEVERITY_MEDIUM: BT_ERROR_CORE(msg);
+					break;
+				case GL_DEBUG_SEVERITY_HIGH: BT_CRITICAL_CORE(msg);
+					break;
+				default: BT_INFO_CORE(msg);
+					break;
+			}
 		}
 	}
 	#endif
