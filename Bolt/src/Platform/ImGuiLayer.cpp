@@ -1,4 +1,4 @@
-﻿#include "ImGuiLayer.hpp"
+﻿#include <Platform/ImGuiLayer.hpp>
 
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -57,6 +57,8 @@ namespace Bolt {
 	void ImGuiLayer::end() {
 		ImGuiIO& io = ImGui::GetIO();
 		io.DisplaySize = ImVec2(GlfwWindow::instance()->getWidth(), GlfwWindow::instance()->getHeight());
+
+		ImGui::ShowDemoWindow();
 
 		// Rendering
 		ImGui::Render();

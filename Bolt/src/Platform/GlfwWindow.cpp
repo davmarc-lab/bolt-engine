@@ -67,7 +67,20 @@ namespace Bolt {
 		BT_INFO_CORE("Window resized: w={0}, h={1}", width, height);
 	}
 
-	void GlfwWindow::init() {
+	bool GlfwWindow::shouldWindowClose() const { return glfwWindowShouldClose(this->m_context); }
+	
+	void GlfwWindow::setVsync(const bool& enabled) {
+		if (enabled) {
+			glfwSwapInterval(1);
+			BT_INFO_CORE("VSync enabled for Window \"{0}\"", this->m_windowTitle);
+		}
+		else {
+			glfwSwapInterval(0);
+			BT_INFO_CORE("VSync disabled for Window \"{0}\"", this->m_windowTitle);
+		}
+	}
+
+	void GlfwWindow::onAttach() {
 		// Init GLFW window
 		BT_INFO_CORE("Initializing GLFW context");
 		glfwInit();
@@ -142,16 +155,12 @@ namespace Bolt {
 		this->m_window = this->m_context;
 	}
 
-	void GlfwWindow::setVsync(const bool& enabled) {
-		if (enabled) {
-			glfwSwapInterval(1);
-			BT_INFO_CORE("VSync enabled for Window \"{0}\"", this->m_windowTitle);
-		}
-		else {
-			glfwSwapInterval(0);
-			BT_INFO_CORE("VSync disabled for Window \"{0}\"", this->m_windowTitle);
-		}
+	void GlfwWindow::onDetach() {
+		glfwDestroyWindow(this->m_context);
 	}
+	
+	void GlfwWindow::onEvent(const Event& e) { BT_INFO_CORE("No Implementation of Event handling."); }
+
 
 	void GlfwWindow::onUpdate() {
 		glfwPollEvents();
@@ -164,10 +173,4 @@ namespace Bolt {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	bool GlfwWindow::shouldWindowClose() const { return glfwWindowShouldClose(this->m_context); }
-
-	void GlfwWindow::destroy() const {
-		glfwDestroyWindow(this->m_context);
-		glfwTerminate();
-	}
 }

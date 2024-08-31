@@ -1,4 +1,4 @@
-#include "Log.hpp"
+#include <Core/Log.hpp>
 
 namespace Bolt {
 	std::shared_ptr<spdlog::logger> Log::s_coreLogger;

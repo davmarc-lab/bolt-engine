@@ -1,20 +1,22 @@
 ﻿#pragma once
 
 #include <string>
+
 #include <Core/Event.hpp>
 
 namespace Bolt {
+
 	class Layer {
 	protected:
 		std::string m_layerName;
 		bool m_isFocused = false;
 
 	public:
-		Layer(std::string name);
+		explicit Layer(std::string name);
 
 		virtual ~Layer() = default;
 
-		const bool& isFocused() const;
+		bool isFocused() const { return false; }
 
 		virtual void onAttach() {}
 
@@ -26,4 +28,6 @@ namespace Bolt {
 
 		virtual void onRender() {}
 	};
+
+	
 }

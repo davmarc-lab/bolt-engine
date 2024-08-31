@@ -3,12 +3,13 @@
 #include <memory>
 #include <mutex>
 #include <string>
+
 #include <Core/Window.hpp>
+#include <Core/Log.hpp>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Core/Log.hpp"
 
 namespace Bolt {
 	class GlfwWindow : public Window {
@@ -31,6 +32,7 @@ namespace Bolt {
 		void operator=(const GlfwWindow& other) = delete;
 
 		inline static std::shared_ptr<GlfwWindow> instance() {
+			std::lock_guard<std::mutex> lock(s_mutex);
 			if (s_pointer == nullptr) {
 				std::shared_ptr<GlfwWindow> copy(new GlfwWindow());
 				copy.swap(s_pointer);
@@ -38,17 +40,20 @@ namespace Bolt {
 
 			return s_pointer;
 		}
+		
+		bool shouldWindowClose() const;
 
 		virtual void setVsync(const bool& enabled) override;
+		
+		virtual void onAttach() override;
+
+		virtual void onDetach() override;
+
+		virtual void onEvent(const Event& e) override;
 
 		virtual void onUpdate() override;
 
 		virtual void onRender() override;
 
-		void init();
-
-		bool shouldWindowClose() const;
-
-		void destroy() const;
 	};
 }

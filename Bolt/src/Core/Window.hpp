@@ -4,8 +4,10 @@
 
 #include <Core/Event.hpp>
 
+#include <Core/Layer.hpp>
+
 namespace Bolt {
-	class Window {
+	class Window : public Layer {
 	protected:
 		WinPos m_position;
 		WinSize m_size;
@@ -15,7 +17,7 @@ namespace Bolt {
 		void* m_window;
 
 	public:
-		Window() {}
+		Window() : Layer("Glfw Window") {}
 
 		virtual ~Window() {}
 
@@ -35,11 +37,15 @@ namespace Bolt {
 
 		inline void* getCurrentWindow() const { return this->m_window; }
 
-		virtual void onEvent(const Event& e) {}
+		// --- Layer ---
+		virtual void onAttach() override {}
 
-		virtual void onUpdate() {}
+		virtual void onDetach() override {}
 
-		virtual void onRender() {}
+		virtual void onEvent(const Event& e) override {}
 
+		virtual void onUpdate() override {}
+
+		virtual void onRender() override {}
 	};
 }
