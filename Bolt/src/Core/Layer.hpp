@@ -12,7 +12,7 @@ namespace Bolt {
 		bool m_isFocused = false;
 
 	public:
-		explicit Layer(std::string name);
+		explicit Layer(std::string name = "Layer");
 
 		virtual ~Layer() = default;
 
@@ -27,7 +27,10 @@ namespace Bolt {
 		virtual void onUpdate() {}
 
 		virtual void onRender() {}
-	};
 
+		virtual void begin() {}
+
+		virtual void end() {}
+	};
 	
 }

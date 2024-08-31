@@ -2,7 +2,6 @@
 
 #include <Core/Log.hpp>
 
-#include <format>
 #include <string>
 
 namespace Bolt {
@@ -159,7 +158,9 @@ namespace Bolt {
 		glfwDestroyWindow(this->m_context);
 	}
 	
-	void GlfwWindow::onEvent(const Event& e) { BT_INFO_CORE("No Implementation of Event handling."); }
+	void GlfwWindow::onEvent(const Event& e) {
+		// BT_INFO_CORE("No Implementation of Event handling.");
+	}
 
 
 	void GlfwWindow::onUpdate() {

@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include <imgui.h>
 #include <Core/Layer.hpp>
 
 namespace Bolt {
@@ -14,8 +13,8 @@ namespace Bolt {
 
 		virtual void onEvent(const Event& e) override;
 
-		void begin();
+		virtual void begin() override;
 
-		void end();
+		virtual void end() override;
 	};
 }

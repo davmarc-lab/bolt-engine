@@ -3,7 +3,6 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-#include <iostream>
 
 #include <Platform/GlfwWindow.hpp>
 #include <Core/Log.hpp>
@@ -46,7 +45,9 @@ namespace Bolt {
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::onEvent(const Event& e) { BT_INFO_CORE("No Implementation of Event handling."); }
+	void ImGuiLayer::onEvent(const Event& e) {
+		// BT_INFO_CORE("No Implementation of Event handling.");
+	}
 
 	void ImGuiLayer::begin() {
 		ImGui_ImplOpenGL3_NewFrame();
@@ -57,8 +58,6 @@ namespace Bolt {
 	void ImGuiLayer::end() {
 		ImGuiIO& io = ImGui::GetIO();
 		io.DisplaySize = ImVec2(GlfwWindow::instance()->getWidth(), GlfwWindow::instance()->getHeight());
-
-		ImGui::ShowDemoWindow();
 
 		// Rendering
 		ImGui::Render();

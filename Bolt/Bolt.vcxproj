@@ -21,6 +21,9 @@
     <ClInclude Include="src\Core\Structs.hpp" />
     <ClInclude Include="src\Core\Window.hpp" />
     <ClInclude Include="src\EntryPoint\EntryPoint.hpp" />
+    <ClInclude Include="src\Graphic\Buffer\Buffer.hpp" />
+    <ClInclude Include="src\Graphic\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Graphic\ImGui\ImGuiWorkspace.hpp" />
     <ClInclude Include="src\Platform\GlfwWindow.hpp" />
     <ClInclude Include="src\Platform\ImGuiLayer.hpp" />
   </ItemGroup>
@@ -38,6 +41,8 @@
     <ClCompile Include="src\Core\LayerManager.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />
     <ClCompile Include="src\Application\Application.cpp" />
+    <ClCompile Include="src\Graphic\Buffer\VertexArray.cpp" />
+    <ClCompile Include="src\Graphic\ImGui\ImGuiWorkspace.cpp" />
     <ClCompile Include="src\Platform\GlfwWindow.cpp" />
     <ClCompile Include="src\Platform\ImGuiLayer.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
