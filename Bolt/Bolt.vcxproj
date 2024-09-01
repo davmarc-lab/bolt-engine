@@ -19,9 +19,12 @@
     <ClInclude Include="src\Bolt.hpp" />
     <ClInclude Include="src\Core\Core.hpp" />
     <ClInclude Include="src\Core\Structs.hpp" />
+    <ClInclude Include="src\Core\Utils.hpp" />
     <ClInclude Include="src\Core\Window.hpp" />
     <ClInclude Include="src\ECS\Component.hpp" />
     <ClInclude Include="src\ECS\Entity.hpp" />
+    <ClInclude Include="src\ECS\EntityManager.hpp" />
+    <ClInclude Include="src\ECS\System.hpp" />
     <ClInclude Include="src\EntryPoint\EntryPoint.hpp" />
     <ClInclude Include="src\Graphic\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Graphic\Buffer\VertexArray.hpp" />
@@ -45,6 +48,7 @@
     <ClCompile Include="src\Application\Application.cpp" />
     <ClCompile Include="src\ECS\Component.cpp" />
     <ClCompile Include="src\ECS\Entity.cpp" />
+    <ClCompile Include="src\ECS\EntityManager.cpp" />
     <ClCompile Include="src\Graphic\Buffer\VertexArray.cpp" />
     <ClCompile Include="src\Platform\GlfwWindow.cpp" />
     <ClCompile Include="src\Platform\ImGuiFactory.cpp">

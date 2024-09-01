@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <Core/Utils.hpp>
+
 #include <string>
 
 #include <Core/Event.hpp>
@@ -9,14 +11,14 @@ namespace Bolt {
 	class Layer {
 	protected:
 		std::string m_layerName;
-		bool m_isFocused = false;
+		b8 m_isFocused = false;
 
 	public:
 		explicit Layer(std::string name = "Layer");
 
 		virtual ~Layer() = default;
 
-		bool isFocused() const { return false; }
+		b8 isFocused() const { return false; }
 
 		virtual void onAttach() {}
 

@@ -1,5 +1,6 @@
 ﻿#include <Platform/GlfwWindow.hpp>
 
+#include <Core/Utils.hpp>
 #include <Core/Log.hpp>
 
 #include <string>
@@ -33,20 +34,20 @@ namespace Bolt {
 	}
 
 	// TODO : Try to implement a macro for the string created (or use streams)
-	void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, const char* message, const void* userParam) {
+	void glDebugOutput(const GLenum source, const GLenum type, const u32 id, const GLenum severity, const GLsizei length, const char* message, const void* userParam) {
 		// ignore non-significant error/warning codes
 		if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
 		// It should be fine using a temporary string to print debug information.
 		{
-			const auto msg = "GLFW Debug Output:\n" + std::string("Code (") + std::to_string(id) + "): " + message + "\n" + "Source: " + getErrorSource(source) + "\n" + "Type: " + getErrorType(type) + "\n" + "File: " + __FILE__ + " (" + std::to_string(__LINE__) + ")";
+			const auto msg = "GLFW Debug Output:\n" + std::string("Code (") + std::to_string(id) + "): " + message + "\n" + "Source: " + getErrorSource(source) + "\n" + "Type: " + getErrorType(type) + "\n" + "File: " + __FILE__;
 
 			switch (severity) {
-				case GL_DEBUG_SEVERITY_LOW: BT_WARN_CORE(msg);
+				case GL_DEBUG_SEVERITY_LOW: BT_INFO_CORE(msg);
 					break;
-				case GL_DEBUG_SEVERITY_MEDIUM: BT_ERROR_CORE(msg);
+				case GL_DEBUG_SEVERITY_MEDIUM: BT_WARN_CORE(msg);
 					break;
-				case GL_DEBUG_SEVERITY_HIGH: BT_CRITICAL_CORE(msg);
+				case GL_DEBUG_SEVERITY_HIGH: BT_ERROR_CORE(msg);
 					break;
 				default: BT_INFO_CORE(msg);
 					break;
@@ -55,20 +56,20 @@ namespace Bolt {
 	}
 	#endif
 
-	static void glfwErrorCallback(int code, const char* description) { BT_ERROR_CORE("GLFW error ({0} -> {1})", code, description); }
+	static void glfwErrorCallback(i32 code, const char* description) { BT_ERROR_CORE("GLFW error ({0} -> {1})", code, description); }
 
-	static void glfwResizeCallback(GLFWwindow* window, int width, int height) {
+	static void glfwResizeCallback(GLFWwindow* window, i32 width, i32 height) {
 		glViewport(0, 0, width, height);
 
 		if (width < 0 || height < 0) { BT_WARN_CORE("Tried to assign negative window size."); }
 
-		GlfwWindow::instance()->setSize({static_cast<uint16_t>(width), static_cast<uint16_t>(height)});
+		GlfwWindow::instance()->setSize({static_cast<u16>(width), static_cast<u16>(height)});
 		BT_INFO_CORE("Window resized: w={0}, h={1}", width, height);
 	}
 
 	bool GlfwWindow::shouldWindowClose() const { return glfwWindowShouldClose(this->m_context); }
 	
-	void GlfwWindow::setVsync(const bool& enabled) {
+	void GlfwWindow::setVsync(const b8& enabled) {
 		if (enabled) {
 			glfwSwapInterval(1);
 			BT_INFO_CORE("VSync enabled for Window \"{0}\"", this->m_windowTitle);
@@ -139,9 +140,9 @@ namespace Bolt {
 		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
 
 		{
-			int width, height;
+			i32 width, height;
 			glfwGetWindowSize(this->m_context, &width, &height);
-			if (width >= 0 && height >= 0) { this->setSize({static_cast<uint16_t>(width), static_cast<uint16_t>(height)}); }
+			if (width >= 0 && height >= 0) { this->setSize({static_cast<u16>(width), static_cast<u16>(height)}); }
 			else { BT_WARN_CORE("Tried to assign negative window size."); }
 		}
 

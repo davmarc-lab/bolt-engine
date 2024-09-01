@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <Core/Utils.hpp>
 #include <Core/Structs.hpp>
 
 #include <Core/Event.hpp>
@@ -12,7 +13,7 @@ namespace Bolt {
 		WinPos m_position;
 		WinSize m_size;
 
-		bool m_vsync = false;
+		b8 m_vsync = false;
 
 		void* m_window;
 
@@ -21,9 +22,9 @@ namespace Bolt {
 
 		virtual ~Window() {}
 
-		inline const uint16_t& getWidth() const { return this->m_size.width; }
+		inline const u16& getWidth() const { return this->m_size.width; }
 
-		inline const uint16_t& getHeight() const { return this->m_size.height; }
+		inline const u16& getHeight() const { return this->m_size.height; }
 
 		inline void setSize(const WinSize& size) { this->m_size = size; }
 
@@ -33,7 +34,7 @@ namespace Bolt {
 
 		inline virtual void setVsync(const bool& vsync) { this->m_vsync = vsync; }
 
-		inline const bool& isVerticalSyncEnable() const { return this->m_vsync; }
+		inline const b8& isVerticalSyncEnable() const { return this->m_vsync; }
 
 		inline void* getCurrentWindow() const { return this->m_window; }
 

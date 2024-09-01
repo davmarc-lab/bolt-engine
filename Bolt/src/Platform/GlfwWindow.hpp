@@ -1,6 +1,7 @@
 ﻿#pragma once
 
-#include <memory>
+#include <Core/Utils.hpp>
+
 #include <mutex>
 #include <string>
 
@@ -9,7 +10,6 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
 
 namespace Bolt {
 	class GlfwWindow : public Window {
@@ -41,9 +41,9 @@ namespace Bolt {
 			return s_pointer;
 		}
 		
-		bool shouldWindowClose() const;
+		b8 shouldWindowClose() const;
 
-		virtual void setVsync(const bool& enabled) override;
+		virtual void setVsync(const b8& enabled) override;
 		
 		virtual void onAttach() override;
 

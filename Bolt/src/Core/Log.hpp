@@ -3,7 +3,6 @@
 #include <Core/Core.hpp>
 
 #include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
 
 namespace Bolt {
 	class BOLT_API Log {

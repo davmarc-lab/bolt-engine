@@ -1,12 +1,14 @@
 ﻿#pragma once
 
+#include <Core/Utils.hpp>
+
 #include <Core/LayerManager.hpp>
 
 namespace Bolt {
 	class ImGuiDockSpace final : public Layer {
 	private:
 		std::string m_name = "DockSpace";
-		bool m_open = true;
+		b8 m_open = true;
 
 	public:
 		ImGuiDockSpace() = default;

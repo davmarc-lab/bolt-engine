@@ -3,6 +3,10 @@
 #include <Core/LayerManager.hpp>
 #include <Graphic/ImGui/ImGuiFactory.hpp>
 
+#include <ECS/EntityManager.hpp>
+
+#include <iostream>
+
 void Bolt::Application::run() {
 	const auto lm = LayerManager::instance();
 	
@@ -12,7 +16,7 @@ void Bolt::Application::run() {
 	
 	// Creates ImGui context and create the basic UI
 	ImGuiFactory::createBasicUi();
-	
+
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
 		lm->execute([e](const std::shared_ptr<Layer>& l) { l->onEvent(e); });

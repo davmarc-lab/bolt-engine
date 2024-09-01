@@ -1,20 +1,23 @@
 ﻿#pragma once
 
-#include <cstdint>
+#include <Core/Utils.hpp>
 
-class Buffer {
-protected:
-	const uint32_t m_id;
-public:
-	Buffer() = delete;
+namespace Bolt {
+	class Buffer {
+	protected:
+		const u32 m_id;
 
-	Buffer(const uint32_t& id) : m_id(id) {}
+	public:
+		Buffer() = delete;
 
-	virtual ~Buffer() = default;
-	
-	virtual void bind() = 0;
+		Buffer(const u32& id) : m_id(id) {}
 
-	virtual void unbind() = 0;
+		virtual ~Buffer() = default;
 
-	const uint32_t& getId() const { return this->m_id; }
-};
+		virtual void bind() = 0;
+
+		virtual void unbind() = 0;
+
+		const u32& getId() const { return this->m_id; }
+	};
+}
