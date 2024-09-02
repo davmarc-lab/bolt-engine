@@ -1,20 +1,23 @@
 ﻿#pragma once
 
 #include <Core/Utils.hpp>
+#include <Core/Math.hpp>
 
-struct WinPos {
-	u16 x = 0;
-	u16 y = 0;
-};
+namespace Bolt {
+	struct WinPos {
+		u16 x = 0;
+		u16 y = 0;
+	};
 
-struct WinSize {
-	u16 width = 0;
-	u16 height = 0;
-};
+	struct WinSize {
+		u16 width = 0;
+		u16 height = 0;
+	};
 
-// math.hpp
-struct EntityPosition {
-	f32 x = 0.f;
-	f32 y = 0.f;
-	f32 z = 0.f;
-};
+	struct EntityInfo {
+		vec3 position = vec3(0);
+		vec3 scale = vec3(1);
+		vec3 rotation = vec3(0);
+		b8 dirty = false;
+	};
+}

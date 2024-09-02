@@ -18,6 +18,7 @@
     <ClInclude Include="src\Application\Application.hpp" />
     <ClInclude Include="src\Bolt.hpp" />
     <ClInclude Include="src\Core\Core.hpp" />
+    <ClInclude Include="src\Core\Math.hpp" />
     <ClInclude Include="src\Core\Structs.hpp" />
     <ClInclude Include="src\Core\Utils.hpp" />
     <ClInclude Include="src\Core\Window.hpp" />
@@ -25,6 +26,8 @@
     <ClInclude Include="src\ECS\Entity.hpp" />
     <ClInclude Include="src\ECS\EntityManager.hpp" />
     <ClInclude Include="src\ECS\System.hpp" />
+    <ClInclude Include="src\ECS\Transform.hpp" />
+    <ClInclude Include="src\ECS\TransformSystem.hpp" />
     <ClInclude Include="src\EntryPoint\EntryPoint.hpp" />
     <ClInclude Include="src\Graphic\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Graphic\Buffer\VertexArray.hpp" />
@@ -46,9 +49,9 @@
     <ClCompile Include="src\Core\LayerManager.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />
     <ClCompile Include="src\Application\Application.cpp" />
-    <ClCompile Include="src\ECS\Component.cpp" />
     <ClCompile Include="src\ECS\Entity.cpp" />
     <ClCompile Include="src\ECS\EntityManager.cpp" />
+    <ClCompile Include="src\ECS\TransformSystem.cpp" />
     <ClCompile Include="src\Graphic\Buffer\VertexArray.cpp" />
     <ClCompile Include="src\Platform\GlfwWindow.cpp" />
     <ClCompile Include="src\Platform\ImGuiFactory.cpp">
@@ -251,7 +254,7 @@
       <PreprocessorDefinitions>BT_WINDOWS;BT_BUILD_DLL;BT_ENABLE_DEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Bolt\src;$(SolutionDir)Bolt\dependencies\spdlog\include;$(SolutionDir)\Bolt\dependencies\glad\include;$(SolutionDir)\Bolt\dependencies\glfw\include;$(SolutionDir)\Bolt\dependencies\imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Bolt\src;$(SolutionDir)Bolt\dependencies\spdlog\include;$(SolutionDir)Bolt\dependencies\glad\include;$(SolutionDir)Bolt\dependencies\glfw\include;$(SolutionDir)Bolt\dependencies\imgui;$(SolutionDir)Bolt\dependencies\glm;$(SolutionDir)\Bolt\dependencies\glm;%(AdditionalIncludeDirectories);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -272,7 +275,7 @@
       <PreprocessorDefinitions>BT_WINDOWS;BT_BUILD_DLL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Bolt\src;$(SolutionDir)Bolt\dependencies\spdlog\include;$(SolutionDir)\Bolt\dependencies\glad\include;$(SolutionDir)\Bolt\dependencies\glfw\include;$(SolutionDir)\Bolt\dependencies\imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Bolt\src;$(SolutionDir)Bolt\dependencies\spdlog\include;$(SolutionDir)Bolt\dependencies\glad\include;$(SolutionDir)Bolt\dependencies\glfw\include;$(SolutionDir)Bolt\dependencies\imgui;$(SolutionDir)Bolt\dependencies\glm;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -58,7 +58,7 @@
       <PreprocessorDefinitions>BT_WINDOWS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);BT_WINDOWS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Bolt\src;$(SolutionDir)Bolt\dependencies\spdlog\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Bolt\src;$(SolutionDir)Bolt\dependencies\spdlog\include;$(SolutionDir)Bolt\dependencies\glm;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

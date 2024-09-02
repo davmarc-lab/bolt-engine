@@ -7,12 +7,22 @@
 
 #include <iostream>
 
+#include <ECS/Entity.hpp>
+#include "ECS/Transform.hpp"
+
 void Bolt::Application::run() {
 	const auto lm = LayerManager::instance();
 	
 	// This window is unique.
 	const auto w = GlfwWindow::instance();
 	lm->addLayer(w);
+
+	Entity e = Entity();
+	e.addComponent(Transform());
+	e.addComponent(Transform());
+
+	auto s = e.getComponentsOfType<Transform>();
+	std::cout << s.size() << "\n";
 	
 	// Creates ImGui context and create the basic UI
 	ImGuiFactory::createBasicUi();

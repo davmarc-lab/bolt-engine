@@ -1,12 +1,11 @@
-﻿#include <ECS/Entity.hpp>
+﻿#include <vcruntime_typeinfo.h>
+#include <ECS/Entity.hpp>
 
 namespace Bolt {
-	 void Entity::addComponent(const Component& component) {  }
+	void Entity::addComponent(const Component& component) {
+		this->m_components.push_back(component);
+	}
 
 	template <class T>
-	bool Entity::removeSingleComponent() { return false; }
-
-	template <class T>
-	const std::vector<T>& Entity::getComponentsOfType() { return nullptr; }
-
+	const b8& Entity::removeSingleComponent() { return false; }
 }

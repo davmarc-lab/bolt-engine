@@ -3,10 +3,10 @@
 #include <Bolt.hpp>
 
 class Foo : public Bolt::Application {
-	public:
-		Foo() {}
+public:
+	Foo() {}
 
-		~Foo() {}
+	~Foo() {}
 };
 
 Bolt::Application* Bolt::createApplication() { return new Foo(); }

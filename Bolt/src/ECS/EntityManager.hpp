@@ -38,5 +38,8 @@ namespace Bolt {
 		void addEntity (std::shared_ptr<Entity> ett);
 
 		bool removeEntity (const u64& id);
+
+		template <typename T>
+		const std::vector<T>& getComponentsFromType();
 	};
 }

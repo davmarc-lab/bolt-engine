@@ -4,9 +4,9 @@
 
 // Math
 #define BTMIN(a, b)	((a) < (b) ? (a) : (b))
-#define BTMININC(a, b)	((a) <= (b) ? (a) : (b))
+// #define BTMININC(a, b)	((a) <= (b) ? (a) : (b))
 #define BTMAX(a, b)	((a) > (b) ? (a) : (b))
-#define BTMAXINC(a, b)	((a) >= (b) ? (a) : (b))
+// #define BTMAXINC(a, b)	((a) >= (b) ? (a) : (b))
 
 // --- TYPEDEF ---
 
