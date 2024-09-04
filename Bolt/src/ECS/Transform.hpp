@@ -2,16 +2,21 @@
 
 #include <ECS/Component.hpp>
 
+#include <Core/Utils.hpp>
 #include <Core/Math.hpp>
-#include <Core/Structs.hpp>
 
 namespace Bolt {
-	struct Transform : Component {
+	class Transform : public Component {
+	public:
 		vec3 position = vec3(0);
 		vec3 scale = vec3(1);
 		vec3 rotation = vec3(0);
 		b8 dirty = false;
 		mat4 modelMatrix = mat4(1);
+
+		Transform() : Component(ecs::Components::transform) {}
+
+		~Transform() override = default;
 	};
 
 	// inline const b8& isDirty() const { return this->m_info.dirty; }

@@ -2,9 +2,9 @@
 
 #include <Core/Utils.hpp>
 
-#include <map>
 #include <memory>
 #include <mutex>
+#include <unordered_map>
 
 #include <ECS/Entity.hpp>
 
@@ -14,9 +14,10 @@ namespace Bolt {
 		inline static std::shared_ptr<EntityManager> s_pointer = nullptr;
 		inline static std::mutex s_mutex;
 
-		u64 m_currentId = 0;
+		u32 m_currentId = 0;
 
-		std::pmr::map<u64, std::shared_ptr<Entity>> m_entities;
+		std::unordered_map<u32, Entity> m_entities;
+		std::unordered_map<u32, std::vector<Component>> m_ettComponents;
 
 		EntityManager() = default;
 
@@ -35,11 +36,8 @@ namespace Bolt {
 			return s_pointer;
 		}
 
-		void addEntity (std::shared_ptr<Entity> ett);
+		void addEntity (const Entity& ett);
 
-		bool removeEntity (const u64& id);
-
-		template <typename T>
-		const std::vector<T>& getComponentsFromType();
+		bool removeEntity (const u32& id);
 	};
 }

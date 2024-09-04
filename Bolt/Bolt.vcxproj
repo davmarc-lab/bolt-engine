@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\Enums.hpp" />
     <ClInclude Include="src\Core\Event.hpp" />
     <ClInclude Include="src\Core\Layer.hpp" />
     <ClInclude Include="src\Core\LayerManager.hpp" />
