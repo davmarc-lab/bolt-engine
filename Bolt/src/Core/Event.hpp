@@ -4,16 +4,16 @@
 
 namespace Bolt {
 
-	class Event {
-	private:
-		std::string m_name;
+class Event {
+  private:
+    std::string m_name;
 
-	public:
-		explicit Event(std::string name = "Basic Event") : m_name(std::move(name)) {}
+  public:
+    explicit Event(std::string name = "Basic Event") : m_name(std::move(name)) {}
 
-		~Event() = default;
+    ~Event() = default;
 
-		const std::string& getName() const { return this->m_name; }
-	};
+    const std::string &getName() const { return this->m_name; }
+};
 
-}
+} // namespace Bolt
