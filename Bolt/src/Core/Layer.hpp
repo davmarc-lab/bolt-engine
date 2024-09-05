@@ -1,10 +1,11 @@
 ﻿#pragma once
 
-#include <Core/Utils.hpp>
+#include "Utils.hpp"
+
+#include "Event.hpp"
 
 #include <string>
 
-#include <Core/Event.hpp>
 
 namespace Bolt {
 

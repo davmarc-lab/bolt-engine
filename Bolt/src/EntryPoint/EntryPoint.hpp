@@ -1,7 +1,5 @@
 #pragma once
 
-#ifdef BT_WINDOWS
-
 extern Bolt::Application* Bolt::createApplication();
 
 int main(int argc, char** argv) {
@@ -12,4 +10,3 @@ int main(int argc, char** argv) {
 	delete app;
 }
 
-#endif

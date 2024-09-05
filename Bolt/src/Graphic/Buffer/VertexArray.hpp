@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include <Graphic/Buffer/Buffer.hpp>
+#include "Buffer.hpp"
 
-#include <Core/Utils.hpp>
+#include "../../Core/Utils.hpp"
 
 namespace Bolt {
 	class VertexArray : public Buffer {

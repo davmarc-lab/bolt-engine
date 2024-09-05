@@ -1,4 +1,4 @@
-﻿#include <Graphic/Buffer/VertexArray.hpp>
+﻿#include "VertexArray.hpp"
 
 namespace Bolt {
 	

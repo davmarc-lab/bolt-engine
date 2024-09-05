@@ -398,6 +398,7 @@ FodyWeavers.xsd
 *.sln.iml
 
 bin
+bin-int
 
 imgui.ini
 

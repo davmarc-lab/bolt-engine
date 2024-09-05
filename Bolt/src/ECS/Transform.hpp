@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include <ECS/Component.hpp>
+#include "Component.hpp"
 
-#include <Core/Utils.hpp>
-#include <Core/Math.hpp>
+#include "../Core/Utils.hpp"
+#include "../Core/Math.hpp"
 
 namespace Bolt {
 	class Transform : public Component {

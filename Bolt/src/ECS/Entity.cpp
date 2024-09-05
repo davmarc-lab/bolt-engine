@@ -1,5 +1,4 @@
-﻿#include <vcruntime_typeinfo.h>
-#include <ECS/Entity.hpp>
+﻿#include "../ECS/Entity.hpp"
 
 namespace Bolt {
 	template <class T>

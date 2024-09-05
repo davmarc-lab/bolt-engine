@@ -1,7 +1,6 @@
-﻿#include <Core/LayerManager.hpp>
+﻿#include "LayerManager.hpp"
 
-#include <Core/Log.hpp>
-#include <Platform/GlfwWindow.hpp>
+#include "../Platform/GlfwWindow.hpp"
 
 namespace Bolt {
 	void LayerManager::addLayer(const std::shared_ptr<Layer>& layer) {

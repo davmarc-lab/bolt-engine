@@ -1,11 +1,10 @@
-﻿#include <Platform/ImGuiLayer.hpp>
+﻿#include "ImGuiLayer.hpp"
 
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
+#include "../../dependencies/imgui/imgui.h"
+#include "../../dependencies/imgui/imgui_impl_glfw.h"
+#include "../../dependencies/imgui/imgui_impl_opengl3.h"
 
-#include <Platform/GlfwWindow.hpp>
-#include <Core/Log.hpp>
+#include "GlfwWindow.hpp"
 
 namespace Bolt {
 	void ImGuiLayer::onAttach() {

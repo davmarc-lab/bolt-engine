@@ -3,13 +3,9 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
 // glm library has a problem with absolute patterns
-#include "../dependencies/glm/glm/glm.hpp"
-#include "../dependencies/glm/glm/gtc/quaternion.hpp"
-#include "../dependencies/glm/glm/gtx/quaternion.hpp"
-// #include "../dependencies/glm/glm/gtc/matrix_access.hpp"
-// #include "../dependencies/glm/glm/gtc/matrix_transform.hpp"
-// #include "../dependencies/glm/glm/gtc/type_ptr.hpp"
-#include "../dependencies/glm/glm/gtx/string_cast.hpp"
+#include "../../dependencies/glm/glm/gtc/quaternion.hpp"
+#include "../../dependencies/glm/glm/gtx/quaternion.hpp"
+#include "../../dependencies/glm/glm/gtx/string_cast.hpp"
 
 namespace Bolt {
 	using glm::vec2;

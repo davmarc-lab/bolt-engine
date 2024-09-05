@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include <Core/Utils.hpp>
-#include <Core/Math.hpp>
+#include "Utils.hpp"
+#include "Math.hpp"
 
 namespace Bolt {
 	struct WinPos {

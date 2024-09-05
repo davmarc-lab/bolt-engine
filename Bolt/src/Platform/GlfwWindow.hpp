@@ -1,15 +1,15 @@
 ﻿#pragma once
 
-#include <Core/Utils.hpp>
+#include "../Core/Utils.hpp"
+#include "../Core/Window.hpp"
+#include "../Core/Log.hpp"
 
 #include <mutex>
 #include <string>
 
-#include <Core/Window.hpp>
-#include <Core/Log.hpp>
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "../../dependencies/glad/include/glad/glad.h"
+#include "../../dependencies/glfw/include/GLFW/glfw3.h"
 
 namespace Bolt {
 	class GlfwWindow : public Window {

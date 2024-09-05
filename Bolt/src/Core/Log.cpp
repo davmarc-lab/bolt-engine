@@ -1,6 +1,6 @@
-#include <Core/Log.hpp>
+#include "Log.hpp"
 
-#include <spdlog/sinks/stdout_color_sinks.h>
+#include "../../dependencies/spdlog/include/spdlog/sinks/stdout_color_sinks.h"
 
 namespace Bolt {
 	std::shared_ptr<spdlog::logger> Log::s_coreLogger;

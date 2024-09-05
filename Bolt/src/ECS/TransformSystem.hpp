@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <ECS/System.hpp>
+#include "System.hpp"
 
 namespace Bolt {
 	class TransformSystem : public System {

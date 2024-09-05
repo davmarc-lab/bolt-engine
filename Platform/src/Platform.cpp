@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <Bolt.hpp>
+#include "../../Bolt/src/Bolt.hpp"
 
 class Foo : public Bolt::Application {
 public:

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <Core/Layer.hpp>
+#include "../Core/Layer.hpp"
 
 namespace Bolt {
 	class ImGuiLayer final : public Layer {

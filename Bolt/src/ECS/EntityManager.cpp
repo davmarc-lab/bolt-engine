@@ -1,6 +1,6 @@
-﻿#include <ECS/EntityManager.hpp>
+﻿#include "EntityManager.hpp"
 
-#include "Core/Log.hpp"
+#include "../Core/Log.hpp"
 
 namespace Bolt {
     u32 EntityManager::createEntity() {

@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include <Core/Utils.hpp>
+#include "../../Core/Utils.hpp"
 
-#include <Core/LayerManager.hpp>
+#include "../../Core/LayerManager.hpp"
 
-#include "ECS/EntityManager.hpp"
+#include "../../ECS/EntityManager.hpp"
 
 namespace Bolt {
 	class ImGuiDockSpace final : public Layer {

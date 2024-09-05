@@ -1,7 +1,7 @@
-﻿#include <Graphic/ImGui/ImGuiFactory.hpp>
+﻿#include "../Graphic/ImGui/ImGuiFactory.hpp"
 
-#include <imgui.h>
-#include <Platform/ImGuiLayer.hpp>
+#include "../../dependencies/imgui/imgui.h"
+#include "ImGuiLayer.hpp"
 
 namespace Bolt {
     void ImGuiDockSpace::onEvent(const Event& e) {

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <Core/Enums.hpp>
+#include "../Core/Enums.hpp"
 
 namespace Bolt {
 	class Component {

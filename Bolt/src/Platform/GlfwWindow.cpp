@@ -1,7 +1,7 @@
-﻿#include <Platform/GlfwWindow.hpp>
+﻿#include "GlfwWindow.hpp"
 
-#include <Core/Utils.hpp>
-#include <Core/Log.hpp>
+#include "../Core/Utils.hpp"
+#include "../Core/Log.hpp"
 
 #include <string>
 

@@ -1,11 +1,11 @@
 ﻿#pragma once
 
-#include <Core/Utils.hpp>
-#include <Core/Structs.hpp>
+#include "Utils.hpp"
+#include "Structs.hpp"
 
-#include <Core/Event.hpp>
+#include "Event.hpp"
 
-#include <Core/Layer.hpp>
+#include "Layer.hpp"
 
 namespace Bolt {
 	class Window : public Layer {

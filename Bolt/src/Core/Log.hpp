@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Core/Core.hpp>
+#include "Core.hpp"
 
-#include <spdlog/spdlog.h>
+#include "../../dependencies/spdlog/include/spdlog/spdlog.h"
 
 namespace Bolt {
 	class BOLT_API Log {

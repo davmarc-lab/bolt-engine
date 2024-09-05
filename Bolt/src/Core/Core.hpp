@@ -1,11 +1,15 @@
 #pragma once
 
 #ifdef BT_WINDOWS
-	#ifdef BT_BUILD_DLL
+	#if defined BT_BUILD_DLL || defined __CYGWIN__
 		#define BOLT_API __declspec(dllexport)
 	#else
 		#define BOLT_API __declspec(dllimport)
 	#endif
 #else
-	#error Supported only in windows
+    #if defined  __GNUC__
+        #define BOLT_API __attribute__ ((visibility ("default")))
+    #else
+        #error Platform not supported.
+    #endif
 #endif

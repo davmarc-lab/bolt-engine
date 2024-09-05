@@ -1,12 +1,11 @@
 ﻿#pragma once
 
+#include "../Core/Utils.hpp"
+#include "Component.hpp"
+
 #include <iostream>
-
-#include <Core/Utils.hpp>
-
 #include <vector>
 
-#include <ECS/Component.hpp>
 
 namespace Bolt {
 	class Entity {

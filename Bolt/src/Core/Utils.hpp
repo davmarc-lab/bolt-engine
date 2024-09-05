@@ -28,11 +28,7 @@ typedef float f32;
 typedef double f64;
 
 // Check errors
-#if defined(__clang__) || defined(__GNUC__)
-#define STATIC_ASSERT _Static_assert
-#else
 #define STATIC_ASSERT static_assert
-#endif
 
 STATIC_ASSERT(sizeof(u8) == 1, "Expected u8 to be 1 byte.");
 STATIC_ASSERT(sizeof(i8) == 1, "Expected i8 to be 1 byte.");

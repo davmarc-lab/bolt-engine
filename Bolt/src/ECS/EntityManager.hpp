@@ -1,15 +1,15 @@
 ﻿#pragma once
 
-#include <Core/Utils.hpp>
+#include "../Core/Utils.hpp"
 
 #include <memory>
 #include <mutex>
 #include <unordered_map>
 
-#include <ECS/Entity.hpp>
+#include "Entity.hpp"
 
-#include <ECS/Transform.hpp>
-#include <Core/Log.hpp>
+#include "Transform.hpp"
+#include "../Core/Log.hpp"
 
 namespace Bolt {
     class EntityManager {

@@ -1,15 +1,13 @@
-#include <Application/Application.hpp>
+#include "Application.hpp"
 
-#include <Core/LayerManager.hpp>
-#include <Graphic/ImGui/ImGuiFactory.hpp>
+#include "../Core/LayerManager.hpp"
+#include "../Graphic/ImGui/ImGuiFactory.hpp"
 
-#include <ECS/EntityManager.hpp>
+#include "../ECS/EntityManager.hpp"
 
 #include <iostream>
 
-#include <ECS/Entity.hpp>
-
-#include "ECS/Transform.hpp"
+#include "../ECS/Transform.hpp"
 
 void Bolt::Application::run() {
 	const auto lm = LayerManager::instance();

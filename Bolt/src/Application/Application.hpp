@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/Core.hpp>
+#include "../Core/Core.hpp"
 
 namespace Bolt {
 	class BOLT_API Application {
@@ -14,3 +14,4 @@ namespace Bolt {
 
 	Application* createApplication();
 }
+

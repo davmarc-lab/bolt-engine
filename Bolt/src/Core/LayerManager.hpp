@@ -4,8 +4,8 @@
 #include <mutex>
 #include <vector>
 
-#include <Core/Layer.hpp>
-#include <Platform/GlfwWindow.hpp>
+#include "Layer.hpp"
+#include "../Platform/GlfwWindow.hpp"
 
 namespace Bolt {
 
