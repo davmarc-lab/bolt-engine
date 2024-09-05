@@ -4,6 +4,8 @@
 
 #include <Core/LayerManager.hpp>
 
+#include "ECS/EntityManager.hpp"
+
 namespace Bolt {
 	class ImGuiDockSpace final : public Layer {
 	private:
@@ -23,9 +25,10 @@ namespace Bolt {
 	class ImGuiEntityTree : public Layer {
 	private:
 		std::string m_name = "Entities";
+		u32 m_entities;
 
 	public:
-		ImGuiEntityTree() = default;
+		ImGuiEntityTree();
 
 		~ImGuiEntityTree() override = default;
 

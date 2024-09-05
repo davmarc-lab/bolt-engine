@@ -11,11 +11,12 @@
 namespace Bolt {
 	class Entity {
 	private:
-		// std::vector<std::pair<classid, Component>> or std::map... ????
+		std::string m_name;
 		std::vector<Component> m_components;
 
 	public:
-		explicit Entity() {}
+		explicit Entity(std::string name = "Entity") : m_name(std::move(name)) {
+		}
 
 		~Entity() = default;
 
@@ -26,6 +27,10 @@ namespace Bolt {
 		template <class T>
 		// check if Component is_base_of_v T
 		const b8& removeSingleComponent();
+
+		std::string getName() const { return this->m_name; }
+		
+		void setName(const std::string& name) { this->m_name = name; }
 
 		// // TODO : To implement this function, before you have to implement a way to filter Components without giving a class name (Notes.md)
 		// template <class T>

@@ -1,20 +1,22 @@
 ﻿#include <ECS/EntityManager.hpp>
 
-namespace Bolt {
-	void EntityManager::addEntity(const Entity& ett) {
-		// created new element
-		if (const auto [fst, snd] = this->m_entities.insert(std::make_pair(this->m_currentId, ett)); snd) {
-			// add all components that an entity could have
-			auto [id, comps] = this->m_ettComponents.emplace(this->m_currentId, std::vector<Component>(ett.getComponents()));
-			// const auto& elem = this->m_ettComponents.find(this->m_currentId);
-			// for (const auto& e : elem->second) { std::cout << e.getType() << "\n"; }
-			this->m_currentId++;
-		}
-	}
+#include "Core/Log.hpp"
 
-	bool EntityManager::removeEntity(const u32& id) {
-		auto ec_res = static_cast<bool>(this->m_ettComponents.erase(id));
-		auto e_res = static_cast<bool>(this->m_entities.erase(id));
-		return ec_res && e_res;
-	}
+namespace Bolt {
+    u32 EntityManager::createEntity() {
+        if (this->m_currentId >= ecs::max_entities) {
+            BT_WARN_CORE("Cannot create another entity (MAX_ENTITIES = 512).");
+            return 0;
+        }
+
+        auto [it, res] = this->m_entities.insert(
+            std::make_pair(this->m_currentId, std::make_unique<Entity>("Entity " + std::to_string(this->m_currentId))));
+        return this->m_currentId++;
+    }
+    
+    b8 EntityManager::removeEntity(const u32& id) {
+        const auto ec_res = static_cast<bool>(this->m_ettComponents.erase(id));
+        const auto e_res = static_cast<bool>(this->m_entities.erase(id));
+        return ec_res && e_res;
+    }
 }
