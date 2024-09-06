@@ -34,7 +34,9 @@
     <ClInclude Include="src\Graphic\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Graphic\Buffer\VertexArray.hpp" />
     <ClInclude Include="src\Graphic\ImGui\ImGuiFactory.hpp" />
+    <ClInclude Include="src\Graphic\Renderer\Renderer.hpp" />
     <ClInclude Include="src\Platform\GlfwWindow.hpp" />
+    <ClInclude Include="src\Platform\GlRenderer.hpp" />
     <ClInclude Include="src\Platform\ImGuiLayer.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +58,7 @@
     <ClCompile Include="src\ECS\TransformSystem.cpp" />
     <ClCompile Include="src\Graphic\Buffer\VertexArray.cpp" />
     <ClCompile Include="src\Platform\GlfwWindow.cpp" />
+    <ClCompile Include="src\Platform\GlRenderer.cpp" />
     <ClCompile Include="src\Platform\ImGuiFactory.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>

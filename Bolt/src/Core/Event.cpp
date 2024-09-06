@@ -1,4 +1,4 @@
-﻿#include "../Core/Event.hpp"
+﻿#include "Event.hpp"
 
 namespace Bolt {
 	void EventDispatcher::subscribe(const Event &event, EventCallback &&callback) {

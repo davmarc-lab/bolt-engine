@@ -14,9 +14,9 @@ namespace Bolt {
 
 		virtual ~Buffer() = default;
 
-		virtual void bind() = 0;
+		virtual void bind() const {}
 
-		virtual void unbind() = 0;
+		virtual void unbind() const {}
 
 		const u32& getId() const { return this->m_id; }
 	};

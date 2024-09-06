@@ -8,8 +8,8 @@ namespace Bolt {
 	public:
 		VertexArray(const u32& id) : Buffer(id) {}
 
-		virtual void bind() override {}
+		virtual void bind() const override {}
 
-		virtual void unbind() override {}
+		virtual void unbind() const override {}
 	};
 }
