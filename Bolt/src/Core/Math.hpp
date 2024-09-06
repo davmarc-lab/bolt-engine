@@ -53,5 +53,5 @@ namespace Bolt {
 	
 	using glm::to_string;
 
-	constexpr auto identity = mat4(1);
+	BT_CONSTEXPR auto identity = mat4(1);
 }

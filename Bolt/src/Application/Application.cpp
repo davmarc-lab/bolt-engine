@@ -9,33 +9,46 @@
 
 #include "../ECS/Transform.hpp"
 
+class Foo {
+public:
+	Foo() = default;
+
+	void handle(Bolt::Event e) { if (e == Bolt::events::input::KeyPressedEvent) { std::cout << "IN " << e.getType() << "\n"; } }
+};
+
 void Bolt::Application::run() {
-    const auto lm = LayerManager::instance();
+	const auto lm = LayerManager::instance();
 
-    // This window is unique.
-    const auto w = GlfwWindow::instance();
-    lm->addLayer(w);
+	// This window is unique.
+	const auto w = GlfwWindow::instance();
+	lm->addLayer(w);
 
-    EntityManager::instance()->createEntity();
-    EntityManager::instance()->createEntity();
-    EntityManager::instance()->createEntity();
-    std::cout << EntityManager::instance()->addComponent(0, ecs::Components::transform) << "\n";
-    std::cout << EntityManager::instance()->addComponent(1, {ecs::Components::transform, ecs::Components::render}) << "\n";
+	auto ed = EventDispatcher::instance();
+	auto f = Foo();
 
-    // Creates ImGui context and create the basic UI
-    ImGuiFactory::createBasicUi();
+	ed->subscribe(events::input::KeyPressedEvent, [&f](auto &&ph1) { f.t handle(ph1); });
+	ed->post(events::input::KeyPressedEvent);
 
-    while (!w->shouldWindowClose()) {
-        auto e = Event();
-        lm->execute([e](const std::shared_ptr<Layer> &l) { l->onEvent(e); });
+	EntityManager::instance()->createEntity();
+	EntityManager::instance()->createEntity();
+	EntityManager::instance()->createEntity();
+	std::cout << EntityManager::instance()->addComponent(0, ecs::Components::transform) << "\n";
+	std::cout << EntityManager::instance()->addComponent(1, {ecs::Components::transform, ecs::Components::render}) << "\n";
 
-        lm->execute([](const std::shared_ptr<Layer> &l) { l->onUpdate(); });
+	// Creates ImGui context and create the basic UI
+	ImGuiFactory::createBasicUi();
 
-        // Before rendering operations
-        lm->execute([](const std::shared_ptr<Layer> &l) { l->begin(); });
-        lm->execute([](const std::shared_ptr<Layer> &l) { l->onRender(); });
-        // After rendering operations
-        lm->execute([](const std::shared_ptr<Layer> &l) { l->end(); });
-    }
-    lm->execute([](const std::shared_ptr<Layer> &l) { l->onDetach(); });
+	while (!w->shouldWindowClose()) {
+		auto e = Event();
+		lm->execute([e](const std::shared_ptr<Layer> &l) { l->onEvent(e); });
+
+		lm->execute([](const std::shared_ptr<Layer> &l) { l->onUpdate(); });
+
+		// Before rendering operations
+		lm->execute([](const std::shared_ptr<Layer> &l) { l->begin(); });
+		lm->execute([](const std::shared_ptr<Layer> &l) { l->onRender(); });
+		// After rendering operations
+		lm->execute([](const std::shared_ptr<Layer> &l) { l->end(); });
+	}
+	lm->execute([](const std::shared_ptr<Layer> &l) { l->onDetach(); });
 }

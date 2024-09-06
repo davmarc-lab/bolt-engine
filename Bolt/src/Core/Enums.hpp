@@ -4,7 +4,7 @@
 
 namespace Bolt {
 	namespace ecs {
-		constexpr u32 max_entities = 512;
+		BT_CONSTEXPR u32 MAX_ENTITIES = 512;
 		
 		enum Components {
 			unknown,

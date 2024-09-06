@@ -27,6 +27,10 @@ typedef bool b8;
 typedef float f32;
 typedef double f64;
 
+// constexpression
+#define BT_CONSTEXPR constexpr
+#define BT_AUTOCONST const auto
+
 // Check errors
 #define STATIC_ASSERT static_assert
 
