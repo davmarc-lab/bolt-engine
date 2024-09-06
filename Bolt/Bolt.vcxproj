@@ -32,6 +32,7 @@
     <ClInclude Include="src\ECS\TransformSystem.hpp" />
     <ClInclude Include="src\EntryPoint\EntryPoint.hpp" />
     <ClInclude Include="src\Graphic\Buffer\Buffer.hpp" />
+    <ClInclude Include="src\Graphic\Buffer\ElementBuffer.hpp" />
     <ClInclude Include="src\Graphic\Buffer\VertexArray.hpp" />
     <ClInclude Include="src\Graphic\ImGui\ImGuiFactory.hpp" />
     <ClInclude Include="src\Graphic\Renderer\Renderer.hpp" />
@@ -56,7 +57,9 @@
     <ClCompile Include="src\ECS\Entity.cpp" />
     <ClCompile Include="src\ECS\EntityManager.cpp" />
     <ClCompile Include="src\ECS\TransformSystem.cpp" />
+    <ClCompile Include="src\Graphic\Buffer\ElementBuffer.cpp" />
     <ClCompile Include="src\Graphic\Buffer\VertexArray.cpp" />
+    <ClCompile Include="src\Graphic\Buffer\VertexBuffer.cpp" />
     <ClCompile Include="src\Platform\GlfwWindow.cpp" />
     <ClCompile Include="src\Platform\GlRenderer.cpp" />
     <ClCompile Include="src\Platform\ImGuiFactory.cpp">
@@ -209,6 +212,9 @@
       <AdditionalIncludeDirectories>C:\Users\David\Desktop\BoltEngine\Bolt\src;C:\Users\David\Desktop\BoltEngine\Bolt\dependencies\spdlog\include;C:\Users\David\Desktop\BoltEngine\\Bolt\dependencies\glad\include;C:\Users\David\Desktop\BoltEngine\\Bolt\dependencies\glfw\include;C:\Users\David\Desktop\BoltEngine\\Bolt\dependencies\imgui</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\Graphic\Buffer\VertexBuffer.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

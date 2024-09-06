@@ -5,14 +5,16 @@
 namespace Bolt {
 	class Buffer {
 	protected:
-		const u32 m_id;
+		u32 m_id = 0;
 
 	public:
-		Buffer() = delete;
-
-		Buffer(const u32& id) : m_id(id) {}
+		Buffer() = default;
 
 		virtual ~Buffer() = default;
+
+		virtual void onAttach() {}
+
+		virtual void onDetach() {}
 
 		virtual void bind() const {}
 
