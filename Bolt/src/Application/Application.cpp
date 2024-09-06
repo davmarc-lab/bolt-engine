@@ -26,7 +26,7 @@ void Bolt::Application::run() {
 	auto ed = EventDispatcher::instance();
 	auto f = Foo();
 
-	ed->subscribe(events::input::KeyPressedEvent, [&f](auto &&ph1) { f.t handle(ph1); });
+	ed->subscribe(events::input::KeyPressedEvent, [&f](auto &&ph1) { f.handle(ph1); });
 	ed->post(events::input::KeyPressedEvent);
 
 	EntityManager::instance()->createEntity();
