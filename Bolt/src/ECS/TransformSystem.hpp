@@ -12,6 +12,5 @@ namespace Bolt {
 		~TransformSystem() override = default;
 
 		void onUpdate() override;
-		
 	};
 }

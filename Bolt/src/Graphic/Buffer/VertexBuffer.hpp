@@ -18,8 +18,6 @@ namespace Bolt {
 
 		virtual void onAttach() override;
 
-		virtual void onDetach() override;
-
 		virtual void bind() const override;
 
 		virtual void unbind() const override;

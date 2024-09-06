@@ -5,7 +5,7 @@
 namespace Bolt {
     u32 EntityManager::createEntity() {
         if (this->m_currentId >= ecs::MAX_ENTITIES) {
-            BT_WARN_CORE("Cannot create another entity (MAX_ENTITIES = 512).");
+            BT_WARN_CORE("Cannot create another entity (MAX_ENTITIES = {0}).", ecs::MAX_ENTITIES);
             return 0;
         }
 

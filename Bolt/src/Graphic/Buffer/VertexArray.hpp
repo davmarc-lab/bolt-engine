@@ -20,7 +20,7 @@ namespace Bolt {
 
 		virtual void unbind() const override;
 
-		void linkVertexBuffer(const VertexBuffer &vbo, const u32 &layout, const i32 &size, const u32& &type, const i32 &stride, void *offset, const b8 &normalize = false) const;
+		void linkVertexBuffer(const VertexBuffer &vbo, const u32 &layout, const i32 &size, const u32& type, const i32 &stride, void *offset, const b8 &normalize = false) const;
 
 		void linkAttribFast(const u32 &layout, const i32 &size, const u32 &type, const i32 &stride, void *offset, const b8 &normalize = false) const;
 

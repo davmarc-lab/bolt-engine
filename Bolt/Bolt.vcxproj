@@ -27,6 +27,7 @@
     <ClInclude Include="src\ECS\Component.hpp" />
     <ClInclude Include="src\ECS\Entity.hpp" />
     <ClInclude Include="src\ECS\EntityManager.hpp" />
+    <ClInclude Include="src\ECS\Render.hpp" />
     <ClInclude Include="src\ECS\System.hpp" />
     <ClInclude Include="src\ECS\Transform.hpp" />
     <ClInclude Include="src\ECS\TransformSystem.hpp" />

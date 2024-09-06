@@ -9,6 +9,7 @@
 
 #include "../Core/Log.hpp"
 #include "Transform.hpp"
+#include "Render.hpp"
 
 namespace Bolt {
 class EntityManager {

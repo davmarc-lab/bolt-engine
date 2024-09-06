@@ -33,7 +33,6 @@ void Bolt::Application::run() {
 	EntityManager::instance()->createEntity();
 	EntityManager::instance()->createEntity();
 	std::cout << EntityManager::instance()->addComponent(0, ecs::Components::transform) << "\n";
-	std::cout << EntityManager::instance()->addComponent(1, {ecs::Components::transform, ecs::Components::render}) << "\n";
 
 	// Creates ImGui context and create the basic UI
 	ImGuiFactory::createBasicUi();

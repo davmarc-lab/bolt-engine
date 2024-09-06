@@ -14,11 +14,4 @@ namespace Bolt {
 
 		const ecs::Components& getType() const { return this->m_type; }
 	};
-
-	class Render : public Component {
-	public:
-		Render() : Component(ecs::render) {}
-
-		~Render() override = default;
-	};
 }

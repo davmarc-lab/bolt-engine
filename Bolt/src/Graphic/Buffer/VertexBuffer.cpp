@@ -17,6 +17,12 @@ namespace Bolt {
 		return *this;
 	}
 
+	void VertexBuffer::onAttach() { glGenBuffers(1, &this->m_id); }
+
+	void VertexBuffer::bind() const { glBindBuffer(GL_ARRAY_BUFFER, this->m_id); }
+
+	void VertexBuffer::unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
+
 	void VertexBuffer::setup(const f32 *vertices, const i64 &size, const u32 &usage = GL_STATIC_DRAW) const {
 		this->bind();
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, usage);

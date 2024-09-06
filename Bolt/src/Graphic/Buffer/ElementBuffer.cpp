@@ -17,6 +17,8 @@ namespace Bolt {
 			glDeleteBuffers(1, &this->m_id);
 	}
 
+	void ElementBuffer::onAttach() { glGenBuffers(1, &this->m_id); }
+
 	void ElementBuffer::bind() const {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->m_id);
 	}

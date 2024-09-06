@@ -16,6 +16,8 @@ namespace Bolt {
 		ElementBuffer &operator=(const ElementBuffer &other) = delete;
 		ElementBuffer &operator=(ElementBuffer &&other) noexcept;
 
+		virtual void onAttach() override;
+
 		virtual void bind() const override;
 
 		virtual void unbind() const override;
