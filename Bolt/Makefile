@@ -85,7 +85,10 @@ OBJECTS := \
 	$(OBJDIR)/Entity.o \
 	$(OBJDIR)/EntityManager.o \
 	$(OBJDIR)/TransformSystem.o \
+	$(OBJDIR)/ElementBuffer.o \
 	$(OBJDIR)/VertexArray.o \
+	$(OBJDIR)/VertexBuffer.o \
+	$(OBJDIR)/GlRenderer.o \
 	$(OBJDIR)/GlfwWindow.o \
 	$(OBJDIR)/ImGuiFactory.o \
 	$(OBJDIR)/ImGuiLayer.o \
@@ -195,7 +198,16 @@ $(OBJDIR)/EntityManager.o: src/ECS/EntityManager.cpp
 $(OBJDIR)/TransformSystem.o: src/ECS/TransformSystem.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/ElementBuffer.o: src/Graphic/Buffer/ElementBuffer.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/VertexArray.o: src/Graphic/Buffer/VertexArray.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/VertexBuffer.o: src/Graphic/Buffer/VertexBuffer.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/GlRenderer.o: src/Platform/GlRenderer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlfwWindow.o: src/Platform/GlfwWindow.cpp

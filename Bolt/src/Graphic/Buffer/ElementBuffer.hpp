@@ -38,7 +38,7 @@ namespace Bolt {
 		 * @param usage The usage type.
 		 */
 		template <typename T>
-		void setup(const T *indices, const i64 &size, const u32 &usage);
+		void setup(const T *indices, const i64 &size, const u32 &usage = buffers::DEFAULT_USAGE);
 
 		/**
 		 * @brief Sets up the data for the buffer.
@@ -47,6 +47,6 @@ namespace Bolt {
 		 * @param usage The usage type.
 		 */
 		template <typename T>
-		void setup(const std::vector<T> &indices, const u32 &usage);
+		void setup(const std::vector<T> &indices, const u32 &usage = buffers::DEFAULT_USAGE);
 	};
 }

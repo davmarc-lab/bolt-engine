@@ -3,6 +3,10 @@
 #include "../../Core/Utils.hpp"
 
 namespace Bolt {
+    namespace buffers {
+        BT_AUTOCONST DEFAULT_USAGE = 0;
+    }
+
 	class Buffer {
 	protected:
 		u32 m_id = 0;

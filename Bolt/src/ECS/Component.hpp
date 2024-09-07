@@ -8,7 +8,9 @@ namespace Bolt {
 		ecs::Components m_type;
 
 	public:
-		Component(const ecs::Components& t = ecs::unknown) : m_type(t) {}
+		Component(const ecs::Components& t) : m_type(t) {}
+
+        Component() : Component(ecs::unknown) {}
 
 		virtual ~Component() = default;
 

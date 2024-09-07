@@ -1,5 +1,7 @@
 ﻿#include "VertexBuffer.hpp"
 
+#include <utility>
+
 #include "../../../dependencies/glad/include/glad/glad.h"
 
 namespace Bolt {
@@ -23,31 +25,31 @@ namespace Bolt {
 
 	void VertexBuffer::unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
-	void VertexBuffer::setup(const f32 *vertices, const i64 &size, const u32 &usage = GL_STATIC_DRAW) const {
+	void VertexBuffer::setup(const f32 *vertices, const i64 &size, const u32 &usage) const {
 		this->bind();
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, usage);
 	}
 
 	template <typename T>
-	void VertexBuffer::setup(const T *vertices, const i64 &size, const u32 &usage = GL_STATIC_DRAW) {
+	void VertexBuffer::setup(const T *vertices, const i64 &size, const u32 &usage) {
 		this->bind();
-		glBufferData(GL_ARRAY_BUFFER, size, vertices, usage);
+		glBufferData(GL_ARRAY_BUFFER, size, vertices, usage == buffers::DEFAULT_USAGE ? GL_STATIC_DRAW : usage);
 	}
 
 	template <typename T>
-	void VertexBuffer::setup(const std::vector<T> &vertices, const u32 &usage = GL_STATIC_DRAW) {
+	void VertexBuffer::setup(const std::vector<T> &vertices, const u32 &usage) {
 		this->bind();
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(T), vertices.data(), usage);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(T), vertices.data(), usage == buffers::DEFAULT_USAGE ? GL_STATIC_DRAW : usage);
 	}
 
 	template <typename T>
-	void VertexBuffer::setupSubData(const T *vertices, const i64 &size, const i64 &offset = 0) {
+	void VertexBuffer::setupSubData(const T *vertices, const i64 &size, const i64 &offset) {
 		this->bind();
 		glBufferSubData(GL_ARRAY_BUFFER, offset, size, vertices);
 	}
 
 	template <typename T>
-	void VertexBuffer::setupSubData(const std::vector<T> &vertices, const i64 &offset = 0) {
+	void VertexBuffer::setupSubData(const std::vector<T> &vertices, const i64 &offset) {
 		this->bind();
 		glBufferSubData(GL_ARRAY_BUFFER, offset, vertices.size() * sizeof(T), vertices.data());
 	}

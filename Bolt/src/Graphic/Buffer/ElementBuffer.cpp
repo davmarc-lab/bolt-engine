@@ -1,6 +1,9 @@
 ﻿#include "ElementBuffer.hpp"
 
+#include <utility>
+
 #include "../../../dependencies/glad/include/glad/glad.h"
+#include "Buffer.hpp"
 
 namespace Bolt {
 	ElementBuffer &ElementBuffer::operator=(ElementBuffer &&other) noexcept {
@@ -27,15 +30,15 @@ namespace Bolt {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
-	void ElementBuffer::setup(const f32 *indices, const i64 &size, const u32 &usage = GL_STATIC_DRAW) const {
+	void ElementBuffer::setup(const f32 *indices, const i64 &size, const u32 &usage) const {
 		this->bind();
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, usage);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, usage == buffers::DEFAULT_USAGE ? GL_STATIC_DRAW : usage);
 	}
 
 	template <typename T>
 	void ElementBuffer::setup(const T *indices, const i64 &size, const u32 &usage) {
 		this->bind();
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, usage);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, usage == buffers::DEFAULT_USAGE ? GL_STATIC_DRAW : usage);
 	}
 
 	template <typename T>
@@ -44,4 +47,4 @@ namespace Bolt {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(T), indices.data(), usage);
 	}
 
-}
+} // namespace Bolt
