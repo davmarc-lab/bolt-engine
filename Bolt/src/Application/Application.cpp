@@ -4,19 +4,20 @@
 #include "../Graphic/ImGui/ImGuiFactory.hpp"
 
 #include "../ECS/EntityManager.hpp"
+#include "../ECS/System.hpp"
 
 #include <iostream>
 
-#include "../ECS/Transform.hpp"
-
-class Foo {
-public:
-	Foo() = default;
-
-	void handle(Bolt::Event e) { if (e == Bolt::events::input::KeyPressedEvent) { std::cout << "IN " << e.getType() << "\n"; } }
-};
-
 void Bolt::Application::run() {
+	class Foo {
+	public:
+		Foo() = default;
+
+		void handle(Bolt::Event e) {
+			systems::updateEntityPosition(0, vec3(1, 0, 0));
+		}
+	};
+
 	const auto lm = LayerManager::instance();
 
 	// This window is unique.
@@ -26,13 +27,25 @@ void Bolt::Application::run() {
 	auto ed = EventDispatcher::instance();
 	auto f = Foo();
 
-	ed->subscribe(events::input::KeyPressedEvent, [&f](auto &&ph1) { f.handle(ph1); });
+	ed->subscribe(events::Update, [&f](auto &&ph1) { f.handle(ph1); });
 	ed->post(events::input::KeyPressedEvent);
 
 	EntityManager::instance()->createEntity();
 	EntityManager::instance()->createEntity();
 	EntityManager::instance()->createEntity();
-	std::cout << EntityManager::instance()->addComponent(0, ecs::Components::transform) << "\n";
+
+	// modify addComponent need ot use templates (we trying again)
+	EntityManager::instance()->addComponent<Transform>(0);
+	EntityManager::instance()->addComponent<Render>(1);
+	EntityManager::instance()->addComponent<Render>(2);
+
+    for (auto e : EntityManager::instance()->getEntitiesFromComponent<Transform>()) {
+        systems::transform::updateEntityPosition(e, vec3(1, 0, 0));
+    }
+
+    for (auto e : EntityManager::instance()->getEntitiesFromComponent<Transform>()) {
+        std::cout << to_string(EntityManager::instance()->getEntityComponent<Transform>(e)->position) << std::endl;
+    }
 
 	// Creates ImGui context and create the basic UI
 	ImGuiFactory::createBasicUi();
@@ -46,8 +59,8 @@ void Bolt::Application::run() {
 		// Before rendering operations
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->begin(); });
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->onRender(); });
-		// After rendering operations
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->end(); });
+        // After rendering operations
 	}
 	lm->execute([](const std::shared_ptr<Layer> &l) { l->onDetach(); });
 }

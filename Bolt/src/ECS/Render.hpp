@@ -13,7 +13,7 @@ namespace Bolt {
 		std::unique_ptr<std::vector<vec4>> colors;
 		std::unique_ptr<std::vector<u32>> indices;
 
-		Render() : Component(ecs::Components::render) {}
+		Render() = default;
 
 		~Render() override = default;
 	};

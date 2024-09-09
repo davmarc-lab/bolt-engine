@@ -1,12 +1,29 @@
 ﻿#pragma once
 
-namespace Bolt {
-	class System {
-	public:
-		System() = default;
+#include "../Core/Math.hpp"
+#include "../Core/Utils.hpp"
+#include "EntityManager.hpp"
+#include "Transform.hpp"
 
-		virtual ~System() = default;
-		
-		inline virtual void onUpdate() {}
-	};
-}
+namespace Bolt {
+	namespace systems {
+		namespace transform {
+			inline void updateEntityPosition(const u32 &id, const vec3 &pos) {
+				auto e = EntityManager::instance()->getEntityComponent<Transform>(id);
+				if (e != nullptr)
+					e->setRotation(pos);
+			}
+
+			inline void updateEntityRotation(const u32 &id, const vec3 &rot) {
+				auto e = EntityManager::instance()->getEntityComponent<Transform>(id);
+				if (e != nullptr)
+					e->setRotation(rot);
+			}
+		} // namespace transform
+
+		namespace render {
+            inline void renderEntities() {}
+		}
+
+	} // namespace systems
+} // namespace Bolt

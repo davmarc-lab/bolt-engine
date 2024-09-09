@@ -4,16 +4,10 @@
 
 namespace Bolt {
 	class Component {
-	protected:
-		ecs::Components m_type;
-
 	public:
-		Component(const ecs::Components& t) : m_type(t) {}
 
-        Component() : Component(ecs::unknown) {}
+        Component() = default;
 
 		virtual ~Component() = default;
-
-		const ecs::Components& getType() const { return this->m_type; }
 	};
 }

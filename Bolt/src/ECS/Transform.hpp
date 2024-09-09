@@ -2,8 +2,8 @@
 
 #include "Component.hpp"
 
-#include "../Core/Utils.hpp"
 #include "../Core/Math.hpp"
+#include "../Core/Utils.hpp"
 
 namespace Bolt {
 	class Transform : public Component {
@@ -14,35 +14,39 @@ namespace Bolt {
 		b8 dirty = false;
 		mat4 modelMatrix = mat4(1);
 
-		Transform() : Component(ecs::Components::transform) {}
+		Transform() = default;
 
 		~Transform() override = default;
+
+		inline const b8 &isDirty() const { return this->dirty; }
+
+		inline void setDirty(const b8 &dirty) { this->dirty = true; }
+
+		inline const vec3 &getPosition() const { return this->position; }
+
+		inline void setPosition(const vec3 &pos) {
+			this->position = pos;
+			this->dirty = true;
+		}
+
+		inline void addPosition(const vec3 &pos) {
+			this->setPosition(this->position += pos);
+		}
+
+		inline const vec3 &getScale() const { return this->scale; }
+
+		inline void setScale(const vec3 &scale) {
+			this->scale = scale;
+			this->dirty = true;
+		}
+
+		inline const vec3 &getRotation() const { return this->rotation; }
+
+		inline void setRotation(const vec3 &rotation) {
+			this->rotation = rotation;
+			this->dirty = true;
+		}
 	};
-
-	// inline const b8& isDirty() const { return this->m_info.dirty; }
-
-	// inline void setDirty(const b8& dirty) { this->m_info.dirty = true; }
-
-	// inline const vec3& getPosition() const { return this->m_info.position; }
-
-	// inline void setPosition(const vec3& pos) {
-	// 	this->m_info.position = pos;
-	// 	this->m_info.dirty = true;
-	// }
-
-	// inline const vec3& getScale() const { return this->m_info.scale; }
-
-	// inline void setScale(const vec3& scale) {
-	// 	this->m_info.scale = scale;
-	// 	this->m_info.dirty = true;
-	// }
-
-	// inline const vec3& getRotation() const { return this->m_info.rotation; }
-
-	// inline void setRotation(const vec3& rotation) {
-	// 	this->m_info.rotation = rotation;
-	// 	this->m_info.dirty = true;
-	// }
 
 	// inline const mat4& getModelMatrix() {
 	// 	if (this->m_info.dirty) {
@@ -53,4 +57,4 @@ namespace Bolt {
 	// }
 
 	// inline void setModelMatrix(const mat4& mat) { this->m_modelMatrix = mat; }
-}
+} // namespace Bolt

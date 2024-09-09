@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "Utils.hpp"
+
 #define GLM_ENABLE_EXPERIMENTAL
 
 // glm library has a problem with absolute patterns

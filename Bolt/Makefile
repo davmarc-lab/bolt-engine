@@ -82,9 +82,7 @@ OBJECTS := \
 	$(OBJDIR)/Layer.o \
 	$(OBJDIR)/LayerManager.o \
 	$(OBJDIR)/Log.o \
-	$(OBJDIR)/Entity.o \
 	$(OBJDIR)/EntityManager.o \
-	$(OBJDIR)/TransformSystem.o \
 	$(OBJDIR)/ElementBuffer.o \
 	$(OBJDIR)/VertexArray.o \
 	$(OBJDIR)/VertexBuffer.o \
@@ -189,13 +187,7 @@ $(OBJDIR)/LayerManager.o: src/Core/LayerManager.cpp
 $(OBJDIR)/Log.o: src/Core/Log.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/Entity.o: src/ECS/Entity.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/EntityManager.o: src/ECS/EntityManager.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/TransformSystem.o: src/ECS/TransformSystem.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ElementBuffer.o: src/Graphic/Buffer/ElementBuffer.cpp

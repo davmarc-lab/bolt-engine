@@ -2,6 +2,7 @@
 
 #include "../Core/Utils.hpp"
 
+#include <algorithm>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
@@ -22,8 +23,9 @@ namespace Bolt {
 		u32 m_currentId = 0;
 
 		std::map<u32, std::unique_ptr<Entity>> m_entities;
-		std::map<u32, std::vector<std::unique_ptr<Component>>> m_ettComponents;
-        // std::unordered_map<Component, std::vector<u32>> m_compEntities;
+		std::map<u32, std::vector<std::shared_ptr<Component>>> m_ettComponents;
+
+		// std::unordered_map<Component, std::vector<u32>> m_compEntities;
 
 		EntityManager() {}
 
@@ -42,6 +44,64 @@ namespace Bolt {
 			return s_pointer;
 		}
 
+		template <typename T>
+		void addComponent(const u32 &id) {
+			if (!this->isEntityValid(id)) {
+				BT_WARN_CORE("Entity does not exist: id = {0}.", id);
+				return;
+			}
+
+			if (this->m_ettComponents.find(id) == this->m_ettComponents.end()) {
+				this->m_ettComponents.emplace(id, std::vector<std::shared_ptr<Component>>{});
+			}
+			this->m_ettComponents.at(id).push_back(std::make_shared<T>());
+		}
+
+		b8 isEntityValid(const u32 &id) {
+			return this->m_entities.find(id) != this->m_entities.end();
+		}
+
+		template <typename T>
+		bool entityHasComponent(const u32 &id) {
+			if (!this->isEntityValid(id)) {
+				BT_WARN_CORE("Entity does not exist: id = {0}.", id);
+				return false;
+			}
+
+			auto vec = this->m_ettComponents.at(id);
+			return std::find_if(vec.begin(), vec.end(), [](const std::shared_ptr<Component> &c) {
+				return std::dynamic_pointer_cast<T>(c) != nullptr;
+			}) != vec.end();
+		}
+
+		template <typename T>
+		std::vector<u32> getEntitiesFromComponent() {
+			// use m_compEntities
+
+			std::vector<u32> res = {};
+
+			for (auto [key, val] : this->m_ettComponents) {
+				if (this->entityHasComponent<T>(key))
+					res.push_back(key);
+			}
+
+			return res;
+		}
+
+		template <typename T>
+		std::shared_ptr<T> getEntityComponent(const u32 &id) {
+			if (this->entityHasComponent<T>(id)) {
+				for (auto c : this->m_ettComponents.at(id)) {
+					if (auto t = std::dynamic_pointer_cast<T>(c); t != nullptr) {
+                        return t;
+					}
+				}
+			}
+			return nullptr;
+		}
+
+		u32 createEntity();
+
 		u32 getEntitiesCount() const { return this->m_currentId; }
 
 		std::vector<Entity> getEntities() const {
@@ -51,41 +111,6 @@ namespace Bolt {
 			}
 
 			return res;
-		}
-
-		u32 createEntity();
-
-		b8 addComponent(const u32 &id, const ecs::Components &type) {
-			if (this->m_entities.find(id) == this->m_entities.end()) {
-				BT_WARN_CORE("Entity does not exist: id = {0}.", id);
-				return false;
-			}
-			switch (type) {
-				case ecs::Components::transform: {
-					if (this->m_ettComponents.find(id) == this->m_ettComponents.end()) {
-						this->m_ettComponents.emplace(id, std::vector<std::unique_ptr<Component>>{});
-					}
-					this->m_ettComponents.at(id).push_back(std::unique_ptr<Transform>());
-					return true;
-				}
-				case ecs::Components::render: {
-					if (this->m_ettComponents.find(id) == this->m_ettComponents.end()) {
-						this->m_ettComponents.emplace(id, std::vector<std::unique_ptr<Component>>{});
-					}
-					this->m_ettComponents.at(id).push_back(std::unique_ptr<Render>());
-					return true;
-				}
-				default:
-					return false;
-			}
-		}
-
-		b8 addComponent(const u32 &id, const std::vector<ecs::Components> &types) {
-			b8 success = true;
-			for (const auto &type : types) {
-				success &= this->addComponent(id, type);
-			}
-			return success;
 		}
 
 		b8 removeEntity(const u32 &id);

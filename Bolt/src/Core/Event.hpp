@@ -67,6 +67,8 @@ namespace Bolt {
 			BT_AUTOCONST LoopResumeEvent = Event("Loop Resume");
 			BT_AUTOCONST LoopStopEvent = Event("Loop Stop");
 		}
+
+        BT_AUTOCONST Update = Event("Update");
 	};
 
 	class EventDispatcher {
