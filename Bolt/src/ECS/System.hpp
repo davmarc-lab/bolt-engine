@@ -4,6 +4,10 @@
 #include "../Core/Utils.hpp"
 #include "EntityManager.hpp"
 
+#include "../Platform/GlRenderer.hpp"
+
+#include "../../dependencies/glad/include/glad/glad.h"
+
 namespace Bolt {
 	namespace systems {
 		namespace transform {
@@ -22,7 +26,18 @@ namespace Bolt {
 		} // namespace transform
 
 		namespace render {
-			inline void initializeEntitiesRender() {}
+
+            inline void drawElement(const u32& id) {
+                auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(id);
+                GlRenderer::drawArrays(mesh->vao, GL_TRIANGLES, 0, 36);
+                mesh->vao.unbind();
+            }
+
+			inline void drawMainScene() {
+				for (auto e : EntityManager::instance()->getEntitiesFromComponent<Mesh>()) {
+                    drawElement(e);
+				}
+			}
 		} // namespace render
 
 	} // namespace systems

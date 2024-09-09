@@ -33,18 +33,8 @@ void Bolt::Application::run() {
 	ed->post(events::input::KeyPressedEvent);
 
 	EntityManager::instance()->createEntity();
-	EntityManager::instance()->addComponent<Transform>(0);
-	EntityManager::instance()->addComponent<Mesh>(0);
 
 	factory::mesh::createEmptyCubeMesh(0);
-
-	for (auto e : EntityManager::instance()->getEntitiesFromComponent<Transform>()) {
-		systems::transform::updateEntityPosition(e, vec3(1, 0, 0));
-	}
-
-	for (auto e : EntityManager::instance()->getEntitiesFromComponent<Transform>()) {
-		std::cout << to_string(EntityManager::instance()->getEntityComponent<Transform>(e)->position) << std::endl;
-	}
 
 	// Creates ImGui context and create the basic UI
 	ImGuiFactory::createBasicUi();

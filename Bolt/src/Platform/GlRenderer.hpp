@@ -15,7 +15,7 @@ namespace Bolt {
 
 		void setPolygonMode();
 
-		void drawArrays(const VertexArray& vao, const u32& mode, const i32& first, const i32& count);
+		static void drawArrays(const VertexArray& vao, const u32& mode, const i32& first, const i32& count);
 		
 		void drawElements(const VertexArray& vao, const u32& mode, const i32& count, const u32& type, const void* indices = nullptr);
 

@@ -24,9 +24,11 @@ namespace Bolt {
 		this->bind();
 		vbo.bind();
 		glVertexAttribPointer(layout, size, type == buffers::DEFAULT_TYPE ? GL_FLOAT : type, normalize ? GL_TRUE : GL_FALSE, stride, offset);
+        glEnableVertexAttribArray(layout);
 	}
 
 	void VertexArray::linkAttribFast(const u32 &layout, const i32 &size, const u32 &type, const i32 &stride, void *offset, const b8 &normalize) const {
 		glVertexAttribPointer(layout, size, type == buffers::DEFAULT_TYPE ? GL_FLOAT : type, normalize ? GL_TRUE : GL_FALSE, stride, offset);
+        glEnableVertexAttribArray(layout);
 	}
 }

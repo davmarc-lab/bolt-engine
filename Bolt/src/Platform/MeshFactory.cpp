@@ -21,9 +21,10 @@ namespace Bolt {
 				comp->vao.onAttach();
 				comp->vbo_g.onAttach();
 				comp->vao.bind();
-				comp->vbo_g.bind();
                 comp->vbo_g.setup(cubeGeometry, sizeof(cubeGeometry), buffers::DEFAULT_USAGE);
                 comp->vao.linkAttribFast(0, 3, buffers::DEFAULT_TYPE, 3 * sizeof(float), 0);
+
+                comp->instanced = true;
 			}
 		} // namespace mesh
 	} // namespace factory

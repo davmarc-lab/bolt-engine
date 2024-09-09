@@ -49,12 +49,9 @@ namespace Bolt {
 				return nullptr;
 			}
 
-			if (this->m_ettComponents.find(id) == this->m_ettComponents.end()) {
-				this->m_ettComponents.emplace(id, std::vector<std::shared_ptr<Component>>{});
-			}
-            auto elem = std::make_shared<T>();
+			auto elem = std::make_shared<T>();
 			this->m_ettComponents.at(id).push_back(elem);
-            return elem;
+			return elem;
 		}
 
 		b8 isEntityValid(const u32 &id) {
@@ -93,7 +90,7 @@ namespace Bolt {
 			if (this->entityHasComponent<T>(id)) {
 				for (auto c : this->m_ettComponents.at(id)) {
 					if (auto t = std::dynamic_pointer_cast<T>(c); t != nullptr) {
-                        return t;
+						return t;
 					}
 				}
 			}
