@@ -6,6 +6,8 @@
 #include "../ECS/EntityManager.hpp"
 #include "../ECS/System.hpp"
 
+#include "../Platform/MeshFactory.hpp"
+
 #include <iostream>
 
 void Bolt::Application::run() {
@@ -30,17 +32,19 @@ void Bolt::Application::run() {
 	ed->subscribe(events::Update, [&f](auto &&ph1) { f.handle(ph1); });
 	ed->post(events::input::KeyPressedEvent);
 
-    EntityManager::instance()->createEntity();
+	EntityManager::instance()->createEntity();
 	EntityManager::instance()->addComponent<Transform>(0);
-	EntityManager::instance()->addComponent<Render>(0);
+	EntityManager::instance()->addComponent<Mesh>(0);
 
-    for (auto e : EntityManager::instance()->getEntitiesFromComponent<Transform>()) {
-        systems::transform::updateEntityPosition(e, vec3(1, 0, 0));
-    }
+	factory::mesh::createEmptyCubeMesh(0);
 
-    for (auto e : EntityManager::instance()->getEntitiesFromComponent<Transform>()) {
-        std::cout << to_string(EntityManager::instance()->getEntityComponent<Transform>(e)->position) << std::endl;
-    }
+	for (auto e : EntityManager::instance()->getEntitiesFromComponent<Transform>()) {
+		systems::transform::updateEntityPosition(e, vec3(1, 0, 0));
+	}
+
+	for (auto e : EntityManager::instance()->getEntitiesFromComponent<Transform>()) {
+		std::cout << to_string(EntityManager::instance()->getEntityComponent<Transform>(e)->position) << std::endl;
+	}
 
 	// Creates ImGui context and create the basic UI
 	ImGuiFactory::createBasicUi();
@@ -55,7 +59,7 @@ void Bolt::Application::run() {
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->begin(); });
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->onRender(); });
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->end(); });
-        // After rendering operations
+		// After rendering operations
 	}
 	lm->execute([](const std::shared_ptr<Layer> &l) { l->onDetach(); });
 }

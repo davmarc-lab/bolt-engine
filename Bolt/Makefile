@@ -90,6 +90,7 @@ OBJECTS := \
 	$(OBJDIR)/GlfwWindow.o \
 	$(OBJDIR)/ImGuiFactory.o \
 	$(OBJDIR)/ImGuiLayer.o \
+	$(OBJDIR)/MeshFactory.o \
 
 RESOURCES := \
 
@@ -209,6 +210,9 @@ $(OBJDIR)/ImGuiFactory.o: src/Platform/ImGuiFactory.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ImGuiLayer.o: src/Platform/ImGuiLayer.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/MeshFactory.o: src/Platform/MeshFactory.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

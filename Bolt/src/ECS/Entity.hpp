@@ -3,7 +3,7 @@
 #include <string>
 
 namespace Bolt {
-	class Entity {
+	class Entity final {
 	private:
 		std::string m_name;
 

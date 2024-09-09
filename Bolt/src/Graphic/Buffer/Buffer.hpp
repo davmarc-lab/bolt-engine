@@ -5,6 +5,7 @@
 namespace Bolt {
     namespace buffers {
         BT_AUTOCONST DEFAULT_USAGE = 0;
+        BT_AUTOCONST DEFAULT_TYPE = 0;
     }
 
 	class Buffer {

@@ -11,8 +11,6 @@
 #include "Entity.hpp"
 
 #include "../Core/Log.hpp"
-#include "Render.hpp"
-#include "Transform.hpp"
 
 namespace Bolt {
 	class EntityManager {
@@ -45,16 +43,18 @@ namespace Bolt {
 		}
 
 		template <typename T>
-		void addComponent(const u32 &id) {
+		std::shared_ptr<T> addComponent(const u32 &id) {
 			if (!this->isEntityValid(id)) {
 				BT_WARN_CORE("Entity does not exist: id = {0}.", id);
-				return;
+				return nullptr;
 			}
 
 			if (this->m_ettComponents.find(id) == this->m_ettComponents.end()) {
 				this->m_ettComponents.emplace(id, std::vector<std::shared_ptr<Component>>{});
 			}
-			this->m_ettComponents.at(id).push_back(std::make_shared<T>());
+            auto elem = std::make_shared<T>();
+			this->m_ettComponents.at(id).push_back(elem);
+            return elem;
 		}
 
 		b8 isEntityValid(const u32 &id) {
@@ -102,7 +102,7 @@ namespace Bolt {
 
 		u32 createEntity();
 
-		u32 getEntitiesCount() const { return this->m_currentId; }
+		u32 getEntitiesCount() const { return this->m_entities.size(); }
 
 		std::vector<Entity> getEntities() const {
 			std::vector<Entity> res;

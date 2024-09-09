@@ -1,6 +1,7 @@
 ﻿#include "EntityManager.hpp"
 
 #include "../Core/Log.hpp"
+#include "../Core/Enums.hpp"
 
 namespace Bolt {
     u32 EntityManager::createEntity() {

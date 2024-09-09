@@ -28,7 +28,7 @@ namespace Bolt {
 		 * @param size The size in bytes of the data.
 		 * @param usage The usage type, default GL_STATIC_DRAW.
 		 */
-		void setup(const f32 *vertices, const i64 &size, const u32 &usage) const;
+		void setup(const f32 *vertices, const i64 &size, const u32 &usage);
 
 		/**
 		 * @brief Sets up the data for the buffer.

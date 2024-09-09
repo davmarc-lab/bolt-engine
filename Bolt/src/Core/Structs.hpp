@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "Utils.hpp"
-#include "Math.hpp"
 
 namespace Bolt {
 	struct WinPos {
@@ -13,11 +12,4 @@ namespace Bolt {
 		u16 width = 0;
 		u16 height = 0;
 	};
-
-	struct EntityInfo {
-		vec3 position = vec3(0);
-		vec3 scale = vec3(1);
-		vec3 rotation = vec3(0);
-		b8 dirty = false;
-	};
-}
+} // namespace Bolt

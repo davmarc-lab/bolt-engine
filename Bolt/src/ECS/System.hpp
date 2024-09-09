@@ -3,7 +3,6 @@
 #include "../Core/Math.hpp"
 #include "../Core/Utils.hpp"
 #include "EntityManager.hpp"
-#include "Transform.hpp"
 
 namespace Bolt {
 	namespace systems {
@@ -23,7 +22,7 @@ namespace Bolt {
 		} // namespace transform
 
 		namespace render {
-			inline void renderEntities() {}
+			inline void initializeEntitiesRender() {}
 		} // namespace render
 
 	} // namespace systems

@@ -72,7 +72,9 @@ void ImGuiUtility::onEvent(const Event &e) {}
 
 void ImGuiUtility::onRender() {
     ImGui::Begin(this->m_name.c_str());
-
+    if (ImGui::Button("New Entity")) {
+        EntityManager::instance()->createEntity();
+    }
     ImGui::End();
 }
 

@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "../../../dependencies/glad/include/glad/glad.h"
+#include "Buffer.hpp"
 
 namespace Bolt {
 	VertexBuffer::~VertexBuffer() {
@@ -25,9 +26,9 @@ namespace Bolt {
 
 	void VertexBuffer::unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
-	void VertexBuffer::setup(const f32 *vertices, const i64 &size, const u32 &usage) const {
+	void VertexBuffer::setup(const f32 *vertices, const i64 &size, const u32 &usage) {
 		this->bind();
-		glBufferData(GL_ARRAY_BUFFER, size, vertices, usage);
+		glBufferData(GL_ARRAY_BUFFER, size, vertices, usage == buffers::DEFAULT_USAGE ? GL_STATIC_DRAW : usage);
 	}
 
 	template <typename T>

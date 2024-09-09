@@ -1,0 +1,30 @@
+#include "MeshFactory.hpp"
+
+#include "../ECS/EntityManager.hpp"
+
+#include "MeshVertices.hpp"
+
+namespace Bolt {
+	namespace factory {
+		namespace mesh {
+			void createEmptyCubeMesh(const u32 &id, config::MeshConfig config) {
+				auto em = EntityManager::instance();
+
+				// basic components added
+				if (!em->entityHasComponent<Transform>(id))
+					em->addComponent<Transform>(id);
+				if (!em->entityHasComponent<Mesh>(id))
+					em->addComponent<Mesh>(id);
+
+				// preparing buffers
+				auto comp = em->addComponent<Mesh>(id);
+				comp->vao.onAttach();
+				comp->vbo_g.onAttach();
+				comp->vao.bind();
+				comp->vbo_g.bind();
+                comp->vbo_g.setup(cubeGeometry, sizeof(cubeGeometry), buffers::DEFAULT_USAGE);
+                comp->vao.linkAttribFast(0, 3, buffers::DEFAULT_TYPE, 3 * sizeof(float), 0);
+			}
+		} // namespace mesh
+	} // namespace factory
+} // namespace Bolt
