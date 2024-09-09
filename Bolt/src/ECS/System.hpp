@@ -10,8 +10,9 @@ namespace Bolt {
 		namespace transform {
 			inline void updateEntityPosition(const u32 &id, const vec3 &pos) {
 				auto e = EntityManager::instance()->getEntityComponent<Transform>(id);
-				if (e != nullptr)
-					e->setRotation(pos);
+				if (e != nullptr) {
+					e->setPosition(pos);
+				}
 			}
 
 			inline void updateEntityRotation(const u32 &id, const vec3 &rot) {
@@ -22,8 +23,8 @@ namespace Bolt {
 		} // namespace transform
 
 		namespace render {
-            inline void renderEntities() {}
-		}
+			inline void renderEntities() {}
+		} // namespace render
 
 	} // namespace systems
 } // namespace Bolt

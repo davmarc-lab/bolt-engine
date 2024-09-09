@@ -14,7 +14,7 @@ void Bolt::Application::run() {
 		Foo() = default;
 
 		void handle(Bolt::Event e) {
-			systems::updateEntityPosition(0, vec3(1, 0, 0));
+			systems::transform::updateEntityPosition(0, vec3(1, 0, 0));
 		}
 	};
 
@@ -30,14 +30,9 @@ void Bolt::Application::run() {
 	ed->subscribe(events::Update, [&f](auto &&ph1) { f.handle(ph1); });
 	ed->post(events::input::KeyPressedEvent);
 
-	EntityManager::instance()->createEntity();
-	EntityManager::instance()->createEntity();
-	EntityManager::instance()->createEntity();
-
-	// modify addComponent need ot use templates (we trying again)
+    EntityManager::instance()->createEntity();
 	EntityManager::instance()->addComponent<Transform>(0);
-	EntityManager::instance()->addComponent<Render>(1);
-	EntityManager::instance()->addComponent<Render>(2);
+	EntityManager::instance()->addComponent<Render>(0);
 
     for (auto e : EntityManager::instance()->getEntitiesFromComponent<Transform>()) {
         systems::transform::updateEntityPosition(e, vec3(1, 0, 0));

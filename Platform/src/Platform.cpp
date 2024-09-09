@@ -4,7 +4,8 @@
 
 class Foo : public Bolt::Application {
 public:
-	Foo() {}
+	Foo() {
+    }
 
 	~Foo() {}
 };
