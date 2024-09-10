@@ -4,7 +4,7 @@
 #include "../Core/Utils.hpp"
 #include "EntityManager.hpp"
 
-#include "../Platform/GlRenderer.hpp"
+#include "../Core/RenderApi.hpp"
 
 #include "../../dependencies/glad/include/glad/glad.h"
 
@@ -27,15 +27,15 @@ namespace Bolt {
 
 		namespace render {
 
-            inline void drawElement(const u32& id) {
-                auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(id);
-                GlRenderer::drawArrays(mesh->vao, GL_TRIANGLES, 0, 36);
-                mesh->vao.unbind();
-            }
+			inline void drawElement(const u32 &id) {
+				auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(id);
+				RenderApi::instance()->getRenderer()->drawArraysTriangles(mesh->vao, 36);
+				mesh->vao.unbind();
+			}
 
 			inline void drawMainScene() {
 				for (auto e : EntityManager::instance()->getEntitiesFromComponent<Mesh>()) {
-                    drawElement(e);
+					drawElement(e);
 				}
 			}
 		} // namespace render

@@ -1,6 +1,7 @@
 #include "Application.hpp"
 
 #include "../Core/LayerManager.hpp"
+#include "../Core/RenderApi.hpp"
 #include "../Graphic/ImGui/ImGuiFactory.hpp"
 
 #include "../ECS/EntityManager.hpp"
@@ -26,6 +27,9 @@ void Bolt::Application::run() {
 	const auto w = GlfwWindow::instance();
 	lm->addLayer(w);
 
+    const auto rd = RenderApi::instance();
+    rd->init(config::RenderApiConfig::render_opengl);
+
 	auto ed = EventDispatcher::instance();
 	auto f = Foo();
 
@@ -47,8 +51,11 @@ void Bolt::Application::run() {
 
 		// Before rendering operations
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->begin(); });
+        systems::render::drawElement(0);
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->onRender(); });
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->end(); });
+
+
 		// After rendering operations
 	}
 	lm->execute([](const std::shared_ptr<Layer> &l) { l->onDetach(); });

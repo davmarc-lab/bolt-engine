@@ -10,6 +10,11 @@ namespace Bolt {
 			mesh_indices = 1 << 2,
 			mesh_normals = 1 << 3,
 		};
+
+        enum RenderApiConfig {
+            render_unknonw = 0,
+            render_opengl = 1 << 0,
+        };
 	}
 
 	namespace ecs {

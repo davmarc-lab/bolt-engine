@@ -2,7 +2,6 @@
 
 #include "../Graphic/Renderer/Renderer.hpp"
 
-#include "../Graphic/Buffer/VertexArray.hpp"
 
 namespace Bolt {
 	class GlRenderer : public Renderer {
@@ -13,18 +12,18 @@ namespace Bolt {
 
 		virtual void onAttach() override;
 
-		void setPolygonMode();
+		static void setPolygonMode();
 
-		static void drawArrays(const VertexArray& vao, const u32& mode, const i32& first, const i32& count);
-		
-		void drawElements(const VertexArray& vao, const u32& mode, const i32& count, const u32& type, const void* indices = nullptr);
+		virtual void drawArrays(const VertexArray& vao, const u32& mode, const i32& first, const i32& count) override;
 
-		void drawArraysLines(const VertexArray& vao, const i32& count, const i32& first = 0);
+		virtual void drawElements(const VertexArray& vao, const u32& mode, const i32& count, const u32& type, const void* indices = nullptr) override;
 
-		void drawElementsLines(const VertexArray& vao, const i32& count);
-		
-		void drawArraysTriangles(const VertexArray& vao, const i32& count, const i32& first = 0);
+		virtual void drawArraysLines(const VertexArray& vao, const i32& count, const i32& first = 0) override;
 
-		void drawElementsTriangles(const VertexArray& vao, const i32& count);
+		virtual void drawElementsLines(const VertexArray& vao, const i32& count) override;
+
+		virtual void drawArraysTriangles(const VertexArray& vao, const i32& count, const i32& first = 0) override;
+
+		virtual void drawElementsTriangles(const VertexArray& vao, const i32& count) override;
 	};
 }
