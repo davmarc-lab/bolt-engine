@@ -7,6 +7,8 @@
 namespace Bolt {
     namespace factory {
         namespace mesh {
+            void createEmptySquare(const u32&, config::MeshConfig = {});
+
             void createEmptyCubeMesh(const u32&, config::MeshConfig = {});
         }
     }

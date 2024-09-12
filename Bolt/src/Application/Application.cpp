@@ -18,6 +18,7 @@ void Bolt::Application::run() {
 
 		void handle(Bolt::Event e) {
 			systems::transform::updateEntityPosition(0, vec3(1, 0, 0));
+			std::cout << to_string(EntityManager::instance()->getEntityComponent<Transform>(0)->position) << std::endl;
 		}
 	};
 
@@ -27,14 +28,13 @@ void Bolt::Application::run() {
 	const auto w = GlfwWindow::instance();
 	lm->addLayer(w);
 
-    const auto rd = RenderApi::instance();
-    rd->init(config::RenderApiConfig::render_opengl);
+	const auto rd = RenderApi::instance();
+	rd->init(config::RenderApiConfig::render_opengl);
 
 	auto ed = EventDispatcher::instance();
 	auto f = Foo();
 
 	ed->subscribe(events::Update, [&f](auto &&ph1) { f.handle(ph1); });
-	ed->post(events::input::KeyPressedEvent);
 
 	EntityManager::instance()->createEntity();
 
@@ -51,10 +51,9 @@ void Bolt::Application::run() {
 
 		// Before rendering operations
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->begin(); });
-        systems::render::drawElement(0);
-		lm->execute([](const std::shared_ptr<Layer> &l) { l->onRender(); });
+        lm->execute([](const std::shared_ptr<Layer> &l) { l->onRender(); });
+		// systems::render::drawElement(0);
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->end(); });
-
 
 		// After rendering operations
 	}
