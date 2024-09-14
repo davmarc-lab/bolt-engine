@@ -41,7 +41,7 @@ void Bolt::Application::run() {
 	factory::mesh::createEmptyCubeMesh(0);
 
 	// Creates ImGui context and create the basic UI
-	ImGuiFactory::createBasicUi();
+	// ImGuiFactory::createBasicUi();
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
@@ -52,7 +52,7 @@ void Bolt::Application::run() {
 		// Before rendering operations
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->begin(); });
         lm->execute([](const std::shared_ptr<Layer> &l) { l->onRender(); });
-		// systems::render::drawElement(0);
+		systems::render::drawElement(0);
 		lm->execute([](const std::shared_ptr<Layer> &l) { l->end(); });
 
 		// After rendering operations

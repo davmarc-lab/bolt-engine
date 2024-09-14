@@ -2,6 +2,8 @@
 
 #include "../ECS/EntityManager.hpp"
 
+#include "Buffer/GlVertexArray.hpp"
+#include "Buffer/GlVertexBuffer.hpp"
 #include "MeshVertices.hpp"
 
 namespace Bolt {
@@ -21,11 +23,15 @@ namespace Bolt {
 					comp = em->getEntityComponent<Mesh>(id);
 
 				// preparing buffers
-				comp->vao.onAttach();
-				comp->vbo_g.onAttach();
-				comp->vao.bind();
-				comp->vbo_g.setup(cubeGeometry, sizeof(cubeGeometry), buffers::DEFAULT_USAGE);
-				comp->vao.linkAttribFast(0, 3, buffers::DEFAULT_TYPE, 3 * sizeof(float), 0);
+
+				// maybe in the draw func i should cast
+				auto vao = static_cast<GlVertexArray &>(comp->vao);
+				auto vbo_g = static_cast<GlVertexBuffer &>(comp->vbo_g);
+				vao.onAttach();
+				vbo_g.onAttach();
+				vao.bind();
+				vbo_g.setup(cubeGeometry, sizeof(cubeGeometry), 0);
+				vao.linkAttribFast(0, 3, 0, 3 * sizeof(float), 0);
 
 				comp->instanced = true;
 			}

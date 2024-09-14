@@ -83,16 +83,17 @@ OBJECTS := \
 	$(OBJDIR)/LayerManager.o \
 	$(OBJDIR)/Log.o \
 	$(OBJDIR)/EntityManager.o \
-	$(OBJDIR)/ElementBuffer.o \
-	$(OBJDIR)/VertexArray.o \
-	$(OBJDIR)/VertexBuffer.o \
+	$(OBJDIR)/GlElementBuffer.o \
 	$(OBJDIR)/GlFrameBuffer.o \
 	$(OBJDIR)/GlRenderBuffer.o \
+	$(OBJDIR)/GlVertexArray.o \
+	$(OBJDIR)/GlVertexBuffer.o \
 	$(OBJDIR)/GlRenderer.o \
 	$(OBJDIR)/GlfwWindow.o \
 	$(OBJDIR)/ImGuiFactory.o \
 	$(OBJDIR)/ImGuiLayer.o \
 	$(OBJDIR)/MeshFactory.o \
+	$(OBJDIR)/GlTexture.o \
 
 RESOURCES := \
 
@@ -193,19 +194,19 @@ $(OBJDIR)/Log.o: src/Core/Log.cpp
 $(OBJDIR)/EntityManager.o: src/ECS/EntityManager.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/ElementBuffer.o: src/Graphic/Buffer/ElementBuffer.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/VertexArray.o: src/Graphic/Buffer/VertexArray.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/VertexBuffer.o: src/Graphic/Buffer/VertexBuffer.cpp
+$(OBJDIR)/GlElementBuffer.o: src/Platform/Buffer/GlElementBuffer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlFrameBuffer.o: src/Platform/Buffer/GlFrameBuffer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlRenderBuffer.o: src/Platform/Buffer/GlRenderBuffer.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/GlVertexArray.o: src/Platform/Buffer/GlVertexArray.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/GlVertexBuffer.o: src/Platform/Buffer/GlVertexBuffer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlRenderer.o: src/Platform/GlRenderer.cpp
@@ -221,6 +222,9 @@ $(OBJDIR)/ImGuiLayer.o: src/Platform/ImGuiLayer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/MeshFactory.o: src/Platform/MeshFactory.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/GlTexture.o: src/Platform/Texture/GlTexture.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

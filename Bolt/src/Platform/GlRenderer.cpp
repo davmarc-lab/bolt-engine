@@ -1,6 +1,7 @@
 ﻿#include "GlRenderer.hpp"
 
 #include "../../dependencies/glad/include/glad/glad.h"
+#include "Buffer/GlVertexArray.hpp"
 
 namespace Bolt {
 	void GlRenderer::onAttach() {
@@ -11,12 +12,12 @@ namespace Bolt {
 	}
 
 	void GlRenderer::drawArrays(const VertexArray &vao, const u32 &mode, const i32 &first, const i32 &count) {
-		vao.bind();
+        static_cast<const GlVertexArray&>(vao).bind();
 		glDrawArrays(mode, first, count);
 	}
 
 	void GlRenderer::drawElements(const VertexArray &vao, const u32 &mode, const i32 &count, const u32 &type, const void *indices) {
-		vao.bind();
+        static_cast<const GlVertexArray&>(vao).bind();
 		glDrawElements(mode, count, type, indices);
 	}
 

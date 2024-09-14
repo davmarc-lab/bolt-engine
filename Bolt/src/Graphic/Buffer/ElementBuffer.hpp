@@ -1,25 +1,27 @@
 ﻿#pragma once
 
-#include <vector>
+#include "../../Core/Log.hpp"
 
-#include "Buffer.hpp"
+#include <vector>
+#include "../../Core/Utils.hpp"
 
 namespace Bolt {
-	class ElementBuffer : public Buffer {
+	class ElementBuffer {
+	protected:
+		u32 m_id;
+
 	public:
 		ElementBuffer() = default;
-		ElementBuffer(const ElementBuffer &other) = delete;
-		ElementBuffer(ElementBuffer &&other) noexcept { *this = std::move(other); }
-		~ElementBuffer() override;
 
-		ElementBuffer &operator=(const ElementBuffer &other) = delete;
-		ElementBuffer &operator=(ElementBuffer &&other) noexcept;
+		virtual ~ElementBuffer() = default;
 
-		virtual void onAttach() override;
+		virtual void onAttach() {}
 
-		virtual void bind() const override;
+		virtual void onDetach() {}
 
-		virtual void unbind() const override;
+		virtual void bind() const {}
+
+		virtual void unbind() const {}
 
 		/**
 		 * @brief Sets up the data for the buffer.
@@ -27,7 +29,7 @@ namespace Bolt {
 		 * @param size The size in bytes of the data.
 		 * @param usage The usage type.
 		 */
-		void setup(const f32 *indices, const i64 &size, const u32 &usage) const;
+		virtual void setup(const f32 *indices, const i64 &size, const u32 &usage) const {}
 
 		/**
 		 * @brief Sets up the data for the buffer.
@@ -37,7 +39,7 @@ namespace Bolt {
 		 * @param usage The usage type.
 		 */
 		template <typename T>
-		void setup(const T *indices, const i64 &size, const u32 &usage = buffers::DEFAULT_USAGE);
+		void setup(const T *indices, const i64 &size, const u32 &usage = 0) { BT_WARN_CORE("Put an assert here {0}.", __FILE__); }
 
 		/**
 		 * @brief Sets up the data for the buffer.
@@ -46,6 +48,6 @@ namespace Bolt {
 		 * @param usage The usage type.
 		 */
 		template <typename T>
-		void setup(const std::vector<T> &indices, const u32 &usage = buffers::DEFAULT_USAGE);
+		void setup(const std::vector<T> &indices, const u32 &usage = 0) { BT_WARN_CORE("Put an assert here {0}.", __FILE__); }
 	};
-}
+} // namespace Bolt

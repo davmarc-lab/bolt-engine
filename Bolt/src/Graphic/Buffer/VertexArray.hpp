@@ -1,28 +1,30 @@
 ﻿#pragma once
 
-#include "Buffer.hpp"
 #include "VertexBuffer.hpp"
 
+#include "../../Core/Log.hpp"
 #include "../../Core/Utils.hpp"
 
 namespace Bolt {
-	class VertexArray : public Buffer {
+	class VertexArray {
+	protected:
+		u32 m_id;
+
 	public:
-		explicit VertexArray() = default;
+		VertexArray() = default;
 
-		virtual ~VertexArray() override = default;
+		virtual ~VertexArray() = default;
 
-		virtual void onAttach() override;
+		virtual void onAttach() {}
 
-		virtual void onDetach() override;
+		virtual void onDetach() {}
 
-		virtual void bind() const override;
+		virtual void bind() const {}
 
-		virtual void unbind() const override;
+		virtual void unbind() const {}
 
-		void linkVertexBuffer(const VertexBuffer &vbo, const u32 &layout, const i32 &size, const u32& type, const i32 &stride, void *offset, const b8 &normalize = false) const;
+		virtual void linkVertexBuffer(const VertexBuffer &vbo, const u32 &layout, const i32 &size, const u32 &type, const i32 &stride, void *offset, const b8 &normalize = false) const { BT_WARN_CORE("Put an assert here {0}.", __FILE__); }
 
-		void linkAttribFast(const u32 &layout, const i32 &size, const u32 &type, const i32 &stride, void *offset, const b8 &normalize = false) const;
-
+		virtual void linkAttribFast(const u32 &layout, const i32 &size, const u32 &type, const i32 &stride, void *offset, const b8 &normalize = false) const { BT_WARN_CORE("Put an assert here {0}.", __FILE__); }
 	};
-}
+} // namespace Bolt

@@ -3,8 +3,9 @@
 #include "../../Core/Utils.hpp"
 
 #include "../../Core/LayerManager.hpp"
-
 #include "../../ECS/EntityManager.hpp"
+
+#include "../Buffer/FrameBuffer.hpp"
 
 namespace Bolt {
 	class ImGuiDockSpace final : public Layer {
@@ -17,7 +18,7 @@ namespace Bolt {
 
 		virtual ~ImGuiDockSpace() override = default;
 
-		virtual void onEvent(const Event& e) override;
+		virtual void onEvent(const Event &e) override;
 
 		virtual void onRender() override;
 	};
@@ -32,7 +33,7 @@ namespace Bolt {
 
 		~ImGuiEntityTree() override = default;
 
-		virtual void onEvent(const Event& e) override;
+		virtual void onEvent(const Event &e) override;
 
 		virtual void onRender() override;
 	};
@@ -40,13 +41,16 @@ namespace Bolt {
 	class ImGuiViewPort : public Layer {
 	private:
 		std::string m_name = "Viewport";
+		FrameBuffer m_fbo;
 
 	public:
 		ImGuiViewPort() = default;
 
 		~ImGuiViewPort() override = default;
 
-		virtual void onEvent(const Event& e) override;
+		virtual void onAttach() override;
+
+		virtual void onEvent(const Event &e) override;
 
 		virtual void onRender() override;
 	};
@@ -60,7 +64,7 @@ namespace Bolt {
 
 		~ImGuiUtility() override = default;
 
-		virtual void onEvent(const Event& e) override;
+		virtual void onEvent(const Event &e) override;
 
 		virtual void onRender() override;
 	};
@@ -74,15 +78,15 @@ namespace Bolt {
 
 		~ImGuiProperties() override = default;
 
-		virtual void onEvent(const Event& e) override;
+		virtual void onEvent(const Event &e) override;
 
 		virtual void onRender() override;
 	};
 
 	class ImGuiFactory {
-		ImGuiFactory() = delete ;
+		ImGuiFactory() = delete;
 
 	public:
 		static void createBasicUi();
 	};
-}
+} // namespace Bolt

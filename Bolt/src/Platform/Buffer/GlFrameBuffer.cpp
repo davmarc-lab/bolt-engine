@@ -31,7 +31,7 @@ namespace Bolt {
 
 		glTexImage2D(attach.target, attach.level, attach.internalFormat, attach.width, attach.height, attach.border, attach.format, attach.dataType, attach.data);
 
-        glTexParameteri(attach.target, texture::opengl::pname::TEXTURE_MAX_FILTER, texture::opengl::pvalue::LINEAR);
+        glTexParameteri(attach.target, texture::opengl::pname::TEXTURE_MAG_FILTER, texture::opengl::pvalue::LINEAR);
         glTexParameteri(attach.target, texture::opengl::pname::TEXTURE_MIN_FILTER, texture::opengl::pvalue::LINEAR);
 
         glFramebufferTexture2D(this->m_config.operation, GL_COLOR_ATTACHMENT0, attach.target, id, attach.level);

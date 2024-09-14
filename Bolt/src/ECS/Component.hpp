@@ -5,7 +5,6 @@
 
 #include "../Graphic/Buffer/VertexArray.hpp"
 #include "../Graphic/Buffer/VertexBuffer.hpp"
-#include "../Graphic/Buffer/ElementBuffer.hpp"
 
 namespace Bolt {
 	class Component {

@@ -1,24 +1,25 @@
 ﻿#pragma once
 
+#include "../../Graphic/Buffer/VertexBuffer.hpp"
+
 #include "../../Core/Utils.hpp"
-#include "../../Core/Log.hpp"
 
 #include <vector>
 
 namespace Bolt {
-	class VertexBuffer {
+	class GlVertexBuffer : public VertexBuffer {
     protected:
         u32 m_id;
 	public:
-		VertexBuffer() = default;
-		virtual ~VertexBuffer() = default;
+		GlVertexBuffer() = default;
+		virtual ~GlVertexBuffer();
 
-		virtual void onAttach() {}
-		virtual void onDetach() {}
+		virtual void onAttach() override;
+		virtual void onDetach() override;
 
-		virtual void bind() const {}
+		virtual void bind() const override;
 
-		virtual void unbind() const {}
+		virtual void unbind() const override;
 
 		/**
 		 * @brief Sets up the data for the buffer.
@@ -26,7 +27,7 @@ namespace Bolt {
 		 * @param size The size in bytes of the data.
 		 * @param usage The usage type, default GL_STATIC_DRAW.
 		 */
-		virtual void setup(const f32 *vertices, const i64 &size, const u32 &usage) { BT_WARN_CORE("Put an assert here {0}.", __FILE__); } 
+		virtual void setup(const f32 *vertices, const i64 &size, const u32 &usage) override;
 
 		/**
 		 * @brief Sets up the data for the buffer.
@@ -36,7 +37,7 @@ namespace Bolt {
 		 * @param usage The usage type.
 		 */
 		template <typename T>
-		void setup(const T *vertices, const i64 &size, const u32 &usage) { BT_WARN_CORE("Put an assert here {0}.", __FILE__); }
+		void setup(const T *vertices, const i64 &size, const u32 &usage);
 
 		/**
 		 * @brief Sets up the data for the buffer.
@@ -45,7 +46,7 @@ namespace Bolt {
 		 * @param usage The usage type.
 		 */
 		template <typename T>
-		void setup(const std::vector<T> &vertices, const u32 &usage) { BT_WARN_CORE("Put an assert here {0}.", __FILE__); }
+		void setup(const std::vector<T> &vertices, const u32 &usage);
 
 		/**
 		 * @brief Sets up the data for the buffer avoiding the cost of reallocating
@@ -57,7 +58,7 @@ namespace Bolt {
 		 *  replacement will begin, measured in bytes.
 		 */
 		template <typename T>
-		void setupSubData(const T *vertices, const i64 &size, const i64 &offset) { BT_WARN_CORE("Put an assert here {0}.", __FILE__); }
+		void setupSubData(const T *vertices, const i64 &size, const i64 &offset);
 
 		/**
 		 * @brief Sets up the data for the buffer avoiding the cost of reallocating
@@ -68,6 +69,6 @@ namespace Bolt {
 		 *  replacement will begin, measured in bytes.
 		 */
 		template <typename T>
-		void setupSubData(const std::vector<T> &vertices, const i64 &offset) { BT_WARN_CORE("Put an assert here {0}.", __FILE__); }
+		void setupSubData(const std::vector<T> &vertices, const i64 &offset);
 	};
 } // namespace Bolt
