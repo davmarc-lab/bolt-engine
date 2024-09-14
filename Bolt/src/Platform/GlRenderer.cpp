@@ -12,12 +12,14 @@ namespace Bolt {
 	}
 
 	void GlRenderer::drawArrays(const VertexArray &vao, const u32 &mode, const i32 &first, const i32 &count) {
-        static_cast<const GlVertexArray&>(vao).bind();
+        auto val = static_cast<const GlVertexArray&>(vao);
+        val.bind();
 		glDrawArrays(mode, first, count);
 	}
 
 	void GlRenderer::drawElements(const VertexArray &vao, const u32 &mode, const i32 &count, const u32 &type, const void *indices) {
-        static_cast<const GlVertexArray&>(vao).bind();
+        auto val = static_cast<const GlVertexArray&>(vao);
+        val.bind();
 		glDrawElements(mode, count, type, indices);
 	}
 

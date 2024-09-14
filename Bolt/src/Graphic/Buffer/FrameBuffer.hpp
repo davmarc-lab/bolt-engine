@@ -4,6 +4,7 @@
 
 namespace Bolt {
 
+    // to be changed with texture
 	struct TextureAttach {
 		u32 id;
 		u32 target;

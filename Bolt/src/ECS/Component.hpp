@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "../Core/Math.hpp"
 #include <memory>
+#include "../Core/Math.hpp"
 
 #include "../Graphic/Buffer/VertexArray.hpp"
 #include "../Graphic/Buffer/VertexBuffer.hpp"
@@ -9,8 +9,7 @@
 namespace Bolt {
 	class Component {
 	public:
-
-        Component() = default;
+		Component() = default;
 
 		virtual ~Component() = default;
 	};
@@ -59,13 +58,13 @@ namespace Bolt {
 
 	class Mesh : public Component {
 	public:
-        VertexArray vao;
-        VertexBuffer vbo_g;
+		std::shared_ptr<VertexArray> vao;
+		std::shared_ptr<VertexBuffer> vbo_g;
 		std::unique_ptr<std::vector<vec3>> vertices;
-        b8 instanced = false;
+		b8 instanced = false;
 
 		Mesh() = default;
 
 		~Mesh() override = default;
 	};
-}
+} // namespace Bolt

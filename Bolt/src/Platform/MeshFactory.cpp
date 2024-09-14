@@ -1,4 +1,5 @@
 #include "MeshFactory.hpp"
+#include <memory>
 
 #include "../ECS/EntityManager.hpp"
 
@@ -17,21 +18,19 @@ namespace Bolt {
 				// basic components added
 				if (!em->entityHasComponent<Transform>(id))
 					em->addComponent<Transform>(id);
-				if (!em->entityHasComponent<Mesh>(id))
+				if (!em->entityHasComponent<Mesh>(id)) {
 					comp = em->addComponent<Mesh>(id);
-				else
+                    comp->vao = std::make_shared<GlVertexArray>();
+                    comp->vbo_g = std::make_shared<GlVertexBuffer>();
+				} else
 					comp = em->getEntityComponent<Mesh>(id);
 
 				// preparing buffers
-
-				// maybe in the draw func i should cast
-				auto vao = static_cast<GlVertexArray &>(comp->vao);
-				auto vbo_g = static_cast<GlVertexBuffer &>(comp->vbo_g);
-				vao.onAttach();
-				vbo_g.onAttach();
-				vao.bind();
-				vbo_g.setup(cubeGeometry, sizeof(cubeGeometry), 0);
-				vao.linkAttribFast(0, 3, 0, 3 * sizeof(float), 0);
+				comp->vao->onAttach();
+				comp->vbo_g->onAttach();
+				comp->vao->bind();
+				comp->vbo_g->setup(cubeGeometry, sizeof(cubeGeometry), 0);
+				comp->vao->linkAttribFast(0, 3, 0, 3 * sizeof(float), 0);
 
 				comp->instanced = true;
 			}

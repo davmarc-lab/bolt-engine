@@ -23,5 +23,7 @@ namespace Bolt {
 		virtual void linkVertexBuffer(const VertexBuffer &vbo, const u32 &layout, const i32 &size, const u32 &type, const i32 &stride, void *offset, const b8 &normalize = false) const override;
 
 		virtual void linkAttribFast(const u32 &layout, const i32 &size, const u32 &type, const i32 &stride, void *offset, const b8 &normalize = false) const override;
+        
+        u32 Id() const { return this->m_id; }
 	};
 } // namespace Bolt
