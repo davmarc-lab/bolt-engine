@@ -11,35 +11,45 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Application\Application.hpp" />
+    <ClInclude Include="src\Bolt.hpp" />
+    <ClInclude Include="src\Core\Core.hpp" />
     <ClInclude Include="src\Core\Enums.hpp" />
     <ClInclude Include="src\Core\Event.hpp" />
     <ClInclude Include="src\Core\Keys.hpp" />
     <ClInclude Include="src\Core\Layer.hpp" />
     <ClInclude Include="src\Core\LayerManager.hpp" />
     <ClInclude Include="src\Core\Log.hpp" />
-    <ClInclude Include="src\Application\Application.hpp" />
-    <ClInclude Include="src\Bolt.hpp" />
-    <ClInclude Include="src\Core\Core.hpp" />
     <ClInclude Include="src\Core\Math.hpp" />
+    <ClInclude Include="src\Core\RenderApi.hpp" />
+    <ClInclude Include="src\Core\Scene.hpp" />
     <ClInclude Include="src\Core\Structs.hpp" />
     <ClInclude Include="src\Core\Utils.hpp" />
     <ClInclude Include="src\Core\Window.hpp" />
     <ClInclude Include="src\ECS\Component.hpp" />
     <ClInclude Include="src\ECS\Entity.hpp" />
     <ClInclude Include="src\ECS\EntityManager.hpp" />
-    <ClInclude Include="src\ECS\Render.hpp" />
     <ClInclude Include="src\ECS\System.hpp" />
-    <ClInclude Include="src\ECS\Transform.hpp" />
-    <ClInclude Include="src\ECS\TransformSystem.hpp" />
     <ClInclude Include="src\EntryPoint\EntryPoint.hpp" />
-    <ClInclude Include="src\Graphic\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Graphic\Buffer\ElementBuffer.hpp" />
+    <ClInclude Include="src\Graphic\Buffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\Graphic\Buffer\RenderBuffer.hpp" />
     <ClInclude Include="src\Graphic\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Graphic\Buffer\VertexBuffer.hpp" />
     <ClInclude Include="src\Graphic\ImGui\ImGuiFactory.hpp" />
     <ClInclude Include="src\Graphic\Renderer\Renderer.hpp" />
+    <ClInclude Include="src\Graphic\Texture\Texture.hpp" />
+    <ClInclude Include="src\Platform\Buffer\GlElementBuffer.hpp" />
+    <ClInclude Include="src\Platform\Buffer\GlFrameBuffer.hpp" />
+    <ClInclude Include="src\Platform\Buffer\GlRenderBuffer.hpp" />
+    <ClInclude Include="src\Platform\Buffer\GlVertexArray.hpp" />
+    <ClInclude Include="src\Platform\Buffer\GlVertexBuffer.hpp" />
     <ClInclude Include="src\Platform\GlfwWindow.hpp" />
     <ClInclude Include="src\Platform\GlRenderer.hpp" />
     <ClInclude Include="src\Platform\ImGuiLayer.hpp" />
+    <ClInclude Include="src\Platform\MeshFactory.hpp" />
+    <ClInclude Include="src\Platform\MeshVertices.hpp" />
+    <ClInclude Include="src\Platform\Texture\GlTexture.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\glad\src\glad.c" />
@@ -50,172 +60,23 @@
     <ClCompile Include="dependencies\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="dependencies\imgui\imgui_tables.cpp" />
     <ClCompile Include="dependencies\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\Application\Application.cpp" />
     <ClCompile Include="src\Core\Event.cpp" />
     <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\LayerManager.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />
-    <ClCompile Include="src\Application\Application.cpp" />
-    <ClCompile Include="src\ECS\Entity.cpp" />
     <ClCompile Include="src\ECS\EntityManager.cpp" />
-    <ClCompile Include="src\ECS\TransformSystem.cpp" />
-    <ClCompile Include="src\Graphic\Buffer\ElementBuffer.cpp" />
-    <ClCompile Include="src\Graphic\Buffer\VertexArray.cpp" />
-    <ClCompile Include="src\Graphic\Buffer\VertexBuffer.cpp" />
+    <ClCompile Include="src\Platform\Buffer\GlElementBuffer.cpp" />
+    <ClCompile Include="src\Platform\Buffer\GlFrameBuffer.cpp" />
+    <ClCompile Include="src\Platform\Buffer\GlRenderBuffer.cpp" />
+    <ClCompile Include="src\Platform\Buffer\GlVertexArray.cpp" />
+    <ClCompile Include="src\Platform\Buffer\GlVertexBuffer.cpp" />
     <ClCompile Include="src\Platform\GlfwWindow.cpp" />
     <ClCompile Include="src\Platform\GlRenderer.cpp" />
-    <ClCompile Include="src\Platform\ImGuiFactory.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</ModuleDependenciesFile>
-      <ModuleOutputFile>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\Bolt.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\Bolt.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <BuildStlModules>false</BuildStlModules>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>BT_WINDOWS;BT_BUILD_DLL;BT_ENABLE_DEBUG;_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\David\Desktop\BoltEngine\Bolt\src;C:\Users\David\Desktop\BoltEngine\Bolt\dependencies\spdlog\include;C:\Users\David\Desktop\BoltEngine\\Bolt\dependencies\glad\include;C:\Users\David\Desktop\BoltEngine\\Bolt\dependencies\glfw\include;C:\Users\David\Desktop\BoltEngine\\Bolt\dependencies\imgui</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-    <ClCompile Include="src\Platform\ImGuiLayer.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</ModuleDependenciesFile>
-      <ModuleOutputFile>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\Bolt.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\Bolt.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>C:\Users\David\Desktop\BoltEngine\bin\int\Debug-x64\Bolt\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <BuildStlModules>false</BuildStlModules>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>BT_WINDOWS;BT_BUILD_DLL;BT_ENABLE_DEBUG;_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\David\Desktop\BoltEngine\Bolt\src;C:\Users\David\Desktop\BoltEngine\Bolt\dependencies\spdlog\include;C:\Users\David\Desktop\BoltEngine\\Bolt\dependencies\glad\include;C:\Users\David\Desktop\BoltEngine\\Bolt\dependencies\glfw\include;C:\Users\David\Desktop\BoltEngine\\Bolt\dependencies\imgui</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="src\Graphic\Buffer\VertexBuffer.hpp" />
+    <ClCompile Include="src\Platform\ImGuiFactory.cpp" />
+    <ClCompile Include="src\Platform\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Platform\MeshFactory.cpp" />
+    <ClCompile Include="src\Platform\Texture\GlTexture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

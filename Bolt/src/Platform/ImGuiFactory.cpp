@@ -1,5 +1,7 @@
 ﻿#include "../Graphic/ImGui/ImGuiFactory.hpp"
 
+#include <iostream>
+
 #include "../../dependencies/imgui/imgui.h"
 
 #include "ImGuiLayer.hpp"
@@ -8,8 +10,7 @@
 namespace Bolt {
 	void ImGuiDockSpace::onEvent(const Event &e) {}
 
-	void ImGuiDockSpace::onAttach() {
-	}
+	void ImGuiDockSpace::onAttach() {}
 
 	void ImGuiDockSpace::onRender() {
 		ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
@@ -51,9 +52,7 @@ namespace Bolt {
 
 	void ImGuiEntityTree::onRender() {
 		ImGui::Begin(this->m_name.c_str());
-		if (this->m_entities != EntityManager::instance()->getEntitiesCount()) {
-			this->m_entities = EntityManager::instance()->getEntitiesCount();
-		}
+		if (this->m_entities != EntityManager::instance()->getEntitiesCount()) { this->m_entities = EntityManager::instance()->getEntitiesCount(); }
 		for (auto ett : EntityManager::instance()->getEntities()) {
 			if (ImGui::TreeNode(ett.getName().c_str())) {
 				ImGui::PushID(&ett);
@@ -68,23 +67,20 @@ namespace Bolt {
 	void ImGuiViewPort::onAttach() {
 		// preparing framebuffer
 		this->m_fbo.onAttach();
-		this->m_fbo.attachTexture({0,
-			texture::opengl::target::TEXTURE_2D,
-			0,
-			texture::opengl::format::RGB,
-			800,
-			600,
-			0,
-			texture::opengl::format::RGB,
-			texture::opengl::dataType::UNSIGNED_BYTE,
-			NULL});
 	}
 
 	void ImGuiViewPort::onEvent(const Event &e) {}
 
 	void ImGuiViewPort::onRender() {
 		ImGui::Begin(this->m_name.c_str());
-		// call scene draw
+		if (!this->m_fboAttached) {
+			this->m_fboAttached = true;
+			const ImVec2 size = ImGui::GetWindowContentRegionMax();
+			this->m_fbo.attachTexture({0, texture::opengl::target::TEXTURE_2D, 0, texture::opengl::format::RGB, static_cast<i32>(size.x), static_cast<i32>(size.y), 0, texture::opengl::format::RGB, texture::opengl::dataType::UNSIGNED_BYTE, NULL});
+			ImGui::End();
+			return;
+		}
+		
 		ImGui::End();
 	}
 
@@ -92,9 +88,7 @@ namespace Bolt {
 
 	void ImGuiUtility::onRender() {
 		ImGui::Begin(this->m_name.c_str());
-		if (ImGui::Button("New Entity")) {
-			EntityManager::instance()->createEntity();
-		}
+		if (ImGui::Button("New Entity")) { EntityManager::instance()->createEntity(); }
 		ImGui::End();
 	}
 

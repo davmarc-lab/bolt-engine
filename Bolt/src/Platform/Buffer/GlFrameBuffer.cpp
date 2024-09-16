@@ -29,7 +29,7 @@ namespace Bolt {
 			attach.data});
 		glBindTexture(attach.target, id);
 
-		glTexImage2D(attach.target, attach.level, attach.internalFormat, attach.width, attach.height, attach.border, attach.format, attach.dataType, attach.data);
+		glTexImage2D(attach.target, attach.level, static_cast<i32>(attach.internalFormat), attach.width, attach.height, attach.border, attach.format, attach.dataType, attach.data);
 
         glTexParameteri(attach.target, texture::opengl::pname::TEXTURE_MAG_FILTER, texture::opengl::pvalue::LINEAR);
         glTexParameteri(attach.target, texture::opengl::pname::TEXTURE_MIN_FILTER, texture::opengl::pvalue::LINEAR);

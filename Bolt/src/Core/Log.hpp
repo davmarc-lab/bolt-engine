@@ -12,9 +12,9 @@ namespace Bolt {
 			static Shared<spdlog::logger> s_clientLogger;
 
 		public:
-			Log() {}
+			Log() = default;
 
-			~Log() {}
+			~Log() = default;
 
 			static void init();
 
