@@ -11,9 +11,9 @@ namespace Bolt {
 		}
 
 		auto [it, res] = this->m_entities.insert(
-			std::make_pair(this->m_currentId, std::make_unique<Entity>("Entity " + std::to_string(this->m_currentId))));
+			std::make_pair(this->m_currentId, CreateUnique<Entity>("Entity " + std::to_string(this->m_currentId))));
 
-		this->m_ettComponents.emplace(this->m_currentId, std::vector<std::shared_ptr<Component>>{});
+		this->m_ettComponents.emplace(this->m_currentId, std::vector<Shared<Component>>{});
 
 		return this->m_currentId++;
 	}

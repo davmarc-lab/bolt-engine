@@ -13,15 +13,15 @@ namespace Bolt {
 
 			void createEmptyCubeMesh(const u32 &id, config::MeshConfig config) {
 				auto em = EntityManager::instance();
-				std::shared_ptr<Mesh> comp;
+				Shared<Mesh> comp;
 
 				// basic components added
 				if (!em->entityHasComponent<Transform>(id))
 					em->addComponent<Transform>(id);
 				if (!em->entityHasComponent<Mesh>(id)) {
 					comp = em->addComponent<Mesh>(id);
-                    comp->vao = std::make_shared<GlVertexArray>();
-                    comp->vbo_g = std::make_shared<GlVertexBuffer>();
+                    comp->vao = CreateShared<GlVertexArray>();
+                    comp->vbo_g = CreateShared<GlVertexBuffer>();
 				} else
 					comp = em->getEntityComponent<Mesh>(id);
 

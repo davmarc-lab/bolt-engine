@@ -3,12 +3,13 @@
 #include "Core.hpp"
 
 #include "../../dependencies/spdlog/include/spdlog/spdlog.h"
+#include "Utils.hpp"
 
 namespace Bolt {
 	class BOLT_API Log {
 		private:
-			static std::shared_ptr<spdlog::logger> s_coreLogger;
-			static std::shared_ptr<spdlog::logger> s_clientLogger;
+			static Shared<spdlog::logger> s_coreLogger;
+			static Shared<spdlog::logger> s_clientLogger;
 
 		public:
 			Log() {}
@@ -17,9 +18,9 @@ namespace Bolt {
 
 			static void init();
 
-			static std::shared_ptr<spdlog::logger>& getCoreLogger() { return s_coreLogger; }
+			static Shared<spdlog::logger>& getCoreLogger() { return s_coreLogger; }
 
-			static std::shared_ptr<spdlog::logger>& getClientLogger() { return s_clientLogger; }
+			static Shared<spdlog::logger>& getClientLogger() { return s_clientLogger; }
 	};
 }
 

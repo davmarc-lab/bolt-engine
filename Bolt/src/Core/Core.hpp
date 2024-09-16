@@ -13,3 +13,10 @@
         #error Platform not supported.
     #endif
 #endif
+
+// asserts
+/*
+* Basic runtime assert.
+*/
+#define BT_ASSERT(exp) assert(exp)
+

@@ -47,17 +47,17 @@ void Bolt::Application::run() {
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
-		lm->execute([e](const std::shared_ptr<Layer> &l) { l->onEvent(e); });
+		lm->execute([e](const Shared<Layer> &l) { l->onEvent(e); });
 
-		lm->execute([](const std::shared_ptr<Layer> &l) { l->onUpdate(); });
+		lm->execute([](const Shared<Layer> &l) { l->onUpdate(); });
 
 		// Before rendering operations
-		lm->execute([](const std::shared_ptr<Layer> &l) { l->begin(); });
-        lm->execute([](const std::shared_ptr<Layer> &l) { l->onRender(); });
+		lm->execute([](const Shared<Layer> &l) { l->begin(); });
+        lm->execute([](const Shared<Layer> &l) { l->onRender(); });
 		// systems::render::drawElement(0);
-		lm->execute([](const std::shared_ptr<Layer> &l) { l->end(); });
+		lm->execute([](const Shared<Layer> &l) { l->end(); });
 
 		// After rendering operations
 	}
-	lm->execute([](const std::shared_ptr<Layer> &l) { l->onDetach(); });
+	lm->execute([](const Shared<Layer> &l) { l->onDetach(); });
 }

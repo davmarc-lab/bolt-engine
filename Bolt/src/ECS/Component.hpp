@@ -58,9 +58,9 @@ namespace Bolt {
 
 	class Mesh : public Component {
 	public:
-		std::shared_ptr<VertexArray> vao;
-		std::shared_ptr<VertexBuffer> vbo_g;
-		std::unique_ptr<std::vector<vec3>> vertices;
+		Shared<VertexArray> vao;
+		Shared<VertexBuffer> vbo_g;
+		Unique<std::vector<vec3>> vertices;
 		b8 instanced = false;
 
 		Mesh() = default;

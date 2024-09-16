@@ -12,11 +12,11 @@
 namespace Bolt {
 	class RenderApi {
 	private:
-		inline static std::shared_ptr<RenderApi> s_pointer = nullptr;
+		inline static Shared<RenderApi> s_pointer = nullptr;
 		inline static std::mutex s_mutex;
 
 		bool m_attached = false;
-		std::shared_ptr<Renderer> m_render = nullptr;
+		Shared<Renderer> m_render = nullptr;
 
 		using RenderApiConfig = config::RenderApiConfig;
 
@@ -27,10 +27,10 @@ namespace Bolt {
 
 		void operator=(const RenderApi &other) = delete;
 
-		inline static std::shared_ptr<RenderApi> instance() {
+		inline static Shared<RenderApi> instance() {
 			std::lock_guard<std::mutex> lock(s_mutex);
 			if (s_pointer == nullptr) {
-				std::shared_ptr<RenderApi> copy(new RenderApi());
+				Shared<RenderApi> copy(new RenderApi());
 				copy.swap(s_pointer);
 			}
 
@@ -40,7 +40,7 @@ namespace Bolt {
 		inline void init(const RenderApiConfig &config = config::render_unknonw) {
             // different renderer types
 			if (config & config::render_opengl)
-				this->m_render = std::make_shared<GlRenderer>();
+				this->m_render = CreateShared<GlRenderer>();
 
 			if (this->m_render == nullptr) {
                 BT_CRITICAL_CORE("No renderer attached, closing the application.");
@@ -52,6 +52,6 @@ namespace Bolt {
             this->m_attached = true;
 		}
 
-		std::shared_ptr<Renderer> getRenderer() const { return this->m_render; }
+		Shared<Renderer> getRenderer() const { return this->m_render; }
 	};
 } // namespace Bolt

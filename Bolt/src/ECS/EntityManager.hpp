@@ -15,13 +15,13 @@
 namespace Bolt {
 	class EntityManager {
 	private:
-		inline static std::shared_ptr<EntityManager> s_pointer = nullptr;
+		inline static Shared<EntityManager> s_pointer = nullptr;
 		inline static std::mutex s_mutex;
 
 		u32 m_currentId = 0;
 
-		std::map<u32, std::unique_ptr<Entity>> m_entities;
-		std::map<u32, std::vector<std::shared_ptr<Component>>> m_ettComponents;
+		std::map<u32, Unique<Entity>> m_entities;
+		std::map<u32, std::vector<Shared<Component>>> m_ettComponents;
 
 		// std::unordered_map<Component, std::vector<u32>> m_compEntities;
 
@@ -32,10 +32,10 @@ namespace Bolt {
 
 		void operator=(const EntityManager &other) = delete;
 
-		inline static std::shared_ptr<EntityManager> instance() {
+		inline static Shared<EntityManager> instance() {
 			std::lock_guard<std::mutex> lock(s_mutex);
 			if (s_pointer == nullptr) {
-				std::shared_ptr<EntityManager> copy(new EntityManager());
+				Shared<EntityManager> copy(new EntityManager());
 				copy.swap(s_pointer);
 			}
 
@@ -43,13 +43,13 @@ namespace Bolt {
 		}
 
 		template <typename T>
-		std::shared_ptr<T> addComponent(const u32 &id) {
+		Shared<T> addComponent(const u32 &id) {
 			if (!this->isEntityValid(id)) {
 				BT_WARN_CORE("Entity does not exist: id = {0}.", id);
 				return nullptr;
 			}
 
-			auto elem = std::make_shared<T>();
+			auto elem = CreateShared<T>();
 			this->m_ettComponents.at(id).push_back(elem);
 			return elem;
 		}
@@ -66,7 +66,7 @@ namespace Bolt {
 			}
 
 			auto vec = this->m_ettComponents.at(id);
-			return std::find_if(vec.begin(), vec.end(), [](const std::shared_ptr<Component> &c) {
+			return std::find_if(vec.begin(), vec.end(), [](const Shared<Component> &c) {
 				return std::dynamic_pointer_cast<T>(c) != nullptr;
 			}) != vec.end();
 		}
@@ -86,7 +86,7 @@ namespace Bolt {
 		}
 
 		template <typename T>
-		std::shared_ptr<T> getEntityComponent(const u32 &id) {
+		Shared<T> getEntityComponent(const u32 &id) {
 			if (this->entityHasComponent<T>(id)) {
 				for (auto c : this->m_ettComponents.at(id)) {
 					if (auto t = std::dynamic_pointer_cast<T>(c); t != nullptr) {

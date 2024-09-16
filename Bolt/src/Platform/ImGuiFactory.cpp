@@ -8,6 +8,9 @@
 namespace Bolt {
 	void ImGuiDockSpace::onEvent(const Event &e) {}
 
+	void ImGuiDockSpace::onAttach() {
+	}
+
 	void ImGuiDockSpace::onRender() {
 		ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
 
@@ -28,9 +31,6 @@ namespace Bolt {
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		ImGui::Begin("DockSpace", &this->m_open, windowFlags);
-		ImGui::PopStyleVar();
-
-		ImGui::PopStyleVar(2);
 
 		// Submit the DockSpace
 		if (const ImGuiIO &io = ImGui::GetIO(); io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
@@ -39,6 +39,9 @@ namespace Bolt {
 		}
 
 		ImGui::End();
+
+		ImGui::PopStyleVar();
+		ImGui::PopStyleVar(2);
 	}
 
 	ImGuiEntityTree::ImGuiEntityTree() :
@@ -63,6 +66,7 @@ namespace Bolt {
 	}
 
 	void ImGuiViewPort::onAttach() {
+		// preparing framebuffer
 		this->m_fbo.onAttach();
 		this->m_fbo.attachTexture({0,
 			texture::opengl::target::TEXTURE_2D,
@@ -74,7 +78,6 @@ namespace Bolt {
 			texture::opengl::format::RGB,
 			texture::opengl::dataType::UNSIGNED_BYTE,
 			NULL});
-        
 	}
 
 	void ImGuiViewPort::onEvent(const Event &e) {}
@@ -104,12 +107,12 @@ namespace Bolt {
 	}
 
 	void ImGuiFactory::createBasicUi() {
-		LayerManager::instance()->addLayer(std::make_shared<ImGuiLayer>());
+		LayerManager::instance()->addLayer(CreateShared<ImGuiLayer>());
 
-		LayerManager::instance()->addLayer(std::make_shared<ImGuiDockSpace>());
-		LayerManager::instance()->addLayer(std::make_shared<ImGuiEntityTree>());
-		LayerManager::instance()->addLayer(std::make_shared<ImGuiViewPort>());
-		LayerManager::instance()->addLayer(std::make_shared<ImGuiUtility>());
-		LayerManager::instance()->addLayer(std::make_shared<ImGuiProperties>());
+		LayerManager::instance()->addLayer(CreateShared<ImGuiDockSpace>());
+		LayerManager::instance()->addLayer(CreateShared<ImGuiEntityTree>());
+		LayerManager::instance()->addLayer(CreateShared<ImGuiViewPort>());
+		LayerManager::instance()->addLayer(CreateShared<ImGuiUtility>());
+		LayerManager::instance()->addLayer(CreateShared<ImGuiProperties>());
 	}
 } // namespace Bolt

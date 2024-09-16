@@ -13,7 +13,7 @@
 namespace Bolt {
 	class GlfwWindow : public Window {
 	private:
-		inline static std::shared_ptr<GlfwWindow> s_pointer;
+		inline static Shared<GlfwWindow> s_pointer;
 		inline static std::mutex s_mutex;
 
 		GLFWwindow *m_context = nullptr;
@@ -31,10 +31,10 @@ namespace Bolt {
 
 		void operator=(const GlfwWindow &other) = delete;
 
-		inline static std::shared_ptr<GlfwWindow> instance() {
+		inline static Shared<GlfwWindow> instance() {
 			std::lock_guard<std::mutex> lock(s_mutex);
 			if (s_pointer == nullptr) {
-				std::shared_ptr<GlfwWindow> copy(new GlfwWindow());
+				Shared<GlfwWindow> copy(new GlfwWindow());
 				copy.swap(s_pointer);
 			}
 

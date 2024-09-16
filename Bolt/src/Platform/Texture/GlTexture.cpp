@@ -24,12 +24,15 @@ namespace Bolt {
 	}
 
 	void GlTexture::createTexture2D(u32 target, i32 level, u32 internalFormat, i32 width, i32 height, i32 border, u32 format, u32 dataType, void *data) {
+		if (!this->m_customParam) {
+            // bind default params
+		}
 		glTexImage2D(target, level, internalFormat, width, height, border, format, dataType, data);
-        this->m_created = true;
+		this->m_created = true;
 	}
-    
-    void GlTexture::generateMipmap(u32 target) {
-        assert(this->m_created);
-        glGenerateMipmap(target);
-    }
+
+	void GlTexture::generateMipmap(u32 target) {
+		assert(this->m_created);
+		glGenerateMipmap(target);
+	}
 } // namespace Bolt

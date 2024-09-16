@@ -3,33 +3,50 @@
 // --- MACROS ---
 
 // Math
-#define BTMIN(a, b)	((a) < (b) ? (a) : (b))
+#include <memory>
+#define BTMIN(a, b) ((a) < (b) ? (a) : (b))
 // #define BTMININC(a, b)	((a) <= (b) ? (a) : (b))
-#define BTMAX(a, b)	((a) > (b) ? (a) : (b))
+#define BTMAX(a, b) ((a) > (b) ? (a) : (b))
 // #define BTMAXINC(a, b)	((a) >= (b) ? (a) : (b))
-
-// --- TYPEDEF ---
-
-// Base Types
-typedef unsigned char u8;
-typedef unsigned short u16;
-typedef unsigned int u32;
-typedef unsigned long long u64;
-
-typedef char i8;
-typedef short i16;
-typedef int i32;
-typedef long long i64;
-
-// should be better
-typedef bool b8;
-
-typedef float f32;
-typedef double f64;
 
 // constexpression
 #define BT_CONSTEXPR constexpr
 #define BT_AUTOCONST const auto
+
+// --- ALIAS ---
+
+// Base Types
+using u8 = unsigned char;
+using u16 = unsigned short;
+using u32 = unsigned int;
+using u64 = unsigned long long;
+
+using i8 = char;
+using i16 = short;
+using i32 = int;
+using i64 = long long;
+
+// should be better
+using b8 = bool;
+
+using f32 = float;
+using f64 = double;
+
+template <typename T>
+using Unique = std::unique_ptr<T>;
+
+template <typename T, typename... Args>
+constexpr Unique<T> CreateUnique(Args &&...args) {
+	return std::make_unique<T>(std::forward<Args>(args)...);
+}
+
+template <typename T>
+using Shared = std::shared_ptr<T>;
+
+template <typename T, typename... Args>
+constexpr Shared<T> CreateShared(Args &&...args) {
+	return std::make_shared<T>(std::forward<Args>(args)...);
+}
 
 // Check errors
 #define STATIC_ASSERT static_assert

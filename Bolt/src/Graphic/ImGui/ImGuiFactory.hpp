@@ -18,6 +18,8 @@ namespace Bolt {
 
 		virtual ~ImGuiDockSpace() override = default;
 
+        virtual void onAttach() override;
+
 		virtual void onEvent(const Event &e) override;
 
 		virtual void onRender() override;
@@ -42,6 +44,8 @@ namespace Bolt {
 	private:
 		std::string m_name = "Viewport";
 		FrameBuffer m_fbo;
+        WinSize size;
+        b8 m_fboAttached = false;
 
 	public:
 		ImGuiViewPort() = default;
