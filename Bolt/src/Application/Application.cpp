@@ -25,7 +25,7 @@ void Bolt::Application::run() {
 	const auto lm = LayerManager::instance();
 
 	// This window is unique.
-	const auto w = GlfwWindow::instance();
+	Shared<GlfwWindow> w = CreateShared<GlfwWindow>(GlfwWindow());
 	lm->addLayer(w);
 
 	const auto rd = RenderApi::instance();
@@ -43,7 +43,7 @@ void Bolt::Application::run() {
     auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(0);
 
 	// Creates ImGui context and create the basic UI
-	ImGuiFactory::createBasicUi();
+	ImGuiFactory::createBasicUi(w);
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();

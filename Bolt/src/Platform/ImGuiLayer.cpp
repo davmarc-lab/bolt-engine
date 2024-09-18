@@ -31,7 +31,7 @@ namespace Bolt {
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
-		const auto window = static_cast<GLFWwindow*>(GlfwWindow::instance()->getCurrentWindow());
+		const auto window = static_cast<GLFWwindow*>(this->m_window->getCurrentWindow());
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -56,7 +56,7 @@ namespace Bolt {
 
 	void ImGuiLayer::end() {
 		ImGuiIO& io = ImGui::GetIO();
-		io.DisplaySize = ImVec2(GlfwWindow::instance()->getWidth(), GlfwWindow::instance()->getHeight());
+		io.DisplaySize = ImVec2(this->m_window->getWidth(), this->m_window->getHeight());
 
 		// Rendering
 		ImGui::Render();

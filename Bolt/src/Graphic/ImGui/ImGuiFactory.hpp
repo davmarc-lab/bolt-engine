@@ -91,6 +91,6 @@ namespace Bolt {
 		ImGuiFactory() = delete;
 
 	public:
-		static void createBasicUi();
+		static void createBasicUi(Shared<GlfwWindow> window);
 	};
 } // namespace Bolt

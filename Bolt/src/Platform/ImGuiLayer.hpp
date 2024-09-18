@@ -1,11 +1,16 @@
 ﻿#pragma once
 
+#include "GlfwWindow.hpp"
 #include "../Core/Layer.hpp"
+
+#include "../Core/Window.hpp"
 
 namespace Bolt {
 	class ImGuiLayer final : public Layer {
+	private:
+		Shared<GlfwWindow> m_window;
 	public:
-		ImGuiLayer() : Layer("ImGui") {}
+		ImGuiLayer(Shared<GlfwWindow> w) : Layer("ImGui"), m_window(w) {}
 
 		virtual void onAttach() override;
 

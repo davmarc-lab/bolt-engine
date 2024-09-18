@@ -100,8 +100,8 @@ namespace Bolt {
 		ImGui::End();
 	}
 
-	void ImGuiFactory::createBasicUi() {
-		LayerManager::instance()->addLayer(CreateShared<ImGuiLayer>());
+	void ImGuiFactory::createBasicUi(Shared<GlfwWindow> window) {
+		LayerManager::instance()->addLayer(CreateShared<ImGuiLayer>(window));
 
 		LayerManager::instance()->addLayer(CreateShared<ImGuiDockSpace>());
 		LayerManager::instance()->addLayer(CreateShared<ImGuiEntityTree>());

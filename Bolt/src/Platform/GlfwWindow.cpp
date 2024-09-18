@@ -8,202 +8,192 @@
 
 namespace Bolt {
 
-#ifdef BT_ENABLE_DEBUG
-const char *getErrorSource(const GLenum &source) {
-    switch (source) {
-    case GL_DEBUG_SOURCE_API:
-        return "API";
-    case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
-        return "Window System";
-    case GL_DEBUG_SOURCE_SHADER_COMPILER:
-        return "Shader Compiler";
-    case GL_DEBUG_SOURCE_THIRD_PARTY:
-        return "Third Party";
-    case GL_DEBUG_SOURCE_APPLICATION:
-        return "Application";
-    default:
-        return "Other";
-    }
-}
+	static u16 s_windowCount = 0;
 
-const char *getErrorType(const GLenum &type) {
-    switch (type) {
-    case GL_DEBUG_TYPE_ERROR:
-        return "Error";
-    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-        return "Deprecated Behaviour";
-    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-        return "Undefined Behaviour";
-    case GL_DEBUG_TYPE_PORTABILITY:
-        return "Portability";
-    case GL_DEBUG_TYPE_PERFORMANCE:
-        return "Performance";
-    case GL_DEBUG_TYPE_MARKER:
-        return "Marker";
-    case GL_DEBUG_TYPE_PUSH_GROUP:
-        return "Push Group";
-    case GL_DEBUG_TYPE_POP_GROUP:
-        return "Pop Group";
-    default:
-        return "Other";
-    }
-}
+	#ifdef BT_ENABLE_DEBUG
+	const char *getErrorSource(const GLenum &source) {
+		switch (source) {
+			case GL_DEBUG_SOURCE_API: return "API";
+			case GL_DEBUG_SOURCE_WINDOW_SYSTEM: return "Window System";
+			case GL_DEBUG_SOURCE_SHADER_COMPILER: return "Shader Compiler";
+			case GL_DEBUG_SOURCE_THIRD_PARTY: return "Third Party";
+			case GL_DEBUG_SOURCE_APPLICATION: return "Application";
+			default: return "Other";
+		}
+	}
 
-// TODO : Try to implement a macro for the string created (or use streams)
-void glDebugOutput(const GLenum source, const GLenum type, const u32 id, const GLenum severity, const GLsizei length, const char *message,
-                   const void *userParam) {
-    // ignore non-significant error/warning codes
-    if (id == 131169 || id == 131185 || id == 131218 || id == 131204)
-        return;
+	const char *getErrorType(const GLenum &type) {
+		switch (type) {
+			case GL_DEBUG_TYPE_ERROR: return "Error";
+			case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "Deprecated Behaviour";
+			case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: return "Undefined Behaviour";
+			case GL_DEBUG_TYPE_PORTABILITY: return "Portability";
+			case GL_DEBUG_TYPE_PERFORMANCE: return "Performance";
+			case GL_DEBUG_TYPE_MARKER: return "Marker";
+			case GL_DEBUG_TYPE_PUSH_GROUP: return "Push Group";
+			case GL_DEBUG_TYPE_POP_GROUP: return "Pop Group";
+			default: return "Other";
+		}
+	}
 
-    // It should be fine using a temporary string to print debug information.
-    {
-        const auto msg = "GLFW Debug Output:\n" + std::string("Code (") + std::to_string(id) + "): " + message + "\n" +
-                         "Source: " + getErrorSource(source) + "\n" + "Type: " + getErrorType(type) + "\n" + "File: " + __FILE__;
+	// TODO : Try to implement a macro for the string created (or use streams)
+	void glDebugOutput(const GLenum source,
+		const GLenum type,
+		const u32 id,
+		const GLenum severity,
+		const GLsizei length,
+		const char *message,
+		const void *userParam) {
+		// ignore non-significant error/warning codes
+		if (id == 131169 || id == 131185 || id == 131218 || id == 131204)
+			return;
 
-        switch (severity) {
-        case GL_DEBUG_SEVERITY_LOW:
-            BT_INFO_CORE(msg);
-            break;
-        case GL_DEBUG_SEVERITY_MEDIUM:
-            BT_WARN_CORE(msg);
-            break;
-        case GL_DEBUG_SEVERITY_HIGH:
-            BT_ERROR_CORE(msg);
-            break;
-        default:
-            BT_INFO_CORE(msg);
-            break;
-        }
-    }
-}
-#endif
+		// It should be fine using a temporary string to print debug information.
+		{
+			const auto msg = "GLFW Debug Output:\n" + std::string("Code (") + std::to_string(id) + "): " + message + "\n" +
+				"Source: " + getErrorSource(source) + "\n" + "Type: " + getErrorType(type) + "\n" + "File: " + __FILE__;
 
-static void glfwErrorCallback(i32 code, const char *description) { BT_ERROR_CORE("GLFW error ({0} -> {1})", code, description); }
+			switch (severity) {
+				case GL_DEBUG_SEVERITY_LOW:
+					BT_INFO_CORE(msg);
+					break;
+				case GL_DEBUG_SEVERITY_MEDIUM:
+					BT_WARN_CORE(msg);
+					break;
+				case GL_DEBUG_SEVERITY_HIGH:
+					BT_ERROR_CORE(msg);
+					break;
+				default:
+					BT_INFO_CORE(msg);
+					break;
+			}
+		}
+	}
+	#endif
 
-static void glfwResizeCallback(GLFWwindow *window, i32 width, i32 height) {
-    glViewport(0, 0, width, height);
+	static void glfwErrorCallback(i32 code, const char *description) { BT_ERROR_CORE("GLFW error ({0} -> {1})", code, description); }
 
-    if (width < 0 || height < 0) {
-        BT_WARN_CORE("Tried to assign negative window size.");
-    }
+	static void glfwResizeCallback(GLFWwindow *window, i32 width, i32 height) {
+		glViewport(0, 0, width, height);
 
-    GlfwWindow::instance()->setSize({static_cast<u16>(width), static_cast<u16>(height)});
-    BT_INFO_CORE("Window resized: w={0}, h={1}", width, height);
-}
+		if (width < 0 || height < 0) { BT_WARN_CORE("Tried to assign negative window size."); }
 
-static void glfwKeyboardCallback(GLFWwindow *window, int key, int code, int action, int mod) {
-    if (key == keyglfw::KEY_ESCAPE) {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-    }
-}
+		BT_INFO_CORE("Window resized: w={0}, h={1}", width, height);
+	}
 
-bool GlfwWindow::shouldWindowClose() const { return glfwWindowShouldClose(this->m_context); }
+	static void glfwKeyboardCallback(GLFWwindow *window, int key, int code, int action, int mod) { if (key == keyglfw::KEY_ESCAPE) { glfwSetWindowShouldClose(window, GLFW_TRUE); } }
 
-void GlfwWindow::setVsync(const b8 &enabled) {
-    if (enabled) {
-        glfwSwapInterval(1);
-        BT_INFO_CORE("VSync enabled for Window \"{0}\"", this->m_windowTitle);
-    } else {
-        glfwSwapInterval(0);
-        BT_INFO_CORE("VSync disabled for Window \"{0}\"", this->m_windowTitle);
-    }
-}
+	bool GlfwWindow::shouldWindowClose() const { return glfwWindowShouldClose(this->m_context); }
 
-void GlfwWindow::onAttach() {
-    // Init GLFW window
-    BT_INFO_CORE("Initializing GLFW context");
-    glfwInit();
+	void GlfwWindow::setVsync(const b8 &enabled) {
+		if (enabled) {
+			glfwSwapInterval(1);
+			BT_INFO_CORE("VSync enabled for Window \"{0}\"", this->m_windowTitle);
+		}
+		else {
+			glfwSwapInterval(0);
+			BT_INFO_CORE("VSync disabled for Window \"{0}\"", this->m_windowTitle);
+		}
+	}
 
-    // Error callback function must use the logger
-    glfwSetErrorCallback(glfwErrorCallback);
+	void GlfwWindow::onAttach() {
+		// Init GLFW window
+		BT_INFO_CORE("Initializing GLFW context");
+		glfwInit();
 
-    BT_INFO_CORE("Creating Window \"{0}\"", this->m_windowTitle);
+		// Error callback function must use the logger
+		glfwSetErrorCallback(glfwErrorCallback);
 
-#ifdef BT_ENABLE_DEBUG
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-    BT_INFO_CORE("Debug activated");
-#endif
+		BT_INFO_CORE("Creating Window \"{0}\"", this->m_windowTitle);
 
-    // Creating window
-    this->m_context = glfwCreateWindow(this->getWidth(), this->getHeight(), this->m_windowTitle.c_str(), NULL, NULL);
-    if (this->m_context == NULL) {
-        BT_ERROR_CORE("Failed to create GLFW window.");
-        BT_INFO_CORE("To be replaced with event.");
-        exit(EXIT_FAILURE);
-    }
+		#ifdef BT_ENABLE_DEBUG
+		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+		BT_INFO_CORE("Debug activated");
+		#endif
 
-    glfwMakeContextCurrent(this->m_context);
+		// Creating window
+		this->m_context = glfwCreateWindow(this->getWidth(), this->getHeight(), this->m_windowTitle.c_str(), NULL, NULL);
+		if (this->m_context == NULL) {
+			BT_ERROR_CORE("Failed to create GLFW window.");
+			BT_INFO_CORE("To be replaced with event.");
+			exit(EXIT_FAILURE);
+		}
 
-    // Init glad loader
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        BT_ERROR_CORE("Failed to initialize GLAD.");
-        glfwTerminate();
-        BT_INFO_CORE("To be replaced with event.");
-        exit(EXIT_FAILURE);
-    }
+		glfwMakeContextCurrent(this->m_context);
 
-#ifdef BT_ENABLE_DEBUG
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+		// Init glad loader
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+			BT_ERROR_CORE("Failed to initialize GLAD.");
+			glfwTerminate();
+			BT_INFO_CORE("To be replaced with event.");
+			exit(EXIT_FAILURE);
+		}
 
-    {
-        int debugFlags;
-        glGetIntegerv(GL_CONTEXT_FLAGS, &debugFlags);
+		#ifdef BT_ENABLE_DEBUG
+		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
-        if (debugFlags & GL_CONTEXT_FLAG_DEBUG_BIT) {
-            glEnable(GL_DEBUG_OUTPUT);
-            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-            glDebugMessageCallback(glDebugOutput, nullptr);
-            glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
-            BT_INFO_CORE("GLFW Debugger Initialized.");
-        }
-    }
-#endif
+		{
+			int debugFlags;
+			glGetIntegerv(GL_CONTEXT_FLAGS, &debugFlags);
 
-    // Enabling vsync
-    this->setVsync(this->isVerticalSyncEnable());
+			if (debugFlags & GL_CONTEXT_FLAG_DEBUG_BIT) {
+				glEnable(GL_DEBUG_OUTPUT);
+				glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+				glDebugMessageCallback(glDebugOutput, nullptr);
+				glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+				BT_INFO_CORE("GLFW Debugger Initialized.");
+			}
+		}
+		#endif
 
-    // Callbacks time
-    glfwSetFramebufferSizeCallback(this->m_context, glfwResizeCallback);
+		// Enabling vsync
+		this->setVsync(this->isVerticalSyncEnable());
 
-    glfwSetKeyCallback(this->m_context, glfwKeyboardCallback);
+		// Callbacks time
+		glfwSetFramebufferSizeCallback(this->m_context, glfwResizeCallback);
 
-    // Enable some parameters
-    glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
+		glfwSetKeyCallback(this->m_context, glfwKeyboardCallback);
 
-    {
-        i32 width, height;
-        glfwGetWindowSize(this->m_context, &width, &height);
-        if (width >= 0 && height >= 0) {
-            this->setSize({static_cast<u16>(width), static_cast<u16>(height)});
-        } else {
-            BT_WARN_CORE("Tried to assign negative window size.");
-        }
-    }
+		// Enable some parameters
+		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
 
-    BT_INFO_CORE("The renderer should do these things");
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_DEPTH_TEST);
+		{
+			i32 width, height;
+			glfwGetWindowSize(this->m_context, &width, &height);
+			if (width >= 0 && height >= 0) { this->setSize({static_cast<u16>(width), static_cast<u16>(height)}); }
+			else { BT_WARN_CORE("Tried to assign negative window size."); }
+		}
 
-    this->m_window = this->m_context;
-}
+		BT_INFO_CORE("The renderer should do these things");
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_DEPTH_TEST);
 
-void GlfwWindow::onDetach() { glfwDestroyWindow(this->m_context); }
+		this->m_window = this->m_context;
+		s_windowCount++;
+	}
 
-void GlfwWindow::onEvent(const Event &e) {
-    // BT_INFO_CORE("No Implementation of Event handling.");
-}
+	void GlfwWindow::onDetach() {
+		glfwDestroyWindow(this->m_context);
+		s_windowCount--;
 
-void GlfwWindow::onUpdate() {
-    glfwPollEvents();
-    glfwSwapBuffers(this->m_context);
-}
+		if (s_windowCount == 0) {
+		}
+	}
 
-void GlfwWindow::onRender() {
-    // Default clear operations.
-    glClearColor(1.f, 0.f, 0.f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
+	void GlfwWindow::onEvent(const Event &e) {
+		// BT_INFO_CORE("No Implementation of Event handling.");
+	}
+
+	void GlfwWindow::onUpdate() {
+		glfwPollEvents();
+		glfwSwapBuffers(this->m_context);
+	}
+
+	void GlfwWindow::onRender() {
+		// Default clear operations.
+		glClearColor(1.f, 0.f, 0.f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
 
 } // namespace Bolt
