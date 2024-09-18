@@ -54,7 +54,7 @@ namespace Bolt {
 
 		/// ???
 		template <class T>
-		inline void getLayerFromType() const { BT_WARN_CORE("{0} method not implemented.", __FILE__); }
+		inline void getLayerFromType() const { /* BT_WARN_CORE("{0} method not implemented.", __FILE__); */ }
 
 		/*
 		 * Executes an operation for each layer.

@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include "../../Core/Log.hpp"
-
 #include <vector>
 #include "../../Core/Utils.hpp"
 
@@ -39,7 +37,7 @@ namespace Bolt {
 		 * @param usage The usage type.
 		 */
 		template <typename T>
-		void setup(const T *indices, const i64 &size, const u32 &usage = 0) { BT_WARN_CORE("Put an assert here {0}.", __FILE__); }
+		void setup(const T *indices, const i64 &size, const u32 &usage = 0) { /* BT_WARN_CORE("Put an assert here {0}.", __FILE__); */ }
 
 		/**
 		 * @brief Sets up the data for the buffer.
@@ -48,6 +46,6 @@ namespace Bolt {
 		 * @param usage The usage type.
 		 */
 		template <typename T>
-		void setup(const std::vector<T> &indices, const u32 &usage = 0) { BT_WARN_CORE("Put an assert here {0}.", __FILE__); }
+		void setup(const std::vector<T> &indices, const u32 &usage = 0) { /* BT_WARN_CORE("Put an assert here {0}.", __FILE__); */ }
 	};
 } // namespace Bolt

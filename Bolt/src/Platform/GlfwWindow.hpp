@@ -21,7 +21,7 @@ namespace Bolt {
 			m_windowTitle("Bolt Engine") {
 			this->setPosition({0, 0});
 			this->setSize({1600, 900});
-			BT_WARN_CORE("You should implement this like a layer so you can create multiple windows.");
+			/* BT_WARN_CORE("You should implement this like a layer so you can create multiple windows."); */
 		}
 		
 		b8 shouldWindowClose() const;

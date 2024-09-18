@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <memory>
 #include <mutex>
-#include <unordered_map>
+#include <map>
 
 #include "Component.hpp"
 #include "Entity.hpp"
@@ -45,7 +45,7 @@ namespace Bolt {
 		template <typename T>
 		Shared<T> addComponent(const u32 &id) {
 			if (!this->isEntityValid(id)) {
-				BT_WARN_CORE("Entity does not exist: id = {0}.", id);
+				// BT_WARN_CORE("Entity does not exist: id = {0}.", id);
 				return nullptr;
 			}
 
@@ -61,7 +61,7 @@ namespace Bolt {
 		template <typename T>
 		bool entityHasComponent(const u32 &id) {
 			if (!this->isEntityValid(id)) {
-				BT_WARN_CORE("Entity does not exist: id = {0}.", id);
+				// BT_WARN_CORE("Entity does not exist: id = {0}.", id);
 				return false;
 			}
 

@@ -1,6 +1,5 @@
 ﻿#include "GlfwWindow.hpp"
 
-#include "../Core/Log.hpp"
 #include "../Core/Utils.hpp"
 #include "../Core/Keys.hpp"
 
@@ -55,30 +54,30 @@ namespace Bolt {
 
 			switch (severity) {
 				case GL_DEBUG_SEVERITY_LOW:
-					BT_INFO_CORE(msg);
+					/* BT_INFO_CORE(msg); */
 					break;
 				case GL_DEBUG_SEVERITY_MEDIUM:
-					BT_WARN_CORE(msg);
+					/* BT_WARN_CORE(msg); */
 					break;
 				case GL_DEBUG_SEVERITY_HIGH:
-					BT_ERROR_CORE(msg);
+					/* BT_ERROR_CORE(msg); */
 					break;
 				default:
-					BT_INFO_CORE(msg);
+					/* BT_INFO_CORE(msg); */
 					break;
 			}
 		}
 	}
 	#endif
 
-	static void glfwErrorCallback(i32 code, const char *description) { BT_ERROR_CORE("GLFW error ({0} -> {1})", code, description); }
+	static void glfwErrorCallback(i32 code, const char *description) { /* BT_ERROR_CORE("GLFW error ({0} -> {1})", code, description); */ }
 
 	static void glfwResizeCallback(GLFWwindow *window, i32 width, i32 height) {
 		glViewport(0, 0, width, height);
 
-		if (width < 0 || height < 0) { BT_WARN_CORE("Tried to assign negative window size."); }
+		if (width < 0 || height < 0) { /* BT_WARN_CORE("Tried to assign negative window size."); */ }
 
-		BT_INFO_CORE("Window resized: w={0}, h={1}", width, height);
+		/* BT_INFO_CORE("Window resized: w={0}, h={1}", width, height); */
 	}
 
 	static void glfwKeyboardCallback(GLFWwindow *window, int key, int code, int action, int mod) { if (key == keyglfw::KEY_ESCAPE) { glfwSetWindowShouldClose(window, GLFW_TRUE); } }
@@ -88,34 +87,34 @@ namespace Bolt {
 	void GlfwWindow::setVsync(const b8 &enabled) {
 		if (enabled) {
 			glfwSwapInterval(1);
-			BT_INFO_CORE("VSync enabled for Window \"{0}\"", this->m_windowTitle);
+			/* BT_INFO_CORE("VSync enabled for Window \"{0}\"", this->m_windowTitle); */
 		}
 		else {
 			glfwSwapInterval(0);
-			BT_INFO_CORE("VSync disabled for Window \"{0}\"", this->m_windowTitle);
+			/* BT_INFO_CORE("VSync disabled for Window \"{0}\"", this->m_windowTitle); */
 		}
 	}
 
 	void GlfwWindow::onAttach() {
 		// Init GLFW window
-		BT_INFO_CORE("Initializing GLFW context");
+		/* BT_INFO_CORE("Initializing GLFW context"); */
 		glfwInit();
 
 		// Error callback function must use the logger
 		glfwSetErrorCallback(glfwErrorCallback);
 
-		BT_INFO_CORE("Creating Window \"{0}\"", this->m_windowTitle);
+		/* BT_INFO_CORE("Creating Window \"{0}\"", this->m_windowTitle); */
 
 		#ifdef BT_ENABLE_DEBUG
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-		BT_INFO_CORE("Debug activated");
+		/* BT_INFO_CORE("Debug activated"); */
 		#endif
 
 		// Creating window
 		this->m_context = glfwCreateWindow(this->getWidth(), this->getHeight(), this->m_windowTitle.c_str(), NULL, NULL);
 		if (this->m_context == NULL) {
-			BT_ERROR_CORE("Failed to create GLFW window.");
-			BT_INFO_CORE("To be replaced with event.");
+			/* BT_ERROR_CORE("Failed to create GLFW window."); */
+			/* BT_INFO_CORE("To be replaced with event."); */
 			exit(EXIT_FAILURE);
 		}
 
@@ -123,9 +122,9 @@ namespace Bolt {
 
 		// Init glad loader
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-			BT_ERROR_CORE("Failed to initialize GLAD.");
+			/* BT_ERROR_CORE("Failed to initialize GLAD."); */
 			glfwTerminate();
-			BT_INFO_CORE("To be replaced with event.");
+			/* BT_INFO_CORE("To be replaced with event."); */
 			exit(EXIT_FAILURE);
 		}
 
@@ -141,7 +140,7 @@ namespace Bolt {
 				glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 				glDebugMessageCallback(glDebugOutput, nullptr);
 				glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
-				BT_INFO_CORE("GLFW Debugger Initialized.");
+				/* BT_INFO_CORE("GLFW Debugger Initialized."); */
 			}
 		}
 		#endif
@@ -161,10 +160,10 @@ namespace Bolt {
 			i32 width, height;
 			glfwGetWindowSize(this->m_context, &width, &height);
 			if (width >= 0 && height >= 0) { this->setSize({static_cast<u16>(width), static_cast<u16>(height)}); }
-			else { BT_WARN_CORE("Tried to assign negative window size."); }
+			else { /* BT_WARN_CORE("Tried to assign negative window size."); */ }
 		}
 
-		BT_INFO_CORE("The renderer should do these things");
+		/* BT_INFO_CORE("The renderer should do these things"); */
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
@@ -192,7 +191,7 @@ namespace Bolt {
 
 	void GlfwWindow::onRender() {
 		// Default clear operations.
-		glClearColor(1.f, 0.f, 0.f, 1.0f);
+		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 

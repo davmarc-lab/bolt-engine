@@ -2,7 +2,7 @@
 
 #include "Application/Application.hpp"
 
-#include "Core/Log.hpp"
+// #include "Core/Log.hpp"
 #include "Core/Utils.hpp"
 
 #include "ECS/EntityManager.hpp"

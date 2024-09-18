@@ -2,10 +2,13 @@
 
 #include "../Core/LayerManager.hpp"
 #include "../Core/RenderApi.hpp"
+
 #include "../Graphic/ImGui/ImGuiFactory.hpp"
 
 #include "../ECS/EntityManager.hpp"
 #include "../ECS/System.hpp"
+#include "../Core/Scene.hpp"
+#include "../Platform/Shader/GlShader.hpp"
 
 #include "../Platform/MeshFactory.hpp"
 
@@ -42,8 +45,16 @@ void Bolt::Application::run() {
 
     auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(0);
 
+    auto scene = Scene::instance();
+    scene->addEntity(0);
+
+    lm->addLayer(CreateShared<SceneLayer>());
+
 	// Creates ImGui context and create the basic UI
-	ImGuiFactory::createBasicUi(w);
+	// ImGuiFactory::createBasicUi(w);
+
+    GlShader s = GlShader("vert.glsl", shader::ShaderType::SHADER_VERTEX);
+    s.createShader();
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();

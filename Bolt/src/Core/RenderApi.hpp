@@ -2,6 +2,7 @@
 
 #include "Enums.hpp"
 
+#include <cstdlib>
 #include <memory>
 #include <mutex>
 
@@ -43,7 +44,7 @@ namespace Bolt {
 				this->m_render = CreateShared<GlRenderer>();
 
 			if (this->m_render == nullptr) {
-                BT_CRITICAL_CORE("No renderer attached, closing the application.");
+                // BT_CRITICAL_CORE("No renderer attached, closing the application.");
                 // close app
                 exit(-1);
 			}
