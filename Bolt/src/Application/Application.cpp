@@ -39,7 +39,7 @@ void Bolt::Application::run() {
 	ed->subscribe(events::Update, [&f](auto &&ph1) { f.handle(ph1); });
 
 	EntityManager::instance()->createEntity();
-	factory::mesh::createEmptyCubeMesh(0, {}, vec4(0.5, 0.2, 1, 1));
+	factory::mesh::createEmptyCubeMesh(0, {}, vec4(0.5, 0.2, 0.5, 1));
 
     auto scene = Scene::instance();
     scene->addEntity(0);
