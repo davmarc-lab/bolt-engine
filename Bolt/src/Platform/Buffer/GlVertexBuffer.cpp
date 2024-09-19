@@ -27,10 +27,9 @@ namespace Bolt {
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, usage == 0 ? GL_STATIC_DRAW : usage);
 	}
 
-	template <typename T>
-	void GlVertexBuffer::setup(const std::vector<T> &vertices, const u32 &usage) {
+	void GlVertexBuffer::setup(const std::vector<vec4> &vertices, const u32 &usage) {
 		this->bind();
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(T), vertices.data(), usage == 0 ? GL_STATIC_DRAW : usage);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vec4), vertices.data(), usage == 0 ? GL_STATIC_DRAW : usage);
 	}
 
 	template <typename T>

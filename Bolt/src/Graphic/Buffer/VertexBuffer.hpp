@@ -3,6 +3,8 @@
 #include "../../Core/Utils.hpp"
 #include "../../Core/Log.hpp"
 
+#include "../../Core/Math.hpp"
+
 #include <vector>
 
 namespace Bolt {
@@ -44,8 +46,7 @@ namespace Bolt {
 		 * @param vertices A std::vector of something to use as data.
 		 * @param usage The usage type.
 		 */
-		template <typename T>
-		void setup(const std::vector<T> &vertices, const u32 &usage) { /* BT_WARN_CORE("Put an assert here {0}.", __FILE__); */ }
+		virtual void setup(const std::vector<vec4> &vertices, const u32 &usage) { /* BT_WARN_CORE("Put an assert here {0}.", __FILE__); */ }
 
 		/**
 		 * @brief Sets up the data for the buffer avoiding the cost of reallocating

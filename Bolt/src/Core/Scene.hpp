@@ -9,6 +9,8 @@
 #include <mutex>
 #include <vector>
 
+#include "../Platform/Shader/GlShader.hpp"
+
 namespace Bolt {
 	class Scene {
 	private:
@@ -54,7 +56,14 @@ namespace Bolt {
 		}
 
 		inline virtual void onRender() override {
+			GlShader vert = GlShader("vert.glsl", shader::ShaderType::SHADER_VERTEX);
+			GlShader frag = GlShader("frag.glsl", shader::ShaderType::SHADER_FRAGMENT);
+			vert.createShader();
+			frag.createShader();
+
+			auto shader = shader::gl::linkVertFragShaders(vert, frag);
 			for (const auto &id : EntityManager::instance()->getEntitiesFromComponent<Mesh>()) {
+                shader->use();
 				systems::render::drawElement(id);
 			}
 		}

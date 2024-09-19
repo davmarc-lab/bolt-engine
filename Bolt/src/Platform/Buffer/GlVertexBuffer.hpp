@@ -45,8 +45,7 @@ namespace Bolt {
 		 * @param vertices A std::vector of something to use as data.
 		 * @param usage The usage type.
 		 */
-		template <typename T>
-		void setup(const std::vector<T> &vertices, const u32 &usage);
+		void setup(const std::vector<vec4> &vertices, const u32 &usage) override;
 
 		/**
 		 * @brief Sets up the data for the buffer avoiding the cost of reallocating

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <memory>
+#include <vector>
 #include "../Core/Math.hpp"
 
 #include "../Graphic/Buffer/VertexArray.hpp"
@@ -56,11 +57,22 @@ namespace Bolt {
 		}
 	};
 
+	class Color : public Component {
+	public:
+		Shared<VertexBuffer> vbo_c;
+		Unique<std::vector<vec4>> colors;
+        
+        Color() = default;
+        
+        ~Color() override = default;
+	};
+
 	class Mesh : public Component {
 	public:
 		Shared<VertexArray> vao;
 		Shared<VertexBuffer> vbo_g;
 		Unique<std::vector<vec3>> vertices;
+        Unique<Color> colorComponent;
 		b8 instanced = false;
 
 		Mesh() = default;

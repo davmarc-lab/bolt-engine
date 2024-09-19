@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Core/Utils.hpp"
+#include "../Core/Math.hpp"
 
 #include "../Core/Enums.hpp"
 
@@ -9,7 +9,7 @@ namespace Bolt {
         namespace mesh {
             void createEmptySquare(const u32&, config::MeshConfig = {});
 
-            void createEmptyCubeMesh(const u32&, config::MeshConfig = {});
+            void createEmptyCubeMesh(const u32&, config::MeshConfig = {}, vec4 color = vec4(1, 0, 0, 1));
         }
     }
 }

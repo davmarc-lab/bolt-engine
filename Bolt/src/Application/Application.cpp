@@ -8,7 +8,6 @@
 #include "../ECS/EntityManager.hpp"
 #include "../ECS/System.hpp"
 #include "../Core/Scene.hpp"
-#include "../Platform/Shader/GlShader.hpp"
 
 #include "../Platform/MeshFactory.hpp"
 
@@ -40,10 +39,7 @@ void Bolt::Application::run() {
 	ed->subscribe(events::Update, [&f](auto &&ph1) { f.handle(ph1); });
 
 	EntityManager::instance()->createEntity();
-
-	factory::mesh::createEmptyCubeMesh(0);
-
-    auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(0);
+	factory::mesh::createEmptyCubeMesh(0, {}, vec4(0.5, 0.2, 1, 1));
 
     auto scene = Scene::instance();
     scene->addEntity(0);
@@ -52,13 +48,6 @@ void Bolt::Application::run() {
 
 	// Creates ImGui context and create the basic UI
 	// ImGuiFactory::createBasicUi(w);
-
-    GlShader vert = GlShader("vert.glsl", shader::ShaderType::SHADER_VERTEX);
-    GlShader frag = GlShader("frag.glsl", shader::ShaderType::SHADER_FRAGMENT);
-    vert.createShader();
-    frag.createShader();
-
-    auto shader = shader::gl::linkVertFragShaders(vert, frag);
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
