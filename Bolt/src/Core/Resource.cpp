@@ -18,7 +18,6 @@ namespace Bolt {
 
             this->m_content.clear();
 			this->m_content = contentStream.str();
-            std::cout << this->m_content;
 		}
 		catch (std::ifstream::failure e) {
 			// BT_ERROR_CORE("Failed to load resource: name -> {0}\n\tError -> {1}", this->m_name, e.what());
@@ -28,6 +27,6 @@ namespace Bolt {
 
 	void Resource::unloadResource() {
 		// I shouldn't call destructor
-		this->~Resource();
+		// this->~Resource();
 	}
 } // namespace Bolt

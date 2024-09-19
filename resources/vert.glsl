@@ -1,3 +1,6 @@
 #version 330 core
 
-void main() {}
+void main()
+{
+    gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+}

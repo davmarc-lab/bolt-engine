@@ -53,8 +53,12 @@ void Bolt::Application::run() {
 	// Creates ImGui context and create the basic UI
 	// ImGuiFactory::createBasicUi(w);
 
-    GlShader s = GlShader("vert.glsl", shader::ShaderType::SHADER_VERTEX);
-    s.createShader();
+    GlShader vert = GlShader("vert.glsl", shader::ShaderType::SHADER_VERTEX);
+    GlShader frag = GlShader("frag.glsl", shader::ShaderType::SHADER_FRAGMENT);
+    vert.createShader();
+    frag.createShader();
+
+    auto shader = shader::gl::linkVertFragShaders(vert, frag);
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
