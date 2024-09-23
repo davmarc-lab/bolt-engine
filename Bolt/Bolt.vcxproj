@@ -22,6 +22,7 @@
     <ClInclude Include="src\Core\Log.hpp" />
     <ClInclude Include="src\Core\Math.hpp" />
     <ClInclude Include="src\Core\RenderApi.hpp" />
+    <ClInclude Include="src\Core\Resource.hpp" />
     <ClInclude Include="src\Core\Scene.hpp" />
     <ClInclude Include="src\Core\Structs.hpp" />
     <ClInclude Include="src\Core\Utils.hpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="src\Graphic\Buffer\VertexBuffer.hpp" />
     <ClInclude Include="src\Graphic\ImGui\ImGuiFactory.hpp" />
     <ClInclude Include="src\Graphic\Renderer\Renderer.hpp" />
+    <ClInclude Include="src\Graphic\Shader\Shader.hpp" />
     <ClInclude Include="src\Graphic\Texture\Texture.hpp" />
     <ClInclude Include="src\Platform\Buffer\GlElementBuffer.hpp" />
     <ClInclude Include="src\Platform\Buffer\GlFrameBuffer.hpp" />
@@ -49,6 +51,7 @@
     <ClInclude Include="src\Platform\ImGuiLayer.hpp" />
     <ClInclude Include="src\Platform\MeshFactory.hpp" />
     <ClInclude Include="src\Platform\MeshVertices.hpp" />
+    <ClInclude Include="src\Platform\Shader\GlShader.hpp" />
     <ClInclude Include="src\Platform\Texture\GlTexture.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +68,7 @@
     <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\LayerManager.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />
+    <ClCompile Include="src\Core\Resource.cpp" />
     <ClCompile Include="src\ECS\EntityManager.cpp" />
     <ClCompile Include="src\Platform\Buffer\GlElementBuffer.cpp" />
     <ClCompile Include="src\Platform\Buffer\GlFrameBuffer.cpp" />
@@ -76,6 +80,7 @@
     <ClCompile Include="src\Platform\ImGuiFactory.cpp" />
     <ClCompile Include="src\Platform\ImGuiLayer.cpp" />
     <ClCompile Include="src\Platform\MeshFactory.cpp" />
+    <ClCompile Include="src\Platform\Shader\GlShader.cpp" />
     <ClCompile Include="src\Platform\Texture\GlTexture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

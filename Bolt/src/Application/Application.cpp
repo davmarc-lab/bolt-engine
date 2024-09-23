@@ -47,7 +47,7 @@ void Bolt::Application::run() {
     lm->addLayer(CreateShared<SceneLayer>());
 
 	// Creates ImGui context and create the basic UI
-	// ImGuiFactory::createBasicUi(w);
+	ImGuiFactory::createBasicUi(w);
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
