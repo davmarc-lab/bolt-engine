@@ -5,7 +5,6 @@
 #include "EntityManager.hpp"
 
 #include "../Core/RenderApi.hpp"
-#include "../Platform/Buffer/GlVertexArray.hpp"
 
 #include "../../dependencies/glad/include/glad/glad.h"
 
@@ -32,12 +31,6 @@ namespace Bolt {
 				auto vao = EntityManager::instance()->getEntityComponent<Mesh>(id)->vao;
 				RenderApi::instance()->getRenderer()->drawArraysTriangles(*vao, 36);
 				vao->unbind();
-			}
-
-			inline void drawMainScene() {
-				for (auto e : EntityManager::instance()->getEntitiesFromComponent<Mesh>()) {
-					drawElement(e);
-				}
 			}
 		} // namespace render
 

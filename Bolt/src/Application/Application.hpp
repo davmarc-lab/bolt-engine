@@ -7,6 +7,8 @@ namespace Bolt {
 	 * Basic entry point to use the engine.
 	 */
 	class BOLT_API Application {
+    private:
+        inline static bool s_enableimGui = false;
 	public:
 		Application() {}
 
@@ -14,6 +16,10 @@ namespace Bolt {
 		 * Starts the aplication, and enters in the loop.
 		 */
 		void run();
+
+        inline static void enableImGui() { s_enableimGui = true; }
+
+        inline static bool isImGuiEnabled() { return s_enableimGui; }
 
 		~Application() {}
 	};

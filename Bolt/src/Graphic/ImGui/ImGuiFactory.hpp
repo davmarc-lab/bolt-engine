@@ -1,11 +1,14 @@
 ﻿#pragma once
 
+#include <stdexcept>
 #include "../../Core/Utils.hpp"
 
 #include "../../Core/LayerManager.hpp"
 #include "../../ECS/EntityManager.hpp"
 
 #include "../Buffer/FrameBuffer.hpp"
+
+#include "../../Application/Application.hpp"
 
 namespace Bolt {
 	class ImGuiDockSpace final : public Layer {
@@ -14,11 +17,14 @@ namespace Bolt {
 		b8 m_open = true;
 
 	public:
-		ImGuiDockSpace() = default;
+		ImGuiDockSpace() {
+			if (!Application::isImGuiEnabled()) // PUT LOG HERE
+				throw std::runtime_error("ImGui is disabled.");
+		}
 
 		virtual ~ImGuiDockSpace() override = default;
 
-        virtual void onAttach() override;
+		virtual void onAttach() override;
 
 		virtual void onEvent(const Event &e) override;
 
@@ -44,11 +50,14 @@ namespace Bolt {
 	private:
 		std::string m_name = "Viewport";
 		FrameBuffer m_fbo;
-        WinSize size;
-        b8 m_fboAttached = false;
+		WinSize size;
+		b8 m_fboAttached = false;
 
 	public:
-		ImGuiViewPort() = default;
+		ImGuiViewPort() {
+			if (!Application::isImGuiEnabled()) // PUT LOG HERE
+				throw std::runtime_error("ImGui is disabled.");
+		}
 
 		~ImGuiViewPort() override = default;
 
@@ -64,7 +73,10 @@ namespace Bolt {
 		std::string m_name = "Utility";
 
 	public:
-		ImGuiUtility() = default;
+		ImGuiUtility() {
+			if (!Application::isImGuiEnabled()) // PUT LOG HERE
+				throw std::runtime_error("ImGui is disabled.");
+		}
 
 		~ImGuiUtility() override = default;
 
@@ -78,7 +90,10 @@ namespace Bolt {
 		std::string m_name = "Property";
 
 	public:
-		ImGuiProperties() = default;
+		ImGuiProperties() {
+			if (!Application::isImGuiEnabled()) // PUT LOG HERE
+				throw std::runtime_error("ImGui is disabled.");
+		}
 
 		~ImGuiProperties() override = default;
 

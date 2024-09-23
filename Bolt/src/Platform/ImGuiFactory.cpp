@@ -46,13 +46,19 @@ namespace Bolt {
 	}
 
 	ImGuiEntityTree::ImGuiEntityTree() :
-		m_entities(EntityManager::instance()->getEntitiesCount()) {}
+		m_entities(EntityManager::instance()->getEntitiesCount()) {
+
+		if (!Application::isImGuiEnabled()) // PUT LOG HERE
+			throw std::runtime_error("ImGui is disabled.");
+	}
 
 	void ImGuiEntityTree::onEvent(const Event &e) {}
 
 	void ImGuiEntityTree::onRender() {
 		ImGui::Begin(this->m_name.c_str());
-		if (this->m_entities != EntityManager::instance()->getEntitiesCount()) { this->m_entities = EntityManager::instance()->getEntitiesCount(); }
+		if (this->m_entities != EntityManager::instance()->getEntitiesCount()) {
+			this->m_entities = EntityManager::instance()->getEntitiesCount();
+		}
 		for (auto ett : EntityManager::instance()->getEntities()) {
 			if (ImGui::TreeNode(ett.getName().c_str())) {
 				ImGui::PushID(&ett);
@@ -80,7 +86,7 @@ namespace Bolt {
 			ImGui::End();
 			return;
 		}
-		
+
 		ImGui::End();
 	}
 
@@ -88,7 +94,9 @@ namespace Bolt {
 
 	void ImGuiUtility::onRender() {
 		ImGui::Begin(this->m_name.c_str());
-		if (ImGui::Button("New Entity")) { EntityManager::instance()->createEntity(); }
+		if (ImGui::Button("New Entity")) {
+			EntityManager::instance()->createEntity();
+		}
 		ImGui::End();
 	}
 

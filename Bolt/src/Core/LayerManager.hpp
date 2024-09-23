@@ -52,6 +52,8 @@ namespace Bolt {
 		 */
 		void addLayer(const Shared<Layer> &layer);
 
+        void addLayersFromStack();
+
 		/// ???
 		template <class T>
 		inline void getLayerFromType() const { /* BT_WARN_CORE("{0} method not implemented.", __FILE__); */ }

@@ -9,8 +9,6 @@
 #include <mutex>
 #include <vector>
 
-#include "../Platform/Shader/GlShader.hpp"
-
 namespace Bolt {
 	class Scene {
 	private:
@@ -56,7 +54,7 @@ namespace Bolt {
 		}
 
 		inline virtual void onRender() override {
-			for (const auto &id : EntityManager::instance()->getEntitiesFromComponent<Mesh>()) {
+			for (const auto &id : Scene::instance()->getEntities()) {
 				systems::render::drawElement(id);
 			}
 		}

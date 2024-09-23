@@ -1,13 +1,17 @@
-#include <iostream>
-
 #include "../../Bolt/src/Bolt.hpp"
 
-class Foo : public Bolt::Application {
+class ImGuiEditor : public Bolt::Application {
 public:
-	Foo() {
-    }
+	ImGuiEditor() {
+        Bolt::Application::enableImGui();
+        Bolt::LayerStack::instance()->addCustomLayer(CreateShared<Bolt::ImGuiDockSpace>());
+        Bolt::LayerStack::instance()->addCustomLayer(CreateShared<Bolt::ImGuiViewPort>());
+        Bolt::LayerStack::instance()->addCustomLayer(CreateShared<Bolt::ImGuiUtility>());
+        Bolt::LayerStack::instance()->addCustomLayer(CreateShared<Bolt::ImGuiEntityTree>());
+        Bolt::LayerStack::instance()->addCustomLayer(CreateShared<Bolt::ImGuiProperties>());
+	}
 
-	~Foo() {}
+	~ImGuiEditor() {}
 };
 
-Bolt::Application* Bolt::createApplication() { return new Foo(); }
+Bolt::Application *Bolt::createApplication() { return new ImGuiEditor(); }

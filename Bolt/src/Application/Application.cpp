@@ -5,10 +5,11 @@
 
 #include "../Graphic/ImGui/ImGuiFactory.hpp"
 
+#include "../Core/Scene.hpp"
 #include "../ECS/EntityManager.hpp"
 #include "../ECS/System.hpp"
-#include "../Core/Scene.hpp"
 
+#include "../Platform/ImGuiLayer.hpp"
 #include "../Platform/MeshFactory.hpp"
 
 #include <iostream>
@@ -30,6 +31,11 @@ void Bolt::Application::run() {
 	Shared<GlfwWindow> w = CreateShared<GlfwWindow>(GlfwWindow());
 	lm->addLayer(w);
 
+	if (this->s_enableimGui) {
+		Shared<ImGuiLayer> ig = CreateShared<ImGuiLayer>(w);
+		lm->addLayer(ig);
+	}
+
 	const auto rd = RenderApi::instance();
 	rd->init(config::RenderApiConfig::render_opengl);
 
@@ -41,13 +47,14 @@ void Bolt::Application::run() {
 	EntityManager::instance()->createEntity();
 	factory::mesh::createEmptyCubeMesh(0, {}, vec4(0.5, 0.2, 0.5, 1));
 
-    auto scene = Scene::instance();
-    scene->addEntity(0);
+	auto scene = Scene::instance();
 
-    lm->addLayer(CreateShared<SceneLayer>());
+	lm->addLayer(CreateShared<SceneLayer>());
 
 	// Creates ImGui context and create the basic UI
-	ImGuiFactory::createBasicUi(w);
+	// ImGuiFactory::createBasicUi(w);
+
+	lm->addLayersFromStack();
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
@@ -57,8 +64,7 @@ void Bolt::Application::run() {
 
 		// Before rendering operations
 		lm->execute([](const Shared<Layer> &l) { l->begin(); });
-        lm->execute([](const Shared<Layer> &l) { l->onRender(); });
-		// systems::render::drawElement(0);
+		lm->execute([](const Shared<Layer> &l) { l->onRender(); });
 		lm->execute([](const Shared<Layer> &l) { l->end(); });
 
 		// After rendering operations

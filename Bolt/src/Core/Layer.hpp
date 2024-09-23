@@ -4,7 +4,10 @@
 
 #include "Event.hpp"
 
+#include <ctime>
+#include <mutex>
 #include <string>
+#include <vector>
 
 namespace Bolt {
 
@@ -45,4 +48,33 @@ namespace Bolt {
 		virtual void end() {}
 	};
 
-}
+	class LayerStack {
+	private:
+		inline static Shared<LayerStack> s_pointer = nullptr;
+		inline static std::mutex s_mutex;
+
+		std::vector<Shared<Layer>> m_layers;
+
+		LayerStack() = default;
+
+	public:
+		LayerStack(LayerStack &other) = delete;
+
+		void operator=(const LayerStack &other) = delete;
+
+		inline static Shared<LayerStack> instance() {
+			std::lock_guard<std::mutex> lock(s_mutex);
+			if (s_pointer == nullptr) {
+				Shared<LayerStack> copy(new LayerStack());
+				copy.swap(s_pointer);
+			}
+
+			return s_pointer;
+		}
+
+		void addCustomLayer(Shared<Layer> layer);
+
+		inline std::vector<Shared<Layer>> getLayers() const { return this->m_layers; }
+	};
+
+} // namespace Bolt
