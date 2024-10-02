@@ -16,8 +16,8 @@ int main(int argc, char* argv[]) {
 	bolt::Scene::instance()->addEntity(0);
 
     auto c = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(0);
-    c->setPosition(bolt::vec3(0));
-    c->setScale(bolt::vec3(1));
+    c->setPosition(bolt::vec3(0.8));
+    c->setScale(bolt::vec3(0.5));
 
 	//bolt::Application::enableImGui();
 

@@ -142,7 +142,7 @@ namespace bolt {
 	void ImGuiUtility::onRender() {
 		ImGui::Begin(this->m_name.c_str());
 		if (ImGui::Button("New Entity")) {
-			EntityManager::instance()->createEntity();
+			EventDispatcher::instance()->post(events::ecs::CreateMeshEvent);
 		}
 		ImGui::End();
 	}

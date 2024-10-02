@@ -35,6 +35,8 @@ void bolt::Application::run()
 
 	auto ed = EventDispatcher::instance();
 
+	EntityManager::instance()->subscribeEventCallbacks();
+
 	lm->addLayer(CreateShared<SceneLayer>());
 
 	//lm->addLayersFromStack();
@@ -49,7 +51,7 @@ void bolt::Application::run()
 	lm->addLayer(vp);
 	lm->addLayer(CreateShared<bolt::ImGuiUtility>());
 	lm->addLayer(CreateShared<bolt::ImGuiProperties>());
-
+	
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
 		lm->execute([e](const Shared<Layer>& l) { l->onEvent(e); });

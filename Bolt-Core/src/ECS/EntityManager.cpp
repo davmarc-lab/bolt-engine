@@ -1,9 +1,24 @@
 ﻿#include "../../include/ECS/EntityManager.hpp"
+#include "../../include/Platform/MeshFactory.hpp"
 
 #include "../../include/Core/Enums.hpp"
 #include "../../include/Core/Log.hpp"
+#include "../../include/Core/SCene.hpp"
+#include <iostream>
 
 namespace bolt {
+	void EntityManager::subscribeEventCallbacks() {
+		this->m_initEvents = true;
+		auto ed = EventDispatcher::instance();
+
+		ed->subscribe(events::ecs::CreateMeshEvent, [this](auto &&p) {
+			auto id = this->createEntity();
+			factory::mesh::createEmptyCubeMesh(id);
+			factory::mesh::initMesh(id);
+			Scene::instance()->addEntity(id);
+		});
+	}
+
 	u32 EntityManager::createEntity() {
 		if (this->m_currentId >= ecs::MAX_ENTITIES) {
 			// BT_WARN_CORE("Cannot create another entity (MAX_ENTITIES = {0}).", ecs::MAX_ENTITIES);

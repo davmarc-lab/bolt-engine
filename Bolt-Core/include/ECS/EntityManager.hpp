@@ -3,13 +3,14 @@
 #include "../Core/Utils.hpp"
 
 #include <algorithm>
+#include <map>
 #include <memory>
 #include <mutex>
-#include <map>
 
 #include "Component.hpp"
 #include "Entity.hpp"
 
+#include "../Core/Event.hpp"
 #include "../Core/Log.hpp"
 
 namespace bolt {
@@ -18,6 +19,7 @@ namespace bolt {
 		inline static Shared<EntityManager> s_pointer = nullptr;
 		inline static std::mutex s_mutex;
 
+		b8 m_initEvents = false;
 		u32 m_currentId = 0;
 
 		std::map<u32, Unique<Entity>> m_entities;
@@ -41,6 +43,8 @@ namespace bolt {
 
 			return s_pointer;
 		}
+
+		void subscribeEventCallbacks();
 
 		template <typename T>
 		Shared<T> addComponent(const u32 &id) {
@@ -112,4 +116,4 @@ namespace bolt {
 
 		b8 removeEntity(const u32 &id);
 	};
-} // namespace Bolt
+} // namespace bolt

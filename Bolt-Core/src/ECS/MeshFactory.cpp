@@ -29,7 +29,7 @@ namespace bolt {
 					comp->vbo_g = CreateShared<VertexBuffer>();
 
 					comp->colorComponent = CreateUnique<Color>();
-					auto colors = getColorVector(sizeof(cubeGeometry) / sizeof(float) / 3, vec4(1, 0, 0, 1));
+					auto colors = getColorVector(sizeof(cubeGeometry) / sizeof(float) / 3, color);
 					comp->colorComponent->colors = std::vector<vec4>(colors);
 					comp->colorComponent->vbo_c = CreateShared<VertexBuffer>();
 

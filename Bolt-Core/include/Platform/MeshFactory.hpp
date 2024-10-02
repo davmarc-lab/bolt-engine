@@ -9,9 +9,9 @@ namespace bolt {
         namespace mesh {
             void createEmptySquare(const u32&, config::MeshConfig = {});
 
-            void createEmptyCubeMesh(const u32&, config::MeshConfig = {}, const vec4& color = vec4(1, 0, 0, 1));
+            void createEmptyCubeMesh(const u32&, config::MeshConfig = {}, const vec4& color = vec4(0, 0, 0, 1));
 
-            void initMesh(u32 id, config::MeshConfig config);
+            void initMesh(u32 id, config::MeshConfig config = {});
         }
     }
 }

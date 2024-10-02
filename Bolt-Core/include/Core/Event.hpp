@@ -67,7 +67,7 @@ namespace bolt {
 		namespace ecs {
 			BT_AUTOCONST EntityCreatedEvent = Event("Entity Created");
 			BT_AUTOCONST EntityRemovedEvent = Event("Entity Removed");
-
+			BT_AUTOCONST CreateMeshEvent = Event("Create Mesh");
 			BT_AUTOCONST ComponentAttachedToEntityEvent = Event("Component Attached");
 			BT_AUTOCONST ComponentDetachFromEntityEvent = Event("Component Detached");
 		} // namespace ecs

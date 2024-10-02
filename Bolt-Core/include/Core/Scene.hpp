@@ -70,7 +70,7 @@ namespace bolt {
 
 		inline virtual void onAttach() override {
 			for (auto id : Scene::instance()->getEntities()) {
-				factory::mesh::initMesh(id, {});
+				factory::mesh::initMesh(id);
 			}
 		}
 
