@@ -9,35 +9,61 @@ ifndef verbose
 endif
 
 ifeq ($(config),debug)
-  Bolt_config = debug
-  Platform_config = debug
+  Bolt_Graphics_config = debug
+  Bolt_imgui_config = debug
+  Bolt_Core_config = debug
+  Bolt_Test_config = debug
 endif
 ifeq ($(config),release)
-  Bolt_config = release
-  Platform_config = release
+  Bolt_Graphics_config = release
+  Bolt_imgui_config = release
+  Bolt_Core_config = release
+  Bolt_Test_config = release
 endif
 
-PROJECTS := Bolt Platform
+PROJECTS := Bolt-Graphics Bolt-imgui Bolt-Core Bolt-Test
 
-.PHONY: all clean help $(PROJECTS) 
+.PHONY: all clean help $(PROJECTS) Bolt-Core Bolt-Graphics Bolt-Test Bolt-imgui
 
 all: $(PROJECTS)
 
-Bolt:
-ifneq (,$(Bolt_config))
-	@echo "==== Building Bolt ($(Bolt_config)) ===="
-	@${MAKE} --no-print-directory -C Bolt -f Makefile config=$(Bolt_config)
+Bolt-Core: Bolt-Core
+
+Bolt-Graphics: Bolt-Graphics
+
+Bolt-Test: Bolt-Test
+
+Bolt-imgui: Bolt-imgui
+
+Bolt-Graphics:
+ifneq (,$(Bolt_Graphics_config))
+	@echo "==== Building Bolt-Graphics ($(Bolt_Graphics_config)) ===="
+	@${MAKE} --no-print-directory -C Bolt-Graphics -f Makefile config=$(Bolt_Graphics_config)
 endif
 
-Platform: Bolt
-ifneq (,$(Platform_config))
-	@echo "==== Building Platform ($(Platform_config)) ===="
-	@${MAKE} --no-print-directory -C Platform -f Makefile config=$(Platform_config)
+Bolt-imgui: Bolt-Graphics
+ifneq (,$(Bolt_imgui_config))
+	@echo "==== Building Bolt-imgui ($(Bolt_imgui_config)) ===="
+	@${MAKE} --no-print-directory -C Bolt-imgui -f Makefile config=$(Bolt_imgui_config)
+endif
+
+Bolt-Core: Bolt-Graphics Bolt-imgui
+ifneq (,$(Bolt_Core_config))
+	@echo "==== Building Bolt-Core ($(Bolt_Core_config)) ===="
+	@${MAKE} --no-print-directory -C Bolt-Core -f Makefile config=$(Bolt_Core_config)
+endif
+
+Bolt-Test: Bolt-Core Bolt-imgui
+ifneq (,$(Bolt_Test_config))
+	@echo "==== Building Bolt-Test ($(Bolt_Test_config)) ===="
+	@${MAKE} --no-print-directory -C Bolt-Test -f Makefile config=$(Bolt_Test_config)
 endif
 
 clean:
-	@${MAKE} --no-print-directory -C Bolt -f Makefile clean
-	@${MAKE} --no-print-directory -C Platform -f Makefile clean
+	@${MAKE} --no-print-directory -C Bolt-Graphics -f Makefile clean
+	@${MAKE} --no-print-directory -C Bolt-imgui -f Makefile clean
+	@${MAKE} --no-print-directory -C Bolt-Core -f Makefile clean
+	@${MAKE} --no-print-directory -C Bolt-Test -f Makefile clean
 
 help:
 	@echo "Usage: make [config=name] [target]"
@@ -49,7 +75,9 @@ help:
 	@echo "TARGETS:"
 	@echo "   all (default)"
 	@echo "   clean"
-	@echo "   Bolt"
-	@echo "   Platform"
+	@echo "   Bolt-Graphics"
+	@echo "   Bolt-imgui"
+	@echo "   Bolt-Core"
+	@echo "   Bolt-Test"
 	@echo ""
 	@echo "For more information, see https://github.com/premake/premake-core/wiki"

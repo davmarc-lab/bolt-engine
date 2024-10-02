@@ -1,69 +1,26 @@
-workspace("Bolt")
-architecture("x64")
+workspace "bolt-engine"
+    architecture "x64"
+    configurations { "Debug", "Release" }
+    startproject "Bolt-Test"
 
-configurations({
-	"Debug",
-	"Release",
-})
+OutputDir = "%{cfg.system}-%{cfg.architecture}/%{cfg.buildcfg}"
 
-outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+libdirs = {
+    "bin/" .. OutputDir .. "/",
+}
 
-project("Bolt")
-location("Bolt")
-kind("SharedLib")
-language("C++")
-cppdialect("C++17")
+group "Bolt-Graphics"
+include "Bolt-Graphics/BuildGraphics.lua"
 
-targetdir("bin/" .. outputDir .. "/%{prj.name}")
-objdir("bin-int/" .. outputDir .. "/%{prj.name}")
+group "Bolt-imgui"
+include "Bolt-imgui/BuildImGui.lua"
 
-files({
-	"%{prj.name}/src/**.hpp",
-	"%{prj.name}/src/**.h",
-	"%{prj.name}/src/**.cpp",
-	"%{prj.name}/dependencies/glad/**.c",
-	"%{prj.name}/dependencies/glm/**.iml",
-	"%{prj.name}/dependencies/imgui/**.cpp",
-})
+group "Bolt-Core"
+include "Bolt-Core/BuildCore.lua"
 
-includedirs({
-	"%{prj.name}/dependencies/spdlog/include",
-	"%{prj.name}/dependencies/glad/include",
-	"%{prj.name}/dependencies/imgui",
-	"%{prj.name}/dependencies/glm",
-})
+group "Bolt-Test"
+    include "Bolt-Test/BuildTest.lua"
 
-links({ "glm", "GL", "glfw", "X11", "Xrandr", "Xi", "dl" })
+-- group ""
 
-defines({
-	"BT_BUILD_DLL",
-	"BT_ENABLE_DEBUG",
-})
-
-postbuildcommands({
-	("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/Platform"),
-})
-
-project("Platform")
-location("Platform")
-kind("ConsoleApp")
-language("C++")
-cppdialect("C++17")
-
-targetdir("bin/" .. outputDir .. "/%{prj.name}")
-objdir("bin-int/" .. outputDir .. "/%{prj.name}")
-
-files({
-	"%{prj.name}/src/**.h",
-	"%{prj.name}/src/**.hpp",
-	"%{prj.name}/src/**.cpp",
-})
-
-includedirs({
-	"Bolt/dependencies/include/spdlog",
-	"Bolt/src",
-})
-
-links({
-	"Bolt",
-})
+--     include "Bolt-imgui/BuildImGui.lua"

@@ -1,6 +1,0 @@
-[submodule "Bolt/dependencies/spdlog"]
-	path = Bolt/dependencies/spdlog
-	url = https://github.com/gabime/spdlog
-[submodule "Bolt/dependencies/imgui"]
-	path = Bolt/dependencies/imgui
-	url = https://github.com/ocornut/imgui
