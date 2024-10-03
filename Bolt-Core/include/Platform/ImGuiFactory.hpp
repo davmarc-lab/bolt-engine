@@ -16,6 +16,10 @@ namespace bolt {
 		std::string m_name = "DockSpace";
 		b8 m_open = true;
 
+		// other windows
+		b8 m_metricWindow = false;
+		b8 m_styleConfig = false;
+
 	public:
 		ImGuiDockSpace() {
 			if (!Application::isImGuiEnabled()) // PUT LOG HERE

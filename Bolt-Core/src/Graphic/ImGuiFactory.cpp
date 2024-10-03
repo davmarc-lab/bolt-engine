@@ -41,6 +41,40 @@ namespace bolt {
 			ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockspaceFlags);
 		}
 
+		static bool opt_fullscreen = false;
+		static bool opt_padding = false;
+
+		if (ImGui::BeginMenuBar()) {
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(4, 4));
+			if (ImGui::BeginMenu("Options")) {
+				// Disabling fullscreen would allow the window to be moved to the front of other windows,
+				// which we can't undo at the moment without finer window depth/z control.
+				if (ImGui::MenuItem("Style")) {
+					this->m_styleConfig = !this->m_styleConfig;
+				}
+				ImGui::EndMenu();
+			}
+			ImGui::PopStyleVar();
+
+			if (ImGui::Button("Metrics")) {
+				this->m_metricWindow = !this->m_metricWindow;
+			}
+
+			ImGui::EndMenuBar();
+		}
+
+		if (this->m_styleConfig) {
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(4, 4));
+			ImGui::Begin("Style Editor", &this->m_styleConfig);
+			ImGui::ShowStyleEditor(&ImGui::GetStyle());
+			ImGui::End();
+			ImGui::PopStyleVar();
+		}
+
+		if (this->m_metricWindow) {
+			ImGui::ShowMetricsWindow();
+		}
+
 		ImGui::End();
 
 		ImGui::PopStyleVar();

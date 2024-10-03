@@ -2,9 +2,13 @@
 
 #include "../Core/Layer.hpp"
 
+#include "../../../Bolt-imgui/include/imgui/imgui.h"
+#include "../../../Bolt-imgui/include/imgui/imconfig.h"
+
 #include "Window.hpp"
 
 namespace bolt {
+
 	class ImGuiLayer final : public Layer {
 	private:
 		Shared<Window> m_window;

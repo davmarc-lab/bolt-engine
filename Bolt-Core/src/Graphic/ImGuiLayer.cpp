@@ -6,6 +6,7 @@
 #include "../../../Bolt-imgui/include/imgui/imgui_impl_glfw.h"
 #include "../../../Bolt-imgui/include/imgui/imgui_impl_opengl3.h"
 
+#include <iostream>
 #include "../../include/Graphic/Window.hpp"
 
 namespace bolt {
@@ -13,27 +14,31 @@ namespace bolt {
 		IMGUI_CHECKVERSION();
 
 		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO();
+		ImGuiIO &io = ImGui::GetIO();
 
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Vieports
 
-		// float fontSize = 18.0f; // *2.0f;
-		// this->m_io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Bold.ttf", fontSize);
-		// this->m_io.FontDefault = this->m_io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Regular.ttf", fontSize);
+		float fontSize = 17.f;
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/DroidSans.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/Cousine-Regular.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/Karla-Regular.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/ProggyClean.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/ProggyTiny.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/Roboto-Medium.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
 
 		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
+		// ImGui::StyleColorsDark();
+		ImGuiStyle &style = ImGui::GetStyle();
 
 		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-		ImGuiStyle& style = ImGui::GetStyle();
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-			style.WindowRounding = 0.0f;
-			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-		}
+		style.WindowRounding = 10.0f;
+		style.FrameRounding = 4.f;
+		style.GrabRounding = 4.f;
+		style.Colors[ImGuiCol_WindowBg].w = 0.8f;
 
-		const auto window = static_cast<GLFWwindow*>(this->m_window->getCurrentWindow());
+		const auto window = static_cast<GLFWwindow *>(this->m_window->getCurrentWindow());
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -46,7 +51,7 @@ namespace bolt {
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::onEvent(const Event& e) {
+	void ImGuiLayer::onEvent(const Event &e) {
 		// BT_INFO_CORE("No Implementation of Event handling.");
 	}
 
@@ -57,7 +62,7 @@ namespace bolt {
 	}
 
 	void ImGuiLayer::end() {
-		ImGuiIO& io = ImGui::GetIO();
+		ImGuiIO &io = ImGui::GetIO();
 		io.DisplaySize = ImVec2(this->m_window->getWidth(), this->m_window->getHeight());
 
 		// Rendering
@@ -72,4 +77,4 @@ namespace bolt {
 		}
 	}
 
-}
+} // namespace bolt
