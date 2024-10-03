@@ -41,6 +41,15 @@ namespace bolt {
 		this->m_created = true;
 	}
 
+	void Texture::rescaleTexture(const u16 &width, const u16 &height) {
+		this->m_width = width;
+		this->m_height = height;
+		this->bind();
+		this->createTexture2D(NULL);
+		this->setTexParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		this->setTexParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+
 	void Texture::generateMipmap() {
 		if (this->m_created)
 			glGenerateMipmap(this->m_parameters.target);

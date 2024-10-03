@@ -47,6 +47,8 @@ namespace bolt {
 		
 		void fastCreateTexture2D(void* data);
 
+		void rescaleTexture(const u16 &width, const u16 &height);
+
 		void generateMipmap();
 
 		b8 isTextureIdGenerated() const { return this->m_generated; }

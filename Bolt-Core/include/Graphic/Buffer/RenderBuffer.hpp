@@ -26,11 +26,15 @@ namespace bolt {
 		~RenderBuffer() = default;
 
 		void onAttach();
+
 		void onDetach();
 
         void bind() const;
-        void unbind() const;
+        
+		void unbind() const;
 		
+		void rescaleRenderBuffer(const u16 &width, const u16 &height);
+
 		u32 getAttachmentType() const;
 
 		const u32 &getId() const { return this->m_id; }

@@ -49,8 +49,8 @@ namespace bolt {
 	class ImGuiViewPort : public Layer {
 	private:
 		std::string m_name = "Viewport";
-		// FrameBuffer m_fbo;
 		WinSize m_size;
+		FrameBuffer m_fbo;
 		b8 m_fboReady = false;
 		u32 fbo = 0;
 		u32 rbo = 0;
@@ -64,7 +64,10 @@ namespace bolt {
 
 		~ImGuiViewPort() override = default;
 
+		void rescaleViewport(const u16 &width, const u16 &height);
+
 		void bindFBO();
+
 		void unbindFBO();
 
 		virtual void onAttach() override;

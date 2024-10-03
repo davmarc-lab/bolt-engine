@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../Core/Structs.hpp"
 #include "../../Core/Utils.hpp"
 
 #include "../../../../Bolt-Graphics/include/glad/glad.h"
@@ -13,17 +14,18 @@
 namespace bolt {
 
 	namespace fbo {
-			enum Operation : u32 {
-				FB_READ = GL_READ_FRAMEBUFFER,
-				FB_WRITE = GL_DRAW_FRAMEBUFFER,
-				FB_DEFAULT = GL_FRAMEBUFFER
-			};
+		enum Operation : u32 {
+			FB_READ = GL_READ_FRAMEBUFFER,
+			FB_WRITE = GL_DRAW_FRAMEBUFFER,
+			FB_DEFAULT = GL_FRAMEBUFFER
+		};
 
-			struct Config {
-				Operation operation = FB_DEFAULT;
-			} inline defaultConfig;
+		struct Config {
+			WinSize size = {0, 0};
+			Operation operation = FB_DEFAULT;
+		} inline defaultConfig;
 
-	} // namespace framebuffer
+	} // namespace fbo
 
 	class FrameBuffer {
 	protected:
@@ -31,14 +33,15 @@ namespace bolt {
 
 		using Config = fbo::Config;
 
-		Config m_config;
+		Config m_config{};
 		Texture m_textureAttach{};
 		RenderBuffer m_renderBuffer{};
 
 	public:
 		FrameBuffer() = default;
 
-		FrameBuffer(Config config = {}) : m_config(config) {} 
+		FrameBuffer(Config config) :
+			m_config(config) {}
 
 		~FrameBuffer() = default;
 
@@ -50,7 +53,10 @@ namespace bolt {
 
 		void unbind() const;
 
-		const u32 &getId() const { return this->m_id; }
-	};
-} // namespace Bolt
+		void rescaleFrameBuffer(const u16 &width, const u16 &height);
 
+		const u32 &getId() const { return this->m_id; }
+
+		const u16 &getTextureId() const { return this->m_textureAttach.getId(); }
+	};
+} // namespace bolt

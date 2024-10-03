@@ -74,19 +74,21 @@ namespace bolt {
 
 	void ImGuiViewPort::onAttach() {
 		// preparing framebuffer
-        //scene::perspectiveProjection = perspective(45.0f, static_cast<f32>(this->m_size.width) / this->m_size.height, 0.1f, 100.f);;
-        //scene::orthoProjection = ortho(0.f, static_cast<f32>(this->m_size.width), 0.f, static_cast<f32>(this->m_size.height));
+		// scene::perspectiveProjection = perspective(45.0f, static_cast<f32>(this->m_size.width) / this->m_size.height, 0.1f, 100.f);;
+		// scene::orthoProjection = ortho(0.f, static_cast<f32>(this->m_size.width), 0.f, static_cast<f32>(this->m_size.height));
 	}
 
 	void ImGuiViewPort::onEvent(const Event &e) {}
 
-	void ImGuiViewPort::bindFBO() {
-		glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
-		glEnable(GL_DEPTH_TEST);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	void ImGuiViewPort::rescaleViewport(const u16 &width, const u16 &height) {
 	}
+
+	void ImGuiViewPort::bindFBO() {
+		this->m_fbo.bind();
+	}
+
 	void ImGuiViewPort::unbindFBO() {
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		this->m_fbo.unbind();
 	}
 
 	void ImGuiViewPort::onRender() {
@@ -98,30 +100,12 @@ namespace bolt {
 			this->m_size.width = dim.x;
 			this->m_size.height = dim.y;
 
-			scene::perspectiveProjection = perspective(45.0f, static_cast<f32>(this->m_size.width) / this->m_size.height, 0.1f, 100.f);;
+			scene::perspectiveProjection = perspective(45.0f, static_cast<f32>(this->m_size.width) / this->m_size.height, 0.1f, 100.f);
 			scene::orthoProjection = ortho(0.f, static_cast<f32>(this->m_size.width), 0.f, static_cast<f32>(this->m_size.height));
 
-			glGenFramebuffers(1, &this->fbo);
-			glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
+			this->m_fbo = FrameBuffer({{this->m_size}, fbo::Operation::FB_DEFAULT});
+			this->m_fbo.onAttach();
 
-			glGenTextures(1, &this->text);
-			glBindTexture(GL_TEXTURE_2D, this->text);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, dim.x, dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->text, 0);
-
-			glGenRenderbuffers(1, &this->rbo);
-			glBindRenderbuffer(GL_RENDERBUFFER, this->rbo);
-			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, dim.x, dim.y);
-			glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, this->rbo);
-
-			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-				std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			ImGui::End();
 			return;
 		}
@@ -130,7 +114,14 @@ namespace bolt {
 		ImGui::Begin(this->m_name.c_str());
 		ImGui::BeginChild("Render");
 
-		ImGui::Image((void*)(intptr_t)this->text, ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
+		auto dim = ImGui::GetContentRegionAvail();
+		if (dim.x != this->m_size.width || dim.y != this->m_size.height) {
+			this->m_fbo.rescaleFrameBuffer(static_cast<u16>(dim.x), static_cast<u16>(dim.y));
+			this->m_size.width = dim.x;
+			this->m_size.height = dim.y;
+		}
+
+		ImGui::Image((void *)(intptr_t)this->m_fbo.getTextureId(), ImVec2(this->m_size.width, this->m_size.height), ImVec2(0, 1), ImVec2(1, 0));
 
 		ImGui::EndChild();
 		ImGui::End();
@@ -162,4 +153,4 @@ namespace bolt {
 		LayerManager::instance()->addLayer(CreateShared<ImGuiUtility>());
 		LayerManager::instance()->addLayer(CreateShared<ImGuiProperties>());
 	}
-} // namespace Bolt
+} // namespace bolt
