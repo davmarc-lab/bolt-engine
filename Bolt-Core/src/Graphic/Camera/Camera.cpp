@@ -6,12 +6,8 @@ namespace bolt {
 			-sin(radians(this->rotation.pitch)),
 			sin(radians(this->rotation.yaw) * cos(radians(this->rotation.pitch)))
 		));
-
 		this->vectors.cameraRight = normalize(cross(this->vectors.cameraFront, this->worldUp));
-
 		this->vectors.cameraUp = normalize(cross(this->vectors.cameraRight, this->vectors.cameraFront));
-
-		this->m_cameraAxis = this->vectors.cameraRight + this->vectors.cameraUp + this->vectors.cameraFront;
 	}
 
 	mat4 Camera::getViewMatrix() {
@@ -19,7 +15,7 @@ namespace bolt {
 	}
 
 	void Camera::moveCamera(vec3 pos) {
-		this->vectors.cameraPos += (pos * this->m_cameraAxis);
+		this->vectors.cameraPos += (pos * this->info.speed);
 		this->updateCameraVectors();
 	}
 

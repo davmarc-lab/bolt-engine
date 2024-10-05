@@ -7,7 +7,7 @@ namespace bolt {
 	namespace camera {
 		inline const f32 YAW = -90.f;
 		inline const f32 PITCH = 0.f;
-		inline const f32 SPEED = 1.f;
+		inline const f32 SPEED = 0.2f;
 		inline const f32 SENSITIVITY = 0.02f;
 		inline const f32 ZOOM = 45.f;
 		inline const vec3 POSITION = vec3(0, 0, 3);
@@ -41,7 +41,6 @@ namespace bolt {
 		camera::CameraVectors vectors;
 		camera::CameraInfo info;
 		camera::CameraRotation rotation;
-		vec3 m_cameraAxis = vec3(this->vectors.cameraRight + this->vectors.cameraUp + this->vectors.cameraFront);
 
 		void updateCameraVectors();
 

@@ -13,11 +13,11 @@
 #include "../../include/Platform/MeshFactory.hpp"
 
 #include "../../include/Graphic/Camera/Camera.hpp"
+#include "../../include/Graphic/Buffer/UniformBuffer.hpp"
 
 #include <iostream>
 
-void bolt::Application::run()
-{
+void bolt::Application::run() {
 	const auto lm = LayerManager::instance();
 
 	scene::perspectiveProjection = perspective(45.0f, 1 / 1.0f, 0.1f, 100.f);
@@ -27,8 +27,10 @@ void bolt::Application::run()
 	Shared<Window> w = CreateShared<Window>(Window());
 	lm->addLayer(w);
 
-	Shared<ImGuiLayer> ig = CreateShared<ImGuiLayer>(w);
-	lm->addLayer(ig);
+	if (Application::isImGuiEnabled()) {
+		Shared<ImGuiLayer> ig = CreateShared<ImGuiLayer>(w);
+		lm->addLayer(ig);
+	}
 
 	const auto rd = RenderApi::instance();
 	rd->init(config::RenderApiConfig::render_opengl);
@@ -37,35 +39,23 @@ void bolt::Application::run()
 
 	EntityManager::instance()->subscribeEventCallbacks();
 
-	lm->addLayer(CreateShared<SceneLayer>());
+	lm->addLayersFromStack();
 
-	//lm->addLayersFromStack();
-
-	ed->subscribe(events::loop::LoopUpdate, [](auto&& ph1) { systems::transform::updateAllModelMatrix(); });
+	ed->subscribe(events::loop::LoopUpdate, [](auto &&ph1) { systems::transform::updateAllModelMatrix(); });
 	auto c = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(0);
 
-	Application::enableImGui();
-	lm->addLayer(CreateShared<bolt::ImGuiDockSpace>());
-	lm->addLayer(CreateShared<bolt::ImGuiEntityTree>());
-	auto vp = CreateShared<bolt::ImGuiViewPort>();
-	lm->addLayer(vp);
-	lm->addLayer(CreateShared<bolt::ImGuiUtility>());
-	lm->addLayer(CreateShared<bolt::ImGuiProperties>());
-	
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
-		lm->execute([e](const Shared<Layer>& l) { l->onEvent(e); });
-		lm->execute([](const Shared<Layer>& l) { l->onUpdate(); });
+		lm->execute([e](const Shared<Layer> &l) { l->onEvent(e); });
+		lm->execute([](const Shared<Layer> &l) { l->onUpdate(); });
 
 		// Before rendering operations
-		lm->execute([](const Shared<Layer>& l) { l->begin(); });
-		vp->bindFBO();
-		lm->execute([](const Shared<Layer>& l) { l->onRender(); });
-		vp->unbindFBO();
-		lm->execute([](const Shared<Layer>& l) { l->end(); });
+		lm->execute([](const Shared<Layer> &l) { l->begin(); });
+		lm->execute([](const Shared<Layer> &l) { l->onRender(); });
+		lm->execute([](const Shared<Layer> &l) { l->end(); });
 		// After rendering operations
 
 		ed->post(events::loop::LoopUpdate);
 	}
-	lm->execute([](const Shared<Layer>& l) { l->onDetach(); });
+	lm->execute([](const Shared<Layer> &l) { l->onDetach(); });
 }

@@ -60,6 +60,9 @@ namespace bolt {
 		u32 rbo = 0;
 		u32 text = 0;
 
+		void bindFBO();
+
+		void unbindFBO();
 	public:
 		ImGuiViewPort() {
 			if (!Application::isImGuiEnabled()) // PUT LOG HERE
@@ -70,9 +73,9 @@ namespace bolt {
 
 		void rescaleViewport(const u16 &width, const u16 &height);
 
-		void bindFBO();
+		virtual void begin() override { this->bindFBO(); }
 
-		void unbindFBO();
+		virtual void end() override { this->unbindFBO(); }
 
 		virtual void onAttach() override;
 

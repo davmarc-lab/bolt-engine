@@ -20,13 +20,13 @@ namespace bolt {
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Vieports
 
-		float fontSize = 17.f;
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/DroidSans.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
-		io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/Cousine-Regular.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
-		io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/Karla-Regular.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
-		io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/ProggyClean.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
-		io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/ProggyTiny.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
-		io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/Roboto-Medium.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		//float fontSize = 17.f;
+		//io.FontDefault = io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/DroidSans.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		//io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/Cousine-Regular.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		//io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/Karla-Regular.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		//io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/ProggyClean.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		//io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/ProggyTiny.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		//io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/Roboto-Medium.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
 
 		// Setup Dear ImGui style
 		// ImGui::StyleColorsDark();

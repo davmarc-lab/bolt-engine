@@ -7,7 +7,11 @@
 
 #include "../../include/Graphic/Camera/Camera.hpp"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "../../include/Core/stbi_image.h"
+
 #include <string>
+#include <iostream>
 
 namespace bolt {
 
@@ -80,7 +84,10 @@ namespace bolt {
 	}
 #endif
 
-	static void glfwErrorCallback(i32 code, const char* description) { /* BT_ERROR_CORE("GLFW error ({0} -> {1})", code, description); */ }
+	static void glfwErrorCallback(i32 code, const char* description) {
+		/* BT_ERROR_CORE("GLFW error ({0} -> {1})", code, description); */
+		std::cerr << "GLFW error (" << code << ") -> (" << description << ")\n";
+	}
 
 	static void glfwResizeCallback(GLFWwindow* window, i32 width, i32 height) {
 		glViewport(0, 0, width, height);
@@ -100,24 +107,24 @@ namespace bolt {
 
 		// needs to be changed with WOLRD::AXIS
 		if (key == GLFW_KEY_W && action != GLFW_RELEASE) {
-			standardCamera.moveCamera(standardCamera.getCameraVelocity() * vec3(0, 0, 1));
+			standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraFront());
 		}
 		if (key == GLFW_KEY_S && action != GLFW_RELEASE) {
-			standardCamera.moveCamera(standardCamera.getCameraVelocity() * vec3(0, 0, -1));
+			standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraFront());
 		}
 
 		if (key == GLFW_KEY_A && action != GLFW_RELEASE) {
-			standardCamera.moveCamera(standardCamera.getCameraVelocity() * vec3(-1, 0, 0));
+			standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraRight());
 		}
 		if (key == GLFW_KEY_D && action != GLFW_RELEASE) {
-			standardCamera.moveCamera(standardCamera.getCameraVelocity() * vec3(1, 0, 0));
+			standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraRight());
 		}
 
 		if (key == GLFW_KEY_SPACE && action != GLFW_RELEASE) {
-			standardCamera.moveCamera(standardCamera.getCameraVelocity() * vec3(0, 1, 0));
+			standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraUp());
 		}
 		if (key == GLFW_KEY_LEFT_SHIFT && action != GLFW_RELEASE) {
-			standardCamera.moveCamera(standardCamera.getCameraVelocity() * vec3(0, -1, 0));
+			standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraUp());
 		}
 	}
 
@@ -179,6 +186,17 @@ namespace bolt {
 
 		glfwMakeContextCurrent(static_cast<GLFWwindow*>(this->m_window));
 
+		int width, height, channels;
+		unsigned char *pixels = stbi_load("../assets/icons/Engine-little.png", &width, &height, &channels, 4);
+		if (pixels != NULL) {
+			GLFWimage icon[1]{};
+			icon[0].width = width;
+			icon[0].height = height;
+			icon[0].pixels = pixels;
+			glfwSetWindowIcon(static_cast<GLFWwindow *>(this->m_window), 1, icon);
+			stbi_image_free(icon[0].pixels);
+		}
+
 		// Init glad loader
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 			/* BT_ERROR_CORE("Failed to initialize GLAD."); */
@@ -230,6 +248,9 @@ namespace bolt {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
+
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 
 		s_windowCount++;
 	}

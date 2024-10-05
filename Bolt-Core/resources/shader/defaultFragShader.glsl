@@ -1,4 +1,4 @@
-#version 330 core
+#version 420 core
 
 in vec2 texCoord;
 in vec4 vertColor;
@@ -6,5 +6,10 @@ in vec4 vertColor;
 out vec4 fragColor;
 
 void main() {
-    fragColor = vertColor;
+    if (gl_FrontFacing) {
+        fragColor = vertColor;
+    }
+    else {
+        fragColor = vec4(0, 0, 0, 1);
+    }
 }

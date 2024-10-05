@@ -9,7 +9,6 @@ namespace bolt {
 		glGenFramebuffers(1, &this->m_id);
 		glBindFramebuffer(GL_FRAMEBUFFER, this->m_id);
 
-		std::cout << "Change with Application/Window size!\n";
 		this->m_textureAttach = Texture(texture::Parameters{GL_TEXTURE_2D, 0, GL_RGB, 0, GL_RGB, GL_UNSIGNED_BYTE}, this->m_config.size.width, this->m_config.size.height);
 		this->m_textureAttach.onAttach();
 
