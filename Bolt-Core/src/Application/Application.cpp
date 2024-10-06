@@ -44,6 +44,14 @@ void bolt::Application::run() {
 	ed->subscribe(events::loop::LoopUpdate, [](auto &&ph1) { systems::transform::updateAllModelMatrix(); });
 	auto c = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(0);
 
+	UniformBuffer ub = UniformBuffer();
+	ub.onAttach();
+	ub.setup(sizeof(mat4), 0);
+	ub.update(0, sizeof(mat4), value_ptr(scene::perspectiveProjection));
+	int a;
+	glGetIntegerv(GL_MAX_COMPUTE_UNIFORM_COMPONENTS, &a);
+	std::cout << a << "\n";
+
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
 		lm->execute([e](const Shared<Layer> &l) { l->onEvent(e); });

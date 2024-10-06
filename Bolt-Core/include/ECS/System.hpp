@@ -62,7 +62,6 @@ namespace bolt {
                 auto shader = EntityManager::instance()->getEntityComponent<ShaderComponent>(id)->shader.get();
 
 				shader->use();
-                shader->setMat4("projection", scene::getProjectionMatrix(scene::SCENE_3D));
                 shader->setMat4("view", standardCamera.getViewMatrix());
                 shader->setMat4("model", model->getModelMatrix());
 
@@ -73,7 +72,17 @@ namespace bolt {
             inline void drawAllMeshes() {
                 const auto meshes = EntityManager::instance()->getEntitiesFromComponent<Mesh>();
                 for (const auto id: meshes) {
-                    drawElement(id);
+					auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(id);
+					auto vao = mesh->vao;
+					auto model = EntityManager::instance()->getEntityComponent<Transform>(id);
+					auto shader = EntityManager::instance()->getEntityComponent<ShaderComponent>(id)->shader.get();
+
+					shader->use();
+					shader->setMat4("view", standardCamera.getViewMatrix());
+					shader->setMat4("model", model->getModelMatrix());
+
+					RenderApi::instance()->getRenderer()->drawArraysTriangles(*vao, 36);
+					vao->unbind();
                 }
             }
 		} // namespace render

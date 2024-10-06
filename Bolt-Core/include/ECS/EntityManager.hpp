@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <iostream>
 
 #include "Component.hpp"
 #include "Entity.hpp"
@@ -47,7 +48,7 @@ namespace bolt {
 		void subscribeEventCallbacks();
 
 		template <typename T>
-		Shared<T> addComponent(const u32 &id) {
+		inline Shared<T> addComponent(const u32 &id) {
 			if (!this->isEntityValid(id)) {
 				// BT_WARN_CORE("Entity does not exist: id = {0}.", id);
 				return nullptr;
@@ -58,7 +59,7 @@ namespace bolt {
 			return elem;
 		}
 
-		b8 isEntityValid(const u32 &id) {
+		inline b8 isEntityValid(const u32 &id) {
 			return this->m_entities.find(id) != this->m_entities.end();
 		}
 
@@ -76,7 +77,7 @@ namespace bolt {
 		}
 
 		template <typename T>
-		std::vector<u32> getEntitiesFromComponent() {
+		inline std::vector<u32> getEntitiesFromComponent() {
 			// use m_compEntities
 
 			std::vector<u32> res = {};
@@ -90,10 +91,10 @@ namespace bolt {
 		}
 
 		template <typename T>
-		Shared<T> getEntityComponent(const u32 &id) {
+		inline Shared<T> getEntityComponent(const u32 &id) {
 			if (this->entityHasComponent<T>(id)) {
-				for (auto c : this->m_ettComponents.at(id)) {
-					if (auto t = std::dynamic_pointer_cast<T>(c); t != nullptr) {
+				for (auto it = this->m_ettComponents.at(id).begin(); it != this->m_ettComponents.at(id).end(); it++) {
+					if (auto t = std::dynamic_pointer_cast<T>(*it); t != nullptr) {
 						return t;
 					}
 				}
@@ -103,9 +104,9 @@ namespace bolt {
 
 		u32 createEntity();
 
-		u32 getEntitiesCount() const { return static_cast<u32>(this->m_entities.size()); }
+		inline u32 getEntitiesCount() const { return static_cast<u32>(this->m_entities.size()); }
 
-		std::vector<Entity> getEntities() const {
+		inline std::vector<Entity> getEntities() const {
 			std::vector<Entity> res;
 			for (const auto &entity : this->m_entities) {
 				res.emplace_back(*entity.second);

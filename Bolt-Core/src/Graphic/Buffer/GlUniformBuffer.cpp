@@ -23,7 +23,6 @@ namespace bolt {
 	void UniformBuffer::setup(const u32 &size, const u32 &binding, const u32 &offset, const u32 &rangeSize) {
 		this->m_memAllocated = size;
 		this->bind();
-		std::cout << !(offset && rangeSize) << "\n";
 		glBufferData(GL_UNIFORM_BUFFER, size, NULL, GL_STATIC_DRAW);
 		if (!(offset && rangeSize))
 			glBindBufferBase(GL_UNIFORM_BUFFER, binding, this->m_id);
@@ -52,5 +51,4 @@ namespace bolt {
 		this->m_memAllocated = size;
 		glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
 	}
-	
 } // namespace bolt
