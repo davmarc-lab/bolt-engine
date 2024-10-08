@@ -1,33 +1,48 @@
 #pragma once
 
-#include "../Core/Core.hpp"
+#include "../Core/Scene.hpp"
+#include "../Graphic/Camera/Camera.hpp"
 
 namespace bolt {
+
+	struct ApplicationSetting {
+		scene::SceneType type = scene::SCENE_3D;
+	};
+
 	/*
 	 * Basic entry point to use the engine.
 	 */
 	class Application {
-    private:
-        inline static bool s_enableimGui = false;
+	private:
+		inline static bool s_enableImGui = false;
+
+		inline static ApplicationSetting s_settings{};
+		
+		inline static mat4 s_projection{};
+
 	public:
-		Application() {}
+		Application() :
+			Application({scene::SceneType::SCENE_2D}) {}
+
+		Application(const ApplicationSetting &settings) {
+			s_settings = settings;
+		}
 
 		/*
 		 * Starts the aplication, and enters in the loop.
 		 */
 		void run();
 
-        inline static void enableImGui() { s_enableimGui = true; }
+		inline static void enableImGui() { s_enableImGui = true; }
 
-        inline static bool isImGuiEnabled() { return s_enableimGui; }
+		inline static bool isImGuiEnabled() { return s_enableImGui; }
 
-		~Application() {}
+		inline static scene::SceneType getSceneType() { return s_settings.type; }
+
+		inline static mat4 getProjectionMatrix() { return s_projection; }
+
+		inline static void setProjectionMatrix(const mat4& proj) { s_projection = proj; }
+
+		~Application() = default;
 	};
-
-    /*
-    * This method need to be defined in a class extending Application.
-    *
-    * @returns an application with custom behavior.
-    */
-	Application *createApplication();
-} // namespace Bolt
+} // namespace bolt

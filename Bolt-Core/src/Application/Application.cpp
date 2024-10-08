@@ -15,13 +15,8 @@
 #include "../../include/Graphic/Camera/Camera.hpp"
 #include "../../include/Graphic/Buffer/UniformBuffer.hpp"
 
-#include <iostream>
-
 void bolt::Application::run() {
 	const auto lm = LayerManager::instance();
-
-	scene::perspectiveProjection = perspective(45.0f, 1 / 1.0f, 0.1f, 100.f);
-	scene::orthoProjection = ortho(0, 1, 0, 1);
 
 	// This window is unique.
 	Shared<Window> w = CreateShared<Window>(Window());
@@ -41,16 +36,18 @@ void bolt::Application::run() {
 
 	lm->addLayersFromStack();
 
+	auto em = EntityManager::instance();
+	auto id = em->createEntity();
+	factory::mesh::createEmptySquare(id);
+	factory::mesh::initSquareMesh(id);
+
 	ed->subscribe(events::loop::LoopUpdate, [](auto &&ph1) { systems::transform::updateAllModelMatrix(); });
 	auto c = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(0);
 
 	UniformBuffer ub = UniformBuffer();
 	ub.onAttach();
 	ub.setup(sizeof(mat4), 0);
-	ub.update(0, sizeof(mat4), value_ptr(scene::perspectiveProjection));
-	int a;
-	glGetIntegerv(GL_MAX_COMPUTE_UNIFORM_COMPONENTS, &a);
-	std::cout << a << "\n";
+	ub.update(0, sizeof(mat4), value_ptr(s_projection));
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();

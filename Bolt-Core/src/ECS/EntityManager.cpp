@@ -13,7 +13,7 @@ namespace bolt {
 		ed->subscribe(events::ecs::CreateMeshEvent, [this](auto &&p) {
 			auto id = this->createEntity();
 			factory::mesh::createEmptyCubeMesh(id);
-			factory::mesh::initMesh(id);
+			factory::mesh::initCubeMesh(id);
 			Scene::instance()->addEntity(id);
 		});
 	}
