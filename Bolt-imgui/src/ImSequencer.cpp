@@ -23,9 +23,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-#include "ImSequencer.h"
-#include "imgui.h"
-#include "imgui_internal.h"
+#include "../include/ImGuizmo/ImSequencer.h"
+#include "../include/imgui/imgui.h"
+#include "../include/imgui/imgui_internal.h"
 #include <cstdlib>
 
 namespace ImSequencer

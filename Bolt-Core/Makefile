@@ -78,8 +78,10 @@ OBJECTS := \
 	$(OBJDIR)/GlElementBuffer.o \
 	$(OBJDIR)/GlFrameBuffer.o \
 	$(OBJDIR)/GlRenderBuffer.o \
+	$(OBJDIR)/GlUniformBuffer.o \
 	$(OBJDIR)/GlVertexArray.o \
 	$(OBJDIR)/GlVertexBuffer.o \
+	$(OBJDIR)/Camera.o \
 	$(OBJDIR)/GlRenderer.o \
 	$(OBJDIR)/GlfwWindow.o \
 	$(OBJDIR)/ImGuiFactory.o \
@@ -183,10 +185,16 @@ $(OBJDIR)/GlFrameBuffer.o: src/Graphic/Buffer/GlFrameBuffer.cpp
 $(OBJDIR)/GlRenderBuffer.o: src/Graphic/Buffer/GlRenderBuffer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/GlUniformBuffer.o: src/Graphic/Buffer/GlUniformBuffer.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlVertexArray.o: src/Graphic/Buffer/GlVertexArray.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlVertexBuffer.o: src/Graphic/Buffer/GlVertexBuffer.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Camera.o: src/Graphic/Camera/Camera.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlRenderer.o: src/Graphic/GlRenderer.cpp

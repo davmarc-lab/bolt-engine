@@ -22,7 +22,7 @@ namespace bolt {
 
 	public:
 		Application() :
-			Application({scene::SceneType::SCENE_2D}) {}
+			Application({scene::SceneType::SCENE_3D}) {}
 
 		Application(const ApplicationSetting &settings) {
 			s_settings = settings;

@@ -27,9 +27,9 @@
 #ifndef IMGUI_DEFINE_MATH_OPERATORS
 #define IMGUI_DEFINE_MATH_OPERATORS
 #endif
-#include "imgui.h"
-#include "imgui_internal.h"
-#include "ImGuizmo.h"
+#include "../include/imgui/imgui.h"
+#include "../include/imgui/imgui_internal.h"
+#include "../include/ImGuizmo/ImGuizmo.h"
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #include <malloc.h>

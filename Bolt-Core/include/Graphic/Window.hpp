@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../include/Application/Application.hpp"
+#include "../Application/Application.hpp"
 #include "../Core/Utils.hpp"
 #include "../Core/Structs.hpp"
 

@@ -38,11 +38,10 @@ void bolt::Application::run() {
 
 	auto em = EntityManager::instance();
 	auto id = em->createEntity();
-	factory::mesh::createEmptySquare(id);
-	factory::mesh::initSquareMesh(id);
+	factory::mesh::createEmptyCubeMesh(id);
+	factory::mesh::initCubeMesh(id);
 
 	ed->subscribe(events::loop::LoopUpdate, [](auto &&ph1) { systems::transform::updateAllModelMatrix(); });
-	auto c = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(0);
 
 	UniformBuffer ub = UniformBuffer();
 	ub.onAttach();
@@ -61,6 +60,7 @@ void bolt::Application::run() {
 		// After rendering operations
 
 		ed->post(events::loop::LoopUpdate);
+        std::cout << to_string(standardCamera.getCameraPosition()) << "\n";
 	}
 	lm->execute([](const Shared<Layer> &l) { l->onDetach(); });
 }

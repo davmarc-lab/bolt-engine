@@ -3,7 +3,7 @@
 
 #include "../../include/Core/Enums.hpp"
 #include "../../include/Core/Log.hpp"
-#include "../../include/Core/SCene.hpp"
+#include "../../include/Core/Scene.hpp"
 
 namespace bolt {
 	void EntityManager::subscribeEventCallbacks() {

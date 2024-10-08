@@ -7,8 +7,6 @@
 
 #include "../Texture/Texture.hpp"
 
-#include <vector>
-
 #include "RenderBuffer.hpp"
 
 namespace bolt {
@@ -57,6 +55,6 @@ namespace bolt {
 
 		const u32 &getId() const { return this->m_id; }
 
-		const u16 &getTextureId() const { return this->m_textureAttach.getId(); }
+		u16 getTextureId() const { return this->m_textureAttach.getId(); }
 	};
 } // namespace bolt

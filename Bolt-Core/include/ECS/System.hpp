@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "../Application/Application.hpp"
+
 #include "../Core/Math.hpp"
 #include "../Core/Utils.hpp"
 #include "Component.hpp"
@@ -75,12 +77,12 @@ namespace bolt {
 					const auto shader = EntityManager::instance()->getEntityComponent<ShaderComponent>(id)->shader.get();
 
 					shader->use();
-					if (Application::getSceneType() == scene::SCENE_3D)
+					if (Application::getSceneType() == scene::SCENE_3D) {
 						shader->setMat4("view", standardCamera.getViewMatrix());
-					else std::cout << "OUT\n";
+                    }
 					shader->setMat4("model", model->getModelMatrix());
 
-					RenderApi::instance()->getRenderer()->drawArraysTriangles(*vao, 6);
+					RenderApi::instance()->getRenderer()->drawArraysTriangles(*vao, 36);
 					vao->unbind();
 				}
 			}
