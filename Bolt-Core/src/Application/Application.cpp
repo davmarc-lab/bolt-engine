@@ -12,8 +12,8 @@
 #include "../../include/Graphic/ImGuiLayer.hpp"
 #include "../../include/Platform/MeshFactory.hpp"
 
-#include "../../include/Graphic/Camera/Camera.hpp"
 #include "../../include/Graphic/Buffer/UniformBuffer.hpp"
+#include "../../include/Graphic/Camera/Camera.hpp"
 
 void bolt::Application::run() {
 	const auto lm = LayerManager::instance();
@@ -36,17 +36,15 @@ void bolt::Application::run() {
 
 	lm->addLayersFromStack();
 
-	auto em = EntityManager::instance();
-	auto id = em->createEntity();
-	factory::mesh::createEmptyCubeMesh(id);
-	factory::mesh::initCubeMesh(id);
-
 	ed->subscribe(events::loop::LoopUpdate, [](auto &&ph1) { systems::transform::updateAllModelMatrix(); });
 
 	UniformBuffer ub = UniformBuffer();
 	ub.onAttach();
 	ub.setup(sizeof(mat4), 0);
 	ub.update(0, sizeof(mat4), value_ptr(s_projection));
+	ed->subscribe(events::shader::ShaderProjectionChanged, [this, &ub](auto &&p) {
+		ub.update(0, sizeof(mat4), value_ptr(s_projection));
+	});
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
@@ -56,11 +54,11 @@ void bolt::Application::run() {
 		// Before rendering operations
 		lm->execute([](const Shared<Layer> &l) { l->begin(); });
 		lm->execute([](const Shared<Layer> &l) { l->onRender(); });
+
 		lm->execute([](const Shared<Layer> &l) { l->end(); });
 		// After rendering operations
 
 		ed->post(events::loop::LoopUpdate);
-        std::cout << to_string(standardCamera.getCameraPosition()) << "\n";
 	}
 	lm->execute([](const Shared<Layer> &l) { l->onDetach(); });
 }

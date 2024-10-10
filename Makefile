@@ -23,15 +23,13 @@ endif
 
 PROJECTS := Bolt-Graphics Bolt-imgui Bolt-Core Bolt-Test
 
-.PHONY: all clean help $(PROJECTS) Bolt-Core Bolt-Graphics Bolt-Test Bolt-imgui
+.PHONY: all clean help $(PROJECTS) Bolt-Core Bolt-Graphics Bolt-imgui
 
 all: $(PROJECTS)
 
 Bolt-Core: Bolt-Core
 
 Bolt-Graphics: Bolt-Graphics
-
-Bolt-Test: Bolt-Test
 
 Bolt-imgui: Bolt-imgui
 
@@ -41,7 +39,7 @@ ifneq (,$(Bolt_Graphics_config))
 	@${MAKE} --no-print-directory -C Bolt-Graphics -f Makefile config=$(Bolt_Graphics_config)
 endif
 
-Bolt-imgui: Bolt-Graphics
+Bolt-imgui:
 ifneq (,$(Bolt_imgui_config))
 	@echo "==== Building Bolt-imgui ($(Bolt_imgui_config)) ===="
 	@${MAKE} --no-print-directory -C Bolt-imgui -f Makefile config=$(Bolt_imgui_config)

@@ -80,6 +80,10 @@ namespace bolt {
 			BT_AUTOCONST LoopStopEvent = Event("Loop Stop");
 		} // namespace loop
 
+		namespace shader {
+			BT_AUTOCONST ShaderProjectionChanged = Event("Changed Projection");
+		} // namespace shader
+
 	}; // namespace events
 
 	/*
@@ -114,8 +118,8 @@ namespace bolt {
 		}
 
 		/*
-         * Stores each callback function for the `Event` given.
-         * It can sore multiple callback for the same `Event`.
+		 * Stores each callback function for the `Event` given.
+		 * It can sore multiple callback for the same `Event`.
 		 *
 		 * @param event the `Event` to be observed.
 		 * @param callback the callback function to be executed.
@@ -124,8 +128,8 @@ namespace bolt {
 
 		/*
 		 * Dispatch the given `Event` and execute all the callbacks.
-         *
-         * @param event the `Event` to be dispatched.
+		 *
+		 * @param event the `Event` to be dispatched.
 		 */
 		void post(const Event &event) const;
 
@@ -137,4 +141,4 @@ namespace bolt {
 
 		EventDispatcher() = default;
 	};
-} // namespace Bolt
+} // namespace bolt

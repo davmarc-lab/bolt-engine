@@ -6,7 +6,7 @@
 namespace bolt {
 
 	struct ApplicationSetting {
-		scene::SceneType type = scene::SCENE_3D;
+		scene::SceneType type;
 	};
 
 	/*

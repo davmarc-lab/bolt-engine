@@ -17,6 +17,8 @@ project "Bolt-Test"
         "Bolt-imgui",
     }
 
+    dependson { "Bolt-Core", "Bolt-imgui" }
+
     targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")
     objdir ("../bin/int/" .. OutputDir .. "/%{prj.name}")
 

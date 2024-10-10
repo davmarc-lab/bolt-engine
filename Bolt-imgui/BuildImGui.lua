@@ -11,10 +11,6 @@ project "Bolt-imgui"
         "../Bolt-Vendor/include",
     }
 
-    links {
-        "Bolt-Graphics",
-    }
-
     targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")
     objdir ("../bin/int/" .. OutputDir .. "/%{prj.name}")
 

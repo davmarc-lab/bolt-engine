@@ -10,8 +10,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../include/Core/stbi_image.h"
 
-#include <string>
 #include <iostream>
+#include <string>
 
 namespace bolt {
 
@@ -23,7 +23,7 @@ namespace bolt {
 
 	static u16 s_windowCount = 0;
 
-	#ifdef BT_ENABLE_DEBUG
+#ifdef BT_ENABLE_DEBUG
 	const char *getErrorSource(const GLenum &source) {
 		switch (source) {
 			case GL_DEBUG_SOURCE_API: return "API";
@@ -75,7 +75,7 @@ namespace bolt {
 			}
 		}
 	}
-	#endif
+#endif
 
 	static void glfwErrorCallback(i32 code, const char *description) {
 		/* BT_ERROR_CORE("GLFW error ({0} -> {1})", code, description); */
@@ -86,11 +86,14 @@ namespace bolt {
 		glViewport(0, 0, width, height);
 
 		switch (Application::getSceneType()) {
-			case scene::SceneType::SCENE_2D: scene::updateOrtho(0.f, static_cast<f32>(width), 0.f, static_cast<f32>(height));
+			case scene::SceneType::SCENE_2D:
+				scene::updateOrtho(0.f, static_cast<f32>(width), 0.f, static_cast<f32>(height));
 				break;
-			case scene::SceneType::SCENE_3D: scene::updatePerspective(45.0f, static_cast<f32>(width) / height, 0.1f, 100.f);
+			case scene::SceneType::SCENE_3D:
+				scene::updatePerspective(45.0f, static_cast<f32>(width) / height, 0.1f, 100.f);
 				break;
 		}
+		EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 
 		if (width < 0 || height < 0) {
 			/* BT_WARN_CORE("Tried to assign negative window size."); */
@@ -100,17 +103,31 @@ namespace bolt {
 	}
 
 	static void glfwKeyboardCallback(GLFWwindow *window, int key, int code, int action, int mod) {
-		if (key == GLFW_KEY_ESCAPE) { glfwSetWindowShouldClose(window, GLFW_TRUE); }
+		if (key == GLFW_KEY_ESCAPE) {
+			glfwSetWindowShouldClose(window, GLFW_TRUE);
+		}
 
 		// needs to be changed with WOLRD::AXIS
-		if (key == GLFW_KEY_W && action != GLFW_RELEASE) { standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraFront()); }
-		if (key == GLFW_KEY_S && action != GLFW_RELEASE) { standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraFront()); }
+		if (key == GLFW_KEY_W && action != GLFW_RELEASE) {
+			standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraFront());
+		}
+		if (key == GLFW_KEY_S && action != GLFW_RELEASE) {
+			standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraFront());
+		}
 
-		if (key == GLFW_KEY_A && action != GLFW_RELEASE) { standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraRight()); }
-		if (key == GLFW_KEY_D && action != GLFW_RELEASE) { standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraRight()); }
+		if (key == GLFW_KEY_A && action != GLFW_RELEASE) {
+			standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraRight());
+		}
+		if (key == GLFW_KEY_D && action != GLFW_RELEASE) {
+			standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraRight());
+		}
 
-		if (key == GLFW_KEY_SPACE && action != GLFW_RELEASE) { standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraUp()); }
-		if (key == GLFW_KEY_LEFT_SHIFT && action != GLFW_RELEASE) { standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraUp()); }
+		if (key == GLFW_KEY_SPACE && action != GLFW_RELEASE) {
+			standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraUp());
+		}
+		if (key == GLFW_KEY_LEFT_SHIFT && action != GLFW_RELEASE) {
+			standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraUp());
+		}
 	}
 
 	static void glfwMouseMovementCallback(GLFWwindow *window, double x, double y) {
@@ -147,19 +164,19 @@ namespace bolt {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		#ifdef __APPLE__
+#ifdef __APPLE__
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-		#endif
+#endif
 
 		// Error callback function must use the logger
 		glfwSetErrorCallback(glfwErrorCallback);
 
 		/* BT_INFO_CORE("Creating Window \"{0}\"", this->m_windowTitle); */
 
-		#ifdef BT_ENABLE_DEBUG
+#ifdef BT_ENABLE_DEBUG
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-		/* BT_INFO_CORE("Debug activated"); */
-		#endif
+/* BT_INFO_CORE("Debug activated"); */
+#endif
 
 		// Creating window
 		this->m_window = glfwCreateWindow(this->getWidth(), this->getHeight(), this->m_windowTitle.c_str(), NULL, NULL);
@@ -190,7 +207,7 @@ namespace bolt {
 			exit(EXIT_FAILURE);
 		}
 
-		#ifdef BT_ENABLE_DEBUG
+#ifdef BT_ENABLE_DEBUG
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
 		{
@@ -205,7 +222,7 @@ namespace bolt {
 				/* BT_INFO_CORE("GLFW Debugger Initialized."); */
 			}
 		}
-		#endif
+#endif
 
 		// Enabling vsync
 		this->setVsync(this->isVerticalSyncEnable());
@@ -216,8 +233,8 @@ namespace bolt {
 		glfwSetKeyCallback(static_cast<GLFWwindow *>(this->m_window), glfwKeyboardCallback);
 
 		// They are ready to work - BUG on Trello -
-		//glfwSetInputMode(static_cast<GLFWwindow*>(this->m_window), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		//glfwSetCursorPosCallback(static_cast<GLFWwindow*>(this->m_window), glfwMouseMovementCallback);
+		// glfwSetInputMode(static_cast<GLFWwindow*>(this->m_window), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		// glfwSetCursorPosCallback(static_cast<GLFWwindow*>(this->m_window), glfwMouseMovementCallback);
 
 		// Enable some parameters
 		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
@@ -225,7 +242,9 @@ namespace bolt {
 		{
 			i32 width, height;
 			glfwGetWindowSize(static_cast<GLFWwindow *>(this->m_window), &width, &height);
-			if (width >= 0 && height >= 0) { this->setSize({static_cast<u16>(width), static_cast<u16>(height)}); }
+			if (width >= 0 && height >= 0) {
+				this->setSize({static_cast<u16>(width), static_cast<u16>(height)});
+			}
 			else {
 				/* BT_WARN_CORE("Tried to assign negative window size."); */
 			}
@@ -235,14 +254,17 @@ namespace bolt {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		switch (Application::getSceneType()) {
-			case scene::SceneType::SCENE_2D: scene::updateOrtho(0.f, static_cast<f32>(width), 0.f, static_cast<f32>(height));
+			case scene::SceneType::SCENE_2D:
+				scene::updateOrtho(0.f, static_cast<f32>(width), 0.f, static_cast<f32>(height));
 				break;
-			case scene::SceneType::SCENE_3D: scene::updatePerspective(45.0f, static_cast<f32>(width) / height, 0.1f, 100.f);
+			case scene::SceneType::SCENE_3D:
+				scene::updatePerspective(45.0f, static_cast<f32>(width) / height, 0.1f, 100.f);
 				glEnable(GL_DEPTH_TEST);
 				glEnable(GL_CULL_FACE);
 				glCullFace(GL_BACK);
 				break;
 		}
+		EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 
 		s_windowCount++;
 	}
@@ -268,4 +290,4 @@ namespace bolt {
 
 	void Window::end() { glfwSwapBuffers(static_cast<GLFWwindow *>(this->m_window)); }
 
-} // namespace Bolt
+} // namespace bolt

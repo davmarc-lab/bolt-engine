@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "../Application/Application.hpp"
-#include "../Core/Utils.hpp"
 #include "../Core/Structs.hpp"
+#include "../Core/Utils.hpp"
 
 #include "../Core/Event.hpp"
 
@@ -32,11 +32,14 @@ namespace bolt {
 			this->setPosition(position);
 			this->setSize(size);
 			switch (Application::getSceneType()) {
-				case scene::SceneType::SCENE_2D: scene::updateOrtho(0.f, static_cast<f32>(this->m_size.width), 0.f, static_cast<f32>(this->m_size.height));
+				case scene::SceneType::SCENE_2D:
+					scene::updateOrtho(0.f, static_cast<f32>(this->m_size.width), 0.f, static_cast<f32>(this->m_size.height));
 					break;
-				case scene::SceneType::SCENE_3D: scene::updatePerspective(45.0f, static_cast<f32>(this->m_size.width) / this->m_size.height, 0.1f, 100.f);
+				case scene::SceneType::SCENE_3D:
+					scene::updatePerspective(45.0f, static_cast<f32>(this->m_size.width) / this->m_size.height, 0.1f, 100.f);
 					break;
 			}
+			EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 		}
 
 		virtual ~Window() = default;
@@ -72,4 +75,4 @@ namespace bolt {
 
 		virtual void end() override;
 	};
-}
+} // namespace bolt
