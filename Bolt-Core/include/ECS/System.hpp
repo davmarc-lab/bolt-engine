@@ -86,14 +86,12 @@ namespace bolt {
 				shader->setMat4("model", model->getModelMatrix());
 
 				RenderApi::instance()->getRenderer()->drawElementsTriangles(*mesh->vao, mesh->indices->size());
-				mesh->vao->unbind();
 			}
 
 			inline void drawAllMeshes() {
 				const auto meshes = EntityManager::instance()->getEntitiesFromComponent<Mesh>();
 				for (const auto id : meshes) {
 					const auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(id);
-					const auto vao = mesh->vao;
 					const auto model = EntityManager::instance()->getEntityComponent<Transform>(id);
 					const auto shader = EntityManager::instance()->getEntityComponent<ShaderComponent>(id)->shader.get();
 
@@ -103,7 +101,7 @@ namespace bolt {
 					}
 					shader->setMat4("model", model->getModelMatrix());
 
-					RenderApi::instance()->getRenderer()->drawArraysTriangles(*vao, mesh->vertices->size());
+                    mesh->render->call();
 				}
 			}
 		} // namespace render

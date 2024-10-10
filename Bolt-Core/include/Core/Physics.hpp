@@ -1,8 +1,10 @@
 #pragma once
 
+#include "Utils.hpp"
+#include "Math.hpp"
+
 #include "Layer.hpp"
 #include "Timestep.hpp"
-#include "Utils.hpp"
 
 #include <set>
 
@@ -34,11 +36,14 @@ namespace bolt {
         void step();
 
 		Unique<std::set<u32>> m_entities;
+
         Timestep m_time{};
         f32 m_accumulator = 0.f;
         f32 m_prevTime = 0.f;
         f32 m_currTime = 0.f;
         f32 m_frameTime = 0.f;
+
+        vec3 m_gravity = vec3(0, -9.81f, 0);
 	};
 
 } // namespace bolt

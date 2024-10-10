@@ -71,6 +71,14 @@ namespace bolt {
 				shader->shader = CreateUnique<ShaderProgram>("shader/defaultOrthoVertShader.glsl", "shader/defaultFragShader.glsl");
 				shader->shader->createShaderProgram();
 
+				// render
+				auto vao = *comp->vao;
+				auto size = comp->indices->size();
+
+				comp->render->setCall([vao, size]() {
+					RenderApi::instance()->getRenderer()->drawElementsTriangles(vao, size);
+				});
+
 				comp->instanced = true;
 			}
 
@@ -105,6 +113,9 @@ namespace bolt {
 					// shader
 					auto shader = em->addComponent<ShaderComponent>(id);
 					shader = CreateShared<ShaderComponent>();
+
+					// render
+					comp->render = CreateShared<RenderComponent>();
 				}
 				else
 					comp = em->getEntityComponent<Mesh>(id);
@@ -135,6 +146,14 @@ namespace bolt {
 				auto shader = em->getEntityComponent<ShaderComponent>(id);
 				shader->shader = CreateUnique<ShaderProgram>("shader/defaultPerspVertShader.glsl", "shader/defaultFragShader.glsl");
 				shader->shader->createShaderProgram();
+
+				// render
+				auto vao = *comp->vao;
+				auto size = comp->vertices->size();
+
+				comp->render->setCall([vao, size]() {
+					RenderApi::instance()->getRenderer()->drawArraysTriangles(vao, size);
+				});
 
 				comp->instanced = true;
 			}

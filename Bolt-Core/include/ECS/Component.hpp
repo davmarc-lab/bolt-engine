@@ -95,6 +95,10 @@ namespace bolt {
 	public:
 		std::function<void()> draw;
 
+        void setCall(std::function<void()> &&func) { this->draw = std::move(func); }
+
+        void call() { this->draw(); }
+
 		RenderComponent() = default;
 
 		~RenderComponent() override = default;

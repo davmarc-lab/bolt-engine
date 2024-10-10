@@ -5,18 +5,17 @@
 #include "../../include/Graphic/Buffer/VertexArray.hpp"
 
 namespace bolt {
-	void Renderer::onAttach() {
-	}
+	void Renderer::onAttach() {}
 
 	void Renderer::onDetach() {}
 
 	void Renderer::drawArrays(const VertexArray &vao, const u32 &mode, const i32 &first, const i32 &count) {
-        vao.bind();
+		vao.bind();
 		glDrawArrays(mode, first, count);
 	}
 
 	void Renderer::drawElements(const VertexArray &vao, const u32 &mode, const i32 &count, const u32 &type, const void *indices) {
-        vao.bind();
+		vao.bind();
 		glDrawElements(mode, count, type, indices);
 	}
 
@@ -35,4 +34,4 @@ namespace bolt {
 	void Renderer::drawElementsTriangles(const VertexArray &vao, const i32 &count) {
 		this->drawElements(vao, GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
-}
+} // namespace bolt

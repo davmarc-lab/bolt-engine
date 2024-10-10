@@ -6,7 +6,7 @@ namespace bolt {
 
 	void PhysicsWorld::onAttach() {
 		auto ids = EntityManager::instance()->getEntitiesFromComponent<PhysicComponent>();
-		for (const auto& id : ids) {
+		for (const auto &id : ids) {
 			this->m_entities->insert(id);
 		}
 	}
@@ -14,21 +14,33 @@ namespace bolt {
 	void PhysicsWorld::onDetach() {}
 
 	void PhysicsWorld::onUpdate() {
-        this->m_currTime = this->m_time.getTime();
-        this->m_frameTime = this->m_currTime - this->m_prevTime;
-        this->m_prevTime = this->m_currTime;
+		this->m_currTime = this->m_time.getTime();
+		this->m_frameTime = this->m_currTime - this->m_prevTime;
+		this->m_prevTime = this->m_currTime;
 
-        this->m_accumulator += this->m_frameTime;
+		this->m_accumulator += this->m_frameTime;
 
-        while (this->m_accumulator >= this->m_time.getTimeStep()) {
-            this->step();
+		while (this->m_accumulator >= this->m_time.getTimeStep()) {
+			this->step();
 
-            this->m_accumulator -= this->m_time.getTimeStep();
-        }
+			this->m_accumulator -= this->m_time.getTimeStep();
+		}
 
-        // interpolate Physic result
-    }
+		// interpolate Physic result
+	}
 
-    void PhysicsWorld::step() {}
+	void PhysicsWorld::step() {
+        auto em = EntityManager::instance();
+		for (auto id : *this->m_entities) {
+            auto model = em->getEntityComponent<Transform>(id);
+            auto physic = em->getEntityComponent<PhysicComponent>(id);
+
+            physic->force += physic->mass * this->m_gravity;
+            physic->velocity += physic->force / physic->mass * this->m_frameTime;
+            model->addPosition(physic->velocity * this->m_frameTime);
+
+            physic->force = vec3(0);
+		}
+	}
 
 } // namespace bolt
