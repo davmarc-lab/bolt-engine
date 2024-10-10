@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../Core/Scene.hpp"
-#include "../Graphic/Camera/Camera.hpp"
 
 namespace bolt {
 

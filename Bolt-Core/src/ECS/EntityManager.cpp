@@ -5,6 +5,8 @@
 #include "../../include/Core/Log.hpp"
 #include "../../include/Core/Scene.hpp"
 
+#include "../../include/Application/Application.hpp"
+
 namespace bolt {
 	void EntityManager::subscribeEventCallbacks() {
 		this->m_initEvents = true;
@@ -12,8 +14,16 @@ namespace bolt {
 
 		ed->subscribe(events::ecs::CreateMeshEvent, [this](auto &&p) {
 			auto id = this->createEntity();
-			factory::mesh::createEmptyCubeMesh(id);
-			factory::mesh::initCubeMesh(id);
+			if (Application::getSceneType()) {
+				factory::mesh::createEmptyCubeMesh(id);
+				factory::mesh::initCubeMesh(id);
+			} else {
+				factory::mesh::createEmptySquare(id);
+				factory::mesh::initSquareMesh(id);
+                auto comp = this->getEntityComponent<Transform>(id);
+                comp->setPosition(vec3(400, 400, 4));
+                comp->setScale(vec3(3000, 3000, 1000));
+            }
 			Scene::instance()->addEntity(id);
 		});
 	}
@@ -37,4 +47,4 @@ namespace bolt {
 		const auto e_res = static_cast<bool>(this->m_entities.erase(id));
 		return ec_res && e_res;
 	}
-} // namespace Bolt
+} // namespace bolt

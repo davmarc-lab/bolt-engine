@@ -60,11 +60,7 @@ namespace bolt {
 
 		virtual ~SceneLayer() override = default;
 
-		inline virtual void onAttach() override {
-			for (auto id : Scene::instance()->getEntities()) {
-				factory::mesh::initCubeMesh(id);
-			}
-		}
+		virtual void onAttach() override;
 
 		inline virtual void onDetach() override {
 			Scene::instance()->destroy();

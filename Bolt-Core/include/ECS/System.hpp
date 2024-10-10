@@ -3,10 +3,10 @@
 #include "../Application/Application.hpp"
 
 #include "../Core/Math.hpp"
+#include "../Core/RenderApi.hpp"
 #include "../Core/Utils.hpp"
 #include "Component.hpp"
 #include "EntityManager.hpp"
-#include "../Core/RenderApi.hpp"
 
 #include "../Core/Scene.hpp"
 #include "../Graphic/Camera/Camera.hpp"
@@ -22,7 +22,9 @@ namespace bolt {
 		namespace transform {
 			inline void updateEntityPosition(u32 id, const vec3 &pos) {
 				auto e = EntityManager::instance()->getEntityComponent<Transform>(id);
-				if (e != nullptr) { e->addPosition(pos); }
+				if (e != nullptr) {
+					e->addPosition(pos);
+				}
 			}
 
 			inline void updateEntityRotation(u32 id, const vec3 &rot) {
@@ -49,7 +51,9 @@ namespace bolt {
 
 			inline void updateAllModelMatrix() {
 				auto ids = EntityManager::instance()->getEntitiesFromComponent<Transform>();
-				for (const auto id : ids) { updateModelMatrix(id); }
+				for (const auto id : ids) {
+					updateModelMatrix(id);
+				}
 			}
 		} // namespace transform
 
@@ -61,11 +65,28 @@ namespace bolt {
 				const auto shader = EntityManager::instance()->getEntityComponent<ShaderComponent>(id)->shader.get();
 
 				shader->use();
-				shader->setMat4("view", standardCamera.getViewMatrix());
+				if (Application::getSceneType() == scene::SCENE_3D) {
+					shader->setMat4("view", standardCamera.getViewMatrix());
+				}
 				shader->setMat4("model", model->getModelMatrix());
 
-				RenderApi::instance()->getRenderer()->drawArraysTriangles(*vao, 36);
+				RenderApi::instance()->getRenderer()->drawArraysTriangles(*vao, mesh->vertices->size());
 				vao->unbind();
+			}
+
+			inline void drawElementIndexed(u32 id) {
+				const auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(id);
+				const auto model = EntityManager::instance()->getEntityComponent<Transform>(id);
+				const auto shader = EntityManager::instance()->getEntityComponent<ShaderComponent>(id)->shader.get();
+
+				shader->use();
+				if (Application::getSceneType() == scene::SCENE_3D) {
+					shader->setMat4("view", standardCamera.getViewMatrix());
+				}
+				shader->setMat4("model", model->getModelMatrix());
+
+				RenderApi::instance()->getRenderer()->drawElementsTriangles(*mesh->vao, mesh->indices->size());
+				mesh->vao->unbind();
 			}
 
 			inline void drawAllMeshes() {
@@ -79,14 +100,13 @@ namespace bolt {
 					shader->use();
 					if (Application::getSceneType() == scene::SCENE_3D) {
 						shader->setMat4("view", standardCamera.getViewMatrix());
-                    }
+					}
 					shader->setMat4("model", model->getModelMatrix());
 
-					RenderApi::instance()->getRenderer()->drawArraysTriangles(*vao, 36);
-					vao->unbind();
+					RenderApi::instance()->getRenderer()->drawArraysTriangles(*vao, mesh->vertices->size());
 				}
 			}
 		} // namespace render
 
 	} // namespace systems
-} // namespace Bolt
+} // namespace bolt

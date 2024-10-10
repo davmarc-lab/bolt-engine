@@ -14,6 +14,15 @@ namespace bolt {
 		}
 	} // namespace scene
 
+	void SceneLayer::onAttach() {
+		for (auto id : Scene::instance()->getEntities()) {
+            if (Application::getSceneType() == scene::SCENE_3D)
+			    factory::mesh::initCubeMesh(id);
+            else
+                factory::mesh::initSquareMesh(id);
+		}
+	}
+
 	void SceneLayer::onRender() {
 		systems::render::drawAllMeshes();
 	}

@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "../../include/ECS/EntityManager.hpp"
+#include "../../include/ECS/System.hpp"
 
 #include "../../include/Graphic/Buffer/VertexArray.hpp"
 #include "../../include/Graphic/Buffer/VertexBuffer.hpp"
@@ -37,12 +38,15 @@ namespace bolt {
 					// shader
 					auto shader = em->addComponent<ShaderComponent>(id);
 					shader = CreateShared<ShaderComponent>();
+
+					// render
+					comp->render = CreateShared<RenderComponent>();
 				}
 				else
 					comp = em->getEntityComponent<Mesh>(id);
 			}
 
-			void initSquareMesh(const u32& id, config::MeshConfig config) {
+			void initSquareMesh(const u32 &id, config::MeshConfig config) {
 				auto em = EntityManager::instance();
 				if (!em->entityHasComponent<Mesh>(id))
 					return;
@@ -58,7 +62,7 @@ namespace bolt {
 				comp->vao->linkAttribFast(0, 3, 0, false, 3 * sizeof(float), 0);
 
 				comp->colorComponent->vbo_c->setup(comp->colorComponent->colors, 0);
-				comp->vao->linkAttribFast(1, 4, 0, false, 0, (void*)0);
+				comp->vao->linkAttribFast(1, 4, 0, false, 0, (void *)0);
 
 				comp->vbo_t->setup(squareTexCoord, sizeof(squareTexCoord), 0);
 				comp->vao->linkAttribFast(2, 2, 0, false, 2 * sizeof(float), 0);
@@ -70,7 +74,7 @@ namespace bolt {
 				comp->instanced = true;
 			}
 
-			void createEmptyCubeMesh(const u32& id, config::MeshConfig config, const vec4& color) {
+			void createEmptyCubeMesh(const u32 &id, config::MeshConfig config, const vec4 &color) {
 				auto em = EntityManager::instance();
 				Shared<Mesh> comp;
 
@@ -82,6 +86,14 @@ namespace bolt {
 					comp = em->addComponent<Mesh>(id);
 					comp->vao = CreateShared<VertexArray>();
 					comp->vbo_g = CreateShared<VertexBuffer>();
+
+					comp->vertices = CreateUnique<std::vector<vec3>>();
+					for (int i = 0; i < sizeof(cubeGeometry) / (sizeof(cubeGeometry[0])); i += 3) {
+						comp->vertices->push_back(vec3(cubeGeometry[i], cubeGeometry[i + 1], cubeGeometry[i + 3]));
+					}
+
+					comp->ebo = CreateShared<ElementBuffer>();
+					comp->indices = CreateUnique<std::vector<u16>>();
 
 					comp->colorComponent = CreateUnique<Color>();
 					auto colors = getColorVector(sizeof(cubeGeometry) / sizeof(float) / 3, color);
@@ -108,13 +120,14 @@ namespace bolt {
 				comp->vbo_g->onAttach();
 				comp->colorComponent->vbo_c->onAttach();
 				comp->vbo_t->onAttach();
+				comp->ebo->onAttach();
 				comp->vao->bind();
 
 				comp->vbo_g->setup(cubeGeometry, sizeof(cubeGeometry), 0);
 				comp->vao->linkAttribFast(0, 3, 0, false, 3 * sizeof(float), 0);
 
 				comp->colorComponent->vbo_c->setup(comp->colorComponent->colors, 0);
-				comp->vao->linkAttribFast(1, 4, 0, false, 0, (void*)0);
+				comp->vao->linkAttribFast(1, 4, 0, false, 0, (void *)0);
 
 				comp->vbo_t->setup(cubeTexCoord, sizeof(cubeTexCoord), 0);
 				comp->vao->linkAttribFast(2, 2, 0, false, 2 * sizeof(float), 0);

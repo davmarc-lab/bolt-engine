@@ -1,8 +1,10 @@
 ﻿#pragma once
 
+#include <functional>
 #include <vector>
 #include "../Core/Math.hpp"
 
+#include "../Graphic/Buffer/ElementBuffer.hpp"
 #include "../Graphic/Buffer/VertexArray.hpp"
 #include "../Graphic/Buffer/VertexBuffer.hpp"
 
@@ -17,66 +19,66 @@ namespace bolt {
 	};
 
 	struct Transform : public Component {
-    private:
+	private:
 		vec3 position = vec3(0);
 		vec3 scale = vec3(1);
 		vec3 rotation = vec3(0);
-        quat quaternion {};
+		quat quaternion{};
 		mat4 modelMatrix = mat4(1);
-        b8 enableModel = true;
-        b8 dirty = false;
-    public:
+		b8 enableModel = true;
+		b8 dirty = false;
 
+	public:
 		Transform() = default;
 
 		~Transform() override = default;
 
-        inline b8 isModelMatrixEnable() const { return this->enableModel; }
+		inline b8 isModelMatrixEnable() const { return this->enableModel; }
 
-        inline void enableModelMatrix(b8 flag) { this->enableModel = flag; }
+		inline void enableModelMatrix(b8 flag) { this->enableModel = flag; }
 
-		inline const b8& isDirty() const { return this->dirty; }
+		inline const b8 &isDirty() const { return this->dirty; }
 
-		inline void setDirty(const b8& dirty) { this->dirty = true; }
+		inline void setDirty(const b8 &dirty) { this->dirty = true; }
 
-        inline const mat4& getModelMatrix() const { return this->modelMatrix; }
+		inline const mat4 &getModelMatrix() const { return this->modelMatrix; }
 
-        inline void setModelMatrix(mat4 matrix) {
-            this->modelMatrix = matrix;
-            this->dirty = false;
-        }
+		inline void setModelMatrix(mat4 matrix) {
+			this->modelMatrix = matrix;
+			this->dirty = false;
+		}
 
-		inline const vec3& getPosition() const { return this->position; }
+		inline const vec3 &getPosition() const { return this->position; }
 
-		inline void setPosition(const vec3& pos) {
+		inline void setPosition(const vec3 &pos) {
 			this->position = pos;
 			this->dirty = true;
 		}
 
-		inline void addPosition(const vec3& pos) {
+		inline void addPosition(const vec3 &pos) {
 			this->setPosition(this->position += pos);
 		}
 
-		inline const vec3& getScale() const { return this->scale; }
+		inline const vec3 &getScale() const { return this->scale; }
 
-		inline void setScale(const vec3& scale) {
+		inline void setScale(const vec3 &scale) {
 			this->scale = scale;
 			this->dirty = true;
 		}
 
-		inline const vec3& getRotation() const { return this->rotation; }
+		inline const vec3 &getRotation() const { return this->rotation; }
 
-		inline void setRotation(const vec3& rotation) {
+		inline void setRotation(const vec3 &rotation) {
 			this->rotation = rotation;
 			this->dirty = true;
 		}
 
-        inline const quat& getQuaternion() const { return this->quaternion; }
+		inline const quat &getQuaternion() const { return this->quaternion; }
 
-        inline void setQuaternion(quat quaternion) {
-            this->quaternion = quaternion;
-            this->dirty = true;
-        }
+		inline void setQuaternion(quat quaternion) {
+			this->quaternion = quaternion;
+			this->dirty = true;
+		}
 	};
 
 	struct Color : public Component {
@@ -87,6 +89,15 @@ namespace bolt {
 		Color() = default;
 
 		~Color() override = default;
+	};
+
+	struct RenderComponent : public Component {
+	public:
+		std::function<void()> draw;
+
+		RenderComponent() = default;
+
+		~RenderComponent() override = default;
 	};
 
 	struct ShaderComponent : public Component {
@@ -103,13 +114,19 @@ namespace bolt {
 		Shared<VertexArray> vao;
 		Shared<VertexBuffer> vbo_g;
 		Shared<VertexBuffer> vbo_t;
+		Shared<ElementBuffer> ebo;
+
+        Shared<RenderComponent> render;
+
 		Unique<std::vector<vec3>> vertices;
+		Unique<std::vector<u16>> indices;
 		Unique<Color> colorComponent;
 		Unique<std::vector<vec2>> texCoord;
+
 		b8 instanced = false;
 
 		Mesh() = default;
 
 		~Mesh() override = default;
 	};
-} // namespace Bolt
+} // namespace bolt
