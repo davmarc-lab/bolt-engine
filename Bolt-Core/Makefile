@@ -71,6 +71,7 @@ OBJECTS := \
 	$(OBJDIR)/Layer.o \
 	$(OBJDIR)/LayerManager.o \
 	$(OBJDIR)/Log.o \
+	$(OBJDIR)/PhysicsWorld.o \
 	$(OBJDIR)/Resource.o \
 	$(OBJDIR)/Scene.o \
 	$(OBJDIR)/EntityManager.o \
@@ -162,6 +163,9 @@ $(OBJDIR)/LayerManager.o: src/Core/LayerManager.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Log.o: src/Core/Log.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/PhysicsWorld.o: src/Core/PhysicsWorld.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Resource.o: src/Core/Resource.cpp

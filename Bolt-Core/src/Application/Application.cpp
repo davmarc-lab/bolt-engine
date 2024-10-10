@@ -15,6 +15,8 @@
 #include "../../include/Graphic/Buffer/UniformBuffer.hpp"
 #include "../../include/Graphic/Camera/Camera.hpp"
 
+#include "../../include/Core/Physics.hpp"
+
 void bolt::Application::run() {
 	const auto lm = LayerManager::instance();
 
@@ -46,10 +48,25 @@ void bolt::Application::run() {
 		ub.update(0, sizeof(mat4), value_ptr(s_projection));
 	});
 
+    // TEST
+
+    auto em = EntityManager::instance();
+    auto e1 = em->createEntity();
+    em->addComponent<PhysicComponent>(e1);
+    auto e2 = em->createEntity();
+    em->addComponent<PhysicComponent>(e2);
+
+    auto pw = CreateShared<PhysicsWorld>();
+    lm->addLayer(pw);
+
+    // TEST END
+
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
 		lm->execute([e](const Shared<Layer> &l) { l->onEvent(e); });
 		lm->execute([](const Shared<Layer> &l) { l->onUpdate(); });
+
+        ed->post(events::loop::LoopUpdate);
 
 		// Before rendering operations
 		lm->execute([](const Shared<Layer> &l) { l->begin(); });
@@ -58,7 +75,6 @@ void bolt::Application::run() {
 		lm->execute([](const Shared<Layer> &l) { l->end(); });
 		// After rendering operations
 
-		ed->post(events::loop::LoopUpdate);
 	}
 	lm->execute([](const Shared<Layer> &l) { l->onDetach(); });
 }

@@ -116,7 +116,7 @@ namespace bolt {
 		Shared<VertexBuffer> vbo_t;
 		Shared<ElementBuffer> ebo;
 
-        Shared<RenderComponent> render;
+		Shared<RenderComponent> render;
 
 		Unique<std::vector<vec3>> vertices;
 		Unique<std::vector<u16>> indices;
@@ -129,4 +129,17 @@ namespace bolt {
 
 		~Mesh() override = default;
 	};
+
+	struct PhysicComponent : public Component {
+	public:
+        f32 mass = 0.f;
+        vec3 velocity{};
+        vec3 acceleration{};
+        vec3 force{};
+        
+		PhysicComponent() = default;
+
+		~PhysicComponent() override = default;
+	};
+
 } // namespace bolt
