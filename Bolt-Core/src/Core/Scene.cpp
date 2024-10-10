@@ -16,8 +16,9 @@ namespace bolt {
 
 	void SceneLayer::onAttach() {
 		for (auto id : Scene::instance()->getEntities()) {
-            if (Application::getSceneType() == scene::SCENE_3D)
-			    factory::mesh::initCubeMesh(id);
+            if (Application::getSceneType() == scene::SCENE_3D) {
+	            factory::mesh::initCubeMesh(id);
+            }
             else
                 factory::mesh::initSquareMesh(id);
 		}

@@ -78,6 +78,7 @@ namespace bolt {
 			BT_AUTOCONST LoopPauseEvent = Event("Loop Pause");
 			BT_AUTOCONST LoopResumeEvent = Event("Loop Resume");
 			BT_AUTOCONST LoopStopEvent = Event("Loop Stop");
+			BT_AUTOCONST LoopGeneric = Event("Loop Generic");
 		} // namespace loop
 
 		namespace shader {

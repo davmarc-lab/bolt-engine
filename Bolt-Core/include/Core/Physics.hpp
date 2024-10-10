@@ -12,17 +12,13 @@ namespace bolt {
 	class PhysicsWorld : public Layer {
 	public:
 		PhysicsWorld() :
-			Layer("Physic World") {
-			this->m_entities = CreateUnique<std::set<u32>>();
-		}
+			Layer("Physic World") {}
 
-		inline void addEntity(const u32 &entity) { this->m_entities->insert(entity); }
+		inline void addEntity(const u32 &entity) { this->m_entities.insert(entity); }
 
-		inline b8 removeEntity(const u32 &entity) {
-            return this->m_entities->erase(entity);
-		}
+		inline b8 removeEntity(const u32 &entity) { return this->m_entities.erase(entity); }
 
-        inline u16 Count() const { return this->m_entities->size(); }
+		inline u16 Count() const { return this->m_entities.size(); }
 
 		virtual void onAttach() override;
 
@@ -33,17 +29,17 @@ namespace bolt {
 		virtual ~PhysicsWorld() {}
 
 	private:
-        void step();
+		void step();
 
-		Unique<std::set<u32>> m_entities;
+		std::set<u32> m_entities;
 
-        Timestep m_time{};
-        f32 m_accumulator = 0.f;
-        f32 m_prevTime = 0.f;
-        f32 m_currTime = 0.f;
-        f32 m_frameTime = 0.f;
+		Timestep m_time{};
+		f32 m_accumulator = 0.f;
+		f32 m_prevTime = 0.f;
+		f32 m_currTime = 0.f;
+		f32 m_frameTime = 0.f;
 
-        vec3 m_gravity = vec3(0, -9.81f, 0);
+		vec3 m_gravity = vec3(0, -9.81f, 0);
 	};
 
 } // namespace bolt

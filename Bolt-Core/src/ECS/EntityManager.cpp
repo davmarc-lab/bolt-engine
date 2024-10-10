@@ -17,6 +17,7 @@ namespace bolt {
 			if (Application::getSceneType()) {
 				factory::mesh::createEmptyCubeMesh(id);
 				factory::mesh::initCubeMesh(id);
+				this->addComponent<PhysicComponent>(id);
 			} else {
 				factory::mesh::createEmptySquare(id);
 				factory::mesh::initSquareMesh(id);
@@ -25,6 +26,7 @@ namespace bolt {
                 comp->setScale(vec3(3000, 3000, 1000));
             }
 			Scene::instance()->addEntity(id);
+			EventDispatcher::instance()->post(events::loop::LoopGeneric);
 		});
 	}
 

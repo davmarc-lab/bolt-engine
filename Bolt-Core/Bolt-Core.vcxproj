@@ -98,11 +98,13 @@
     <ClInclude Include="include\Core\LayerManager.hpp" />
     <ClInclude Include="include\Core\Log.hpp" />
     <ClInclude Include="include\Core\Math.hpp" />
+    <ClInclude Include="include\Core\Physics.hpp" />
     <ClInclude Include="include\Core\RenderApi.hpp" />
     <ClInclude Include="include\Core\Resource.hpp" />
     <ClInclude Include="include\Core\Scene.hpp" />
     <ClInclude Include="include\Core\stbi_image.h" />
     <ClInclude Include="include\Core\Structs.hpp" />
+    <ClInclude Include="include\Core\Timestep.hpp" />
     <ClInclude Include="include\Core\Utils.hpp" />
     <ClInclude Include="include\Graphic\Buffer\UniformBuffer.hpp" />
     <ClInclude Include="include\Graphic\Camera\Camera.hpp" />
@@ -131,6 +133,7 @@
     <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\LayerManager.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />
+    <ClCompile Include="src\Core\PhysicsWorld.cpp" />
     <ClCompile Include="src\Core\Resource.cpp" />
     <ClCompile Include="src\Core\Scene.cpp" />
     <ClCompile Include="src\ECS\EntityManager.cpp" />

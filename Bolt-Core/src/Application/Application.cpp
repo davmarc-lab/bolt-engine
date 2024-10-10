@@ -48,16 +48,25 @@ void bolt::Application::run() {
 		ub.update(0, sizeof(mat4), value_ptr(s_projection));
 	});
 
-    // TEST
+	// TEST
 
-    auto em = EntityManager::instance();
-    auto e1 = em->createEntity();
-    em->addComponent<PhysicComponent>(e1);
-    auto e2 = em->createEntity();
-    em->addComponent<PhysicComponent>(e2);
+	// auto em = EntityManager::instance();
+	// auto e1 = em->createEntity();
+	// factory::mesh::createEmptyCubeMesh(e1);
+	// factory::mesh::initCubeMesh(e1);
+	// em->addComponent<PhysicComponent>(e1);
+	// auto e2 = em->createEntity();
+	// factory::mesh::createEmptyCubeMesh(e2);
+	// factory::mesh::initCubeMesh(e2);
+	// em->addComponent<PhysicComponent>(e2);
+    
+	auto pw = CreateShared<PhysicsWorld>();
+	lm->addLayer(pw);
 
-    auto pw = CreateShared<PhysicsWorld>();
-    lm->addLayer(pw);
+	// using a loop generic event to add entities to the physic world
+	ed->subscribe(events::loop::LoopGeneric, [&pw](auto &&p) {
+		pw->addEntity(EntityManager::instance()->getEntitiesCount()-1);
+	});
 
     // TEST END
 

@@ -7,7 +7,7 @@ namespace bolt {
 	void PhysicsWorld::onAttach() {
 		auto ids = EntityManager::instance()->getEntitiesFromComponent<PhysicComponent>();
 		for (const auto &id : ids) {
-			this->m_entities->insert(id);
+			this->m_entities.insert(id);
 		}
 	}
 
@@ -22,7 +22,6 @@ namespace bolt {
 
 		while (this->m_accumulator >= this->m_time.getTimeStep()) {
 			this->step();
-
 			this->m_accumulator -= this->m_time.getTimeStep();
 		}
 
@@ -31,14 +30,14 @@ namespace bolt {
 
 	void PhysicsWorld::step() {
         auto em = EntityManager::instance();
-		for (auto id : *this->m_entities) {
+		for (auto id : this->m_entities) {
             auto model = em->getEntityComponent<Transform>(id);
             auto physic = em->getEntityComponent<PhysicComponent>(id);
 
+			// solver
             physic->force += physic->mass * this->m_gravity;
-            physic->velocity += physic->force / physic->mass * this->m_frameTime;
-            model->addPosition(physic->velocity * this->m_frameTime);
-
+            physic->velocity += physic->force / physic->mass * this->m_time.getTimeStep();
+            model->addPosition(physic->velocity * this->m_time.getTimeStep());
             physic->force = vec3(0);
 		}
 	}

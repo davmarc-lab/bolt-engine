@@ -50,12 +50,12 @@ namespace bolt {
 
 		inline const vec3 &getPosition() const { return this->position; }
 
-		inline void setPosition(const vec3 &pos) {
+		inline void setPosition(vec3 pos) {
 			this->position = pos;
 			this->dirty = true;
 		}
 
-		inline void addPosition(const vec3 &pos) {
+		inline void addPosition(vec3 pos) {
 			this->setPosition(this->position += pos);
 		}
 
@@ -136,10 +136,10 @@ namespace bolt {
 
 	struct PhysicComponent : public Component {
 	public:
-        f32 mass = 0.f;
-        vec3 velocity{};
-        vec3 acceleration{};
-        vec3 force{};
+        f32 mass = 10.f;
+        vec3 velocity = vec3(0);
+        vec3 acceleration = vec3(0);
+        vec3 force = vec3(0);
         
 		PhysicComponent() = default;
 
