@@ -3,17 +3,12 @@
 #include "../../include/Core/LayerManager.hpp"
 #include "../../include/Core/RenderApi.hpp"
 
-#include "../../include/Platform/ImGuiFactory.hpp"
-
-#include "../../include/Core/Scene.hpp"
 #include "../../include/ECS/EntityManager.hpp"
 #include "../../include/ECS/System.hpp"
 
 #include "../../include/Graphic/ImGuiLayer.hpp"
-#include "../../include/Platform/MeshFactory.hpp"
 
 #include "../../include/Graphic/Buffer/UniformBuffer.hpp"
-#include "../../include/Graphic/Camera/Camera.hpp"
 
 #include "../../include/Core/Physics.hpp"
 
@@ -59,6 +54,8 @@ void bolt::Application::run() {
 	});
 
     // TEST END
+
+    Timer::instance()->start();
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();

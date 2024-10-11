@@ -61,3 +61,17 @@ namespace bolt {
 
 	BT_CONSTEXPR auto identity = mat4(1);
 } // namespace bolt
+
+namespace bmath {
+	struct bvec2 {
+		f32 x = 0, y = 0;
+	};
+
+	struct bvec3 {
+		f32 x = 0, y = 0, z = 0;
+	};
+
+	struct bvec4 {
+		f32 r = 0, g = 0, b = 0, a = 0;
+	};
+} // namespace bmath

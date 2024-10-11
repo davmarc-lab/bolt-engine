@@ -83,7 +83,7 @@ namespace bolt {
 
 	struct Color : public Component {
 	public:
-		Shared<VertexBuffer> vbo_c;
+		VertexBuffer vbo_c;
 		std::vector<vec4> colors;
 
 		Color() = default;
@@ -115,17 +115,17 @@ namespace bolt {
 
 	struct Mesh : public Component {
 	public:
-		Shared<VertexArray> vao;
-		Shared<VertexBuffer> vbo_g;
-		Shared<VertexBuffer> vbo_t;
-		Shared<ElementBuffer> ebo;
+		VertexArray vao;
+		VertexBuffer vbo_g;
+		VertexBuffer vbo_t;
+		ElementBuffer ebo;
 
-		Shared<RenderComponent> render;
+		RenderComponent render;
 
-		Unique<std::vector<vec3>> vertices;
+		std::vector<vec3> vertices;
 		std::vector<u16> indices{};
-		Unique<Color> colorComponent;
-		Unique<std::vector<vec2>> texCoord;
+		Color colorComponent;
+		std::vector<vec2> texCoord;
 
 		b8 instanced = false;
 

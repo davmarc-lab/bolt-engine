@@ -13,8 +13,6 @@
 
 #include "../../../Bolt-Graphics/include/glad/glad.h"
 
-#include <iostream>
-
 namespace bolt {
 	inline mat4 base = mat4(1.f);
 
@@ -70,8 +68,8 @@ namespace bolt {
 				}
 				shader->setMat4("model", model->getModelMatrix());
 
-				RenderApi::instance()->getRenderer()->drawArraysTriangles(*vao, mesh->vertices->size());
-				vao->unbind();
+				RenderApi::instance()->getRenderer()->drawArraysTriangles(vao, mesh->vertices.size());
+				vao.unbind();
 			}
 
 			inline void drawElementIndexed(u32 id) {
@@ -85,7 +83,7 @@ namespace bolt {
 				}
 				shader->setMat4("model", model->getModelMatrix());
 
-				RenderApi::instance()->getRenderer()->drawElementsTriangles(*mesh->vao, mesh->indices.size());
+				RenderApi::instance()->getRenderer()->drawElementsTriangles(mesh->vao, mesh->indices.size());
 			}
 
 			inline void drawAllMeshes() {
@@ -101,7 +99,7 @@ namespace bolt {
 					}
 					shader->setMat4("model", model->getModelMatrix());
 
-                    mesh->render->call();
+                    mesh->render.call();
 				}
 			}
 		} // namespace render
