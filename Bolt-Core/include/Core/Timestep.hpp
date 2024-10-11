@@ -3,7 +3,6 @@
 #include <cassert>
 #include <chrono>
 #include <cstdlib>
-#include <iostream>
 #include <mutex>
 
 #include "Utils.hpp"
