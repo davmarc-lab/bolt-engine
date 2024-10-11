@@ -123,7 +123,7 @@ namespace bolt {
 		Shared<RenderComponent> render;
 
 		Unique<std::vector<vec3>> vertices;
-		Unique<std::vector<u16>> indices;
+		std::vector<u16> indices{};
 		Unique<Color> colorComponent;
 		Unique<std::vector<vec2>> texCoord;
 

@@ -108,12 +108,24 @@ namespace bolt {
 
 		inline std::vector<Entity> getEntities() const {
 			std::vector<Entity> res;
+			res.reserve(this->m_entities.size());
 			for (const auto &entity : this->m_entities) {
 				res.emplace_back(*entity.second);
 			}
 
 			return res;
 		}
+
+		inline std::vector<u32> getEntitiesId() const {
+			std::vector<u32> res;
+			res.reserve(this->m_entities.size());
+			for (const auto &entity : this->m_entities) {
+				res.push_back(entity.first);
+			}
+			return res;
+		}
+
+		inline std::string getEntityName(const u32& id) const { return this->m_entities.at(id)->getName(); }
 
 		b8 removeEntity(const u32 &id);
 	};

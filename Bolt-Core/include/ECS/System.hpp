@@ -85,7 +85,7 @@ namespace bolt {
 				}
 				shader->setMat4("model", model->getModelMatrix());
 
-				RenderApi::instance()->getRenderer()->drawElementsTriangles(*mesh->vao, mesh->indices->size());
+				RenderApi::instance()->getRenderer()->drawElementsTriangles(*mesh->vao, mesh->indices.size());
 			}
 
 			inline void drawAllMeshes() {

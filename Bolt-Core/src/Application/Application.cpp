@@ -49,17 +49,7 @@ void bolt::Application::run() {
 	});
 
 	// TEST
-
-	// auto em = EntityManager::instance();
-	// auto e1 = em->createEntity();
-	// factory::mesh::createEmptyCubeMesh(e1);
-	// factory::mesh::initCubeMesh(e1);
-	// em->addComponent<PhysicComponent>(e1);
-	// auto e2 = em->createEntity();
-	// factory::mesh::createEmptyCubeMesh(e2);
-	// factory::mesh::initCubeMesh(e2);
-	// em->addComponent<PhysicComponent>(e2);
-    
+	
 	auto pw = CreateShared<PhysicsWorld>();
 	lm->addLayer(pw);
 

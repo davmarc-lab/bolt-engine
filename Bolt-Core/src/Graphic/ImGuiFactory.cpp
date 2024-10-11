@@ -10,6 +10,8 @@
 #include <iostream>
 
 namespace bolt {
+	auto em = EntityManager::instance();
+	
 	void ImGuiDockSpace::onEvent(const Event &e) {}
 
 	void ImGuiDockSpace::onAttach() {}
@@ -94,10 +96,15 @@ namespace bolt {
 		if (this->m_entities != EntityManager::instance()->getEntitiesCount()) {
 			this->m_entities = EntityManager::instance()->getEntitiesCount();
 		}
-		for (auto ett : EntityManager::instance()->getEntities()) {
-			if (ImGui::TreeNode(ett.getName().c_str())) {
-				ImGui::PushID(&ett);
-				ImGui::Text("Name: %s", ett.getName().c_str());
+		for (auto id : EntityManager::instance()->getEntitiesId()) {
+			if (ImGui::TreeNode(em->getEntityName(id).c_str())) {
+				auto comp = em->getEntityComponent<Transform>(id);
+				auto pos = comp->getPosition();
+				ImGui::PushID(&id);
+				ImGui::Text("Name: %s", em->getEntityName(id).c_str());
+				if (ImGui::DragFloat3("Position", &pos.x)) {
+					comp->setPosition(pos);
+				}
 				ImGui::PopID();
 				ImGui::TreePop();
 			}

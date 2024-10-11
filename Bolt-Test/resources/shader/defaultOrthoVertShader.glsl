@@ -14,7 +14,7 @@ layout(std140, binding = 0) uniform Matrices {
 };
 
 void main() {
-    gl_Position = proj * model * vec4(aPos.x, aPos.y, 1, 1.0f);
+    gl_Position = proj * model * vec4(aPos, 1.0f);
     vertColor = aColor;
     texCoord = aTexCoord;
 }
