@@ -14,7 +14,7 @@ namespace bolt {
 		PhysicsWorld() :
 			Layer("Physic World") {}
 
-		inline void addEntity(const u32 &entity) { this->m_entities.insert(entity); }
+		void addEntity(const u32 &entity);
 
 		inline b8 removeEntity(const u32 &entity) { return this->m_entities.erase(entity); }
 
@@ -38,6 +38,7 @@ namespace bolt {
 		f32 m_prevTime = 0.f;
 		f32 m_currTime = 0.f;
 		f32 m_frameTime = 0.f;
+		f32 m_fixedTime = 0.f;
 
 		vec3 m_gravity = vec3(0, -9.81f, 0);
 	};

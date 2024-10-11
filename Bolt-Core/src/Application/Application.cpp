@@ -48,14 +48,14 @@ void bolt::Application::run() {
 		ub.update(0, sizeof(mat4), value_ptr(s_projection));
 	});
 
-	// TEST
+	// TEST START
 	
 	auto pw = CreateShared<PhysicsWorld>();
 	lm->addLayer(pw);
 
 	// using a loop generic event to add entities to the physic world
 	ed->subscribe(events::loop::LoopGeneric, [&pw](auto &&p) {
-		pw->addEntity(EntityManager::instance()->getEntitiesCount()-1);
+		pw->addEntity(EntityManager::instance()->getCurrentId()-1);
 	});
 
     // TEST END

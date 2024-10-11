@@ -22,12 +22,12 @@ namespace bolt {
 				factory::mesh::createEmptySquare(id);
 				factory::mesh::initSquareMesh(id);
                 auto comp = this->getEntityComponent<Transform>(id);
-				// this->addComponent<PhysicComponent>(id);
+				this->addComponent<PhysicComponent>(id);
                 comp->setPosition(vec3(400, 400, 0));
                 comp->setScale(vec3(200, 200, 1));
             }
 			Scene::instance()->addEntity(id);
-			// EventDispatcher::instance()->post(events::loop::LoopGeneric);
+			EventDispatcher::instance()->post(events::loop::LoopGeneric);
 		});
 	}
 

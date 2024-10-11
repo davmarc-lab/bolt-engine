@@ -136,7 +136,7 @@ namespace bolt {
 
 	struct PhysicComponent : public Component {
 	public:
-        f32 mass = 10.f;
+        f32 mass = 1.f;
         vec3 velocity = vec3(0);
         vec3 acceleration = vec3(0);
         vec3 force = vec3(0);

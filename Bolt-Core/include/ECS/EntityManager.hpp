@@ -106,6 +106,8 @@ namespace bolt {
 
 		inline u32 getEntitiesCount() const { return static_cast<u32>(this->m_entities.size()); }
 
+		inline u32 getCurrentId() const { return this->m_currentId; }
+
 		inline std::vector<Entity> getEntities() const {
 			std::vector<Entity> res;
 			res.reserve(this->m_entities.size());

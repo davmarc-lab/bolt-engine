@@ -99,11 +99,17 @@ namespace bolt {
 		for (auto id : EntityManager::instance()->getEntitiesId()) {
 			if (ImGui::TreeNode(em->getEntityName(id).c_str())) {
 				auto comp = em->getEntityComponent<Transform>(id);
+				auto physic = em->getEntityComponent<PhysicComponent>(id);
 				auto pos = comp->getPosition();
 				ImGui::PushID(&id);
 				ImGui::Text("Name: %s", em->getEntityName(id).c_str());
 				if (ImGui::DragFloat3("Position", &pos.x)) {
 					comp->setPosition(pos);
+				}
+
+				auto mass = physic->mass;
+				if (ImGui::InputFloat("Mass", &mass)) {
+					physic->mass = mass;
 				}
 				ImGui::PopID();
 				ImGui::TreePop();
