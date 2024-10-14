@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <string>
+#include "Core.hpp"
 #include "Utils.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -67,18 +68,27 @@ namespace bmath {
 	struct bvec2 {
 		f32 x, y;
 
-		bvec2(const f32 &x = 0, const f32 &y = 0) :
+		bvec2() :
+			bvec2(0) {}
+
+		bvec2(const f32 &x, const f32 &y) :
 			x(x), y(y) {}
 
 		bvec2(const f32 &x) :
 			bvec2(x, x) {}
 
-		bvec2(const i32 &x) :
-			bvec2(x, x) {}
-
 		bvec2(const bvec2 &vec) :
 			bvec2(vec.x, vec.y) {}
 
+        f32& operator[](std::size_t index) {
+            BT_ASSERT(index < 2);
+            switch (index) {
+                default:
+                case 0: return this->x;
+                case 1: return this->y;
+            }
+        }
+        
 		friend bvec2 operator+(const bvec2 &a, const bvec2 &b) {
 			return bvec2(a.x + b.x, a.y + b.y);
 		}
@@ -100,7 +110,7 @@ namespace bmath {
 		}
 
 		inline f32 dot(const bvec2 &vec) {
-            return this->x * vec.x + this->y * vec.y;
+			return this->x * vec.x + this->y * vec.y;
 		}
 	};
 
@@ -111,7 +121,10 @@ namespace bmath {
 	struct bvec3 {
 		f32 x, y, z;
 
-		bvec3(const f32 &x = 0, const f32 &y = 0, const f32 &z = 0) :
+		bvec3() :
+			bvec3(0) {}
+
+		bvec3(const f32 &x, const f32 &y, const f32 &z) :
 			x(x), y(y), z(z) {}
 
 		bvec3(const f32 &x) :
@@ -125,6 +138,16 @@ namespace bmath {
 
 		bvec3(const bvec3 &vec) :
 			bvec3(vec.x, vec.y, vec.z) {}
+
+        f32& operator[](std::size_t index) {
+            BT_ASSERT(index < 3);
+            switch (index) {
+                default:
+                case 0: return this->x;
+                case 1: return this->y;
+                case 2: return this->z;
+            }
+        }
 
 		friend bvec3 operator+(const bvec3 &a, const bvec3 &b) {
 			return bvec3(a.x + b.x, a.y + b.y, a.z + b.z);
@@ -147,7 +170,7 @@ namespace bmath {
 		}
 
 		inline f32 dot(const bvec3 &vec) {
-            return this->x * vec.x + this->y * vec.y + this->z * vec.z;
+			return this->x * vec.x + this->y * vec.y + this->z * vec.z;
 		}
 	};
 
@@ -173,6 +196,17 @@ namespace bmath {
 		bvec4(const bvec4 &vec) :
 			bvec4(vec.r, vec.g, vec.b, vec.a) {}
 
+        f32& operator[](std::size_t index) {
+            BT_ASSERT(index < 4);
+            switch (index) {
+                default:
+                case 0: return this->r;
+                case 1: return this->g;
+                case 2: return this->b;
+                case 3: return this->a;
+            }
+        }
+
 		friend bvec4 operator+(const bvec4 &a, const bvec4 &b) {
 			return bvec4(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a);
 		}
@@ -194,11 +228,77 @@ namespace bmath {
 		}
 
 		inline f32 dot(const bvec4 &vec) {
-            return this->r * vec.r + this->g * vec.g + this->b * vec.b + this->a * vec.a;
+			return this->r * vec.r + this->g * vec.g + this->b * vec.b + this->a * vec.a;
 		}
 	};
 
 	inline std::string dump(const bvec4 &vec) {
 		return std::string("Vec4: r = ").append(std::to_string(vec.r)).append(", g = ").append(std::to_string(vec.g)).append(", b = ").append(std::to_string(vec.b)).append(", a = ").append(std::to_string(vec.a));
 	}
+
+	struct bmat2 {
+		bvec2 value[2];
+
+		bmat2() :
+			bmat2(bvec2(0), bvec2(0)) {}
+
+		bmat2(const f32 &x, const f32 &y) :
+			bmat2(bvec2(x, y)) {}
+
+		bmat2(const bvec2 &first) : bmat2(first, first) {}
+
+		bmat2(const bvec2 &first, const bvec2 &second) {
+            this->value[0] = first;
+            this->value[1] = second;
+        }
+
+		bmat2(const bmat2 &mat) :
+			bmat2(mat.value[0], mat.value[0]) {}
+
+		bmat2(const f32 &val) : bmat2({val}, {val}) {}
+
+		friend bmat2 operator+(const bmat2 &a, const bmat2 &b) {
+			return bmat2(a.value[0] + b.value[0], a.value[1] + b.value[1]);
+		}
+
+		friend bmat2 operator-(const bmat2 &a, const bmat2 &b) {
+			return bmat2(a.value[0] - b.value[0], a.value[1] - b.value[1]);
+		}
+
+		friend bmat2 operator*(const bmat2 &a, const bmat2 &b) {
+			bmat2 res{};
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					for (int k = 0; k < 2; k++) {
+						// res[i][j] = res[i][j] + a[i][j] * b[i][j];
+					}
+				}
+			}
+            return res;
+		}
+
+		bmat2 operator*(const f32 &val) {
+			return bmat2(this->value[0] * val, this->value[1] * val);
+		}
+
+		friend bmat2 operator/(const bmat2 &a, const bmat2 &b) {
+			return bmat2(a.value[0] / b.value[0], a.value[1] / b.value[1]);
+		}
+
+		bmat2 operator/(const f32 &val) {
+			return bmat2(this->value[0] / val, this->value[1] / val);
+		}
+
+		inline bmat2 transpose() {
+			return bmat2({this->value[0].x, this->value[1].x}, {this->value[0].y, this->value[1].y});
+		}
+	};
+
+	inline std::string dump(const bmat2 &mat) {
+		return std::string("Mat2:\n").append(dump(mat.value[0])).append("\n").append(dump(mat.value[1]));
+	}
+
+	struct bmat3 {
+		bvec3 first, second, third;
+	};
 } // namespace bmath

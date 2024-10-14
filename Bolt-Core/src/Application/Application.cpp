@@ -24,6 +24,8 @@ void bolt::Application::run() {
 		lm->addLayer(ig);
 	}
 
+    using namespace bmath;
+
 	const auto rd = RenderApi::instance();
 	rd->init(config::RenderApiConfig::render_opengl);
 
