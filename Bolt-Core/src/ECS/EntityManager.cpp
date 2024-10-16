@@ -14,9 +14,9 @@ namespace bolt {
 
 		ed->subscribe(events::ecs::CreateMeshEvent, [this](auto &&p) {
 			auto id = this->createEntity();
-			if (Application::getSceneType()) {
-				factory::mesh::createEmptyCubeMesh(id);
-				factory::mesh::initCubeMesh(id);
+			if (Application::getSceneType() == scene::SCENE_3D) {
+				factory::mesh::createCustomMesh(id, config::cubeConfig, {});
+				factory::mesh::initCustomMesh(id, config::cubeConfig, {});
 				this->addComponent<PhysicComponent>(id);
 			} else {
 				factory::mesh::createEmptySquare(id);

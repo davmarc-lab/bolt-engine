@@ -7,13 +7,13 @@
 namespace bolt {
     namespace factory {
         namespace mesh {
+            void createCustomMesh(const u32&, config::MeshConfig, config::MeshShape);
+
+            void initCustomMesh(const u32&, config::MeshConfig, config::MeshShape);
+            
             void createEmptySquare(const u32&, config::MeshConfig = {});
         	
             void initSquareMesh(const u32& id, config::MeshConfig config = {});
-
-            void createEmptyCubeMesh(const u32&, config::MeshConfig = {}, const vec4& color = vec4(0, 0, 0, 1));
-
-            void initCubeMesh(u32 id, config::MeshConfig config = {});
         }
     }
 }

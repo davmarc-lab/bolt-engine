@@ -4,8 +4,10 @@
 
 namespace bolt {
 	namespace config {
+		typedef u8 MeshConfig;
+
 		/// Configs for mesh creation.
-		enum MeshConfig {
+		enum MeshConfig_ {
 			mesh_colors = 1 << 0,
 			mesh_texture = 1 << 1,
 			mesh_indices = 1 << 2,
@@ -13,10 +15,21 @@ namespace bolt {
 			mesh_default_shader = 1 << 4,
 		};
 
-        /// Congfigs for rrender api.
+		inline const MeshConfig cubeConfig = config::mesh_colors;
+		inline const MeshConfig squareConfig = config::mesh_colors;
+
+		enum MeshShape {
+			shape_square,
+			shape_circle,
+			shape_cube,
+			shape_sphere,
+			shape_custom,
+		};
+
+		/// Congfigs for rrender api.
 		enum RenderApiConfig {
-			render_unknonw = 0,
-			render_opengl = 1 << 0,
+			render_unknonw,
+			render_opengl,
 		};
 	} // namespace config
 
@@ -24,4 +37,4 @@ namespace bolt {
 		BT_CONSTEXPR u32 MAX_ENTITIES = 1024;
 	}
 
-} // namespace Bolt
+} // namespace bolt

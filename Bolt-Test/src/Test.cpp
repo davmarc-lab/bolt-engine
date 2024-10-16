@@ -4,7 +4,7 @@
 #include "../../Bolt-Core/include/Platform/MeshFactory.hpp"
 
 int main(int argc, char* argv[]) {
-	auto app = CreateUnique<bolt::Application>(bolt::ApplicationSetting{bolt::scene::SCENE_2D});
+	auto app = CreateUnique<bolt::Application>(bolt::ApplicationSetting{bolt::scene::SCENE_3D});
 	auto ls = bolt::LayerStack::instance();
 
 	ls->addCustomLayer(CreateShared<bolt::SceneLayer>());
