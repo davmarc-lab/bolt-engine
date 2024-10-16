@@ -11,10 +11,12 @@
 
 namespace bolt {
 	auto em = EntityManager::instance();
-	
+
 	void ImGuiDockSpace::onEvent(const Event &e) {}
 
-	void ImGuiDockSpace::onAttach() {}
+	void ImGuiDockSpace::onAttach() {
+		this->m_debugWindow = ImGuiDebug("Debug");
+	}
 
 	void ImGuiDockSpace::onRender() {
 		ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
@@ -59,7 +61,7 @@ namespace bolt {
 			ImGui::PopStyleVar();
 
 			if (ImGui::Button("Metrics")) {
-				this->m_metricWindow = !this->m_metricWindow;
+                this->m_debugWindow.setVisible(!this->m_debugWindow.isOpened());
 			}
 
 			ImGui::EndMenuBar();
@@ -73,8 +75,8 @@ namespace bolt {
 			ImGui::PopStyleVar();
 		}
 
-		if (this->m_metricWindow) {
-			ImGui::ShowMetricsWindow();
+		if (this->m_debugWindow.isOpened()) {
+			this->m_debugWindow.onRender();
 		}
 
 		ImGui::End();

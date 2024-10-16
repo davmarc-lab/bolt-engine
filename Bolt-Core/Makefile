@@ -85,6 +85,7 @@ OBJECTS := \
 	$(OBJDIR)/Camera.o \
 	$(OBJDIR)/GlRenderer.o \
 	$(OBJDIR)/GlfwWindow.o \
+	$(OBJDIR)/ImGuiDebug.o \
 	$(OBJDIR)/ImGuiFactory.o \
 	$(OBJDIR)/ImGuiLayer.o \
 	$(OBJDIR)/GlShader.o \
@@ -205,6 +206,9 @@ $(OBJDIR)/GlRenderer.o: src/Graphic/GlRenderer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlfwWindow.o: src/Graphic/GlfwWindow.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/ImGuiDebug.o: src/Graphic/ImGui/ImGuiDebug.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ImGuiFactory.o: src/Graphic/ImGuiFactory.cpp

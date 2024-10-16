@@ -6,6 +6,8 @@
 #include "../Core/LayerManager.hpp"
 #include "../ECS/EntityManager.hpp"
 
+#include "../Graphic/ImGui/ImGuiDebug.hpp"
+
 #include "../Graphic/Buffer/FrameBuffer.hpp"
 
 #include "../Application/Application.hpp"
@@ -17,8 +19,9 @@ namespace bolt {
 		b8 m_open = true;
 
 		// other windows
-		b8 m_metricWindow = false;
 		b8 m_styleConfig = false;
+
+		ImGuiDebug m_debugWindow;
 
 	public:
 		ImGuiDockSpace() {
@@ -63,6 +66,7 @@ namespace bolt {
 		void bindFBO();
 
 		void unbindFBO();
+
 	public:
 		ImGuiViewPort() {
 			if (!Application::isImGuiEnabled()) // PUT LOG HERE
@@ -129,4 +133,4 @@ namespace bolt {
 		Application::enableImGui();
 		ImGuiFactory::createBasicUi();
 	}
-} // namespace Bolt
+} // namespace bolt
