@@ -257,6 +257,11 @@ namespace bmath {
 
 		bmat2(const f32 &val) : bmat2({val}, {val}) {}
 
+		bvec2& operator[](std::size_t index) {
+			BT_ASSERT(index < 2);
+			return this->value[index];
+		}
+
 		friend bmat2 operator+(const bmat2 &a, const bmat2 &b) {
 			return bmat2(a.value[0] + b.value[0], a.value[1] + b.value[1]);
 		}
@@ -265,16 +270,17 @@ namespace bmath {
 			return bmat2(a.value[0] - b.value[0], a.value[1] - b.value[1]);
 		}
 
-		friend bmat2 operator*(const bmat2 &a, const bmat2 &b) {
-			bmat2 res{};
-			for (int i = 0; i < 2; i++) {
-				for (int j = 0; j < 2; j++) {
-					for (int k = 0; k < 2; k++) {
-						// res[i][j] = res[i][j] + a[i][j] * b[i][j];
-					}
+		friend bmat2 operator*(bmat2& a, bmat2& b) {
+			return bmat2(
+				{
+					a[0][0] * b[0][0] + a[0][1] * b[1][0],
+					a[0][0] * b[0][1] + a[0][1] * b[1][1],
+				},
+				{
+					a[1][0] * b[0][0] + a[1][1] * b[1][0],
+					a[1][0] * b[0][1] + a[1][1] * b[1][1],
 				}
-			}
-            return res;
+			);
 		}
 
 		bmat2 operator*(const f32 &val) {
