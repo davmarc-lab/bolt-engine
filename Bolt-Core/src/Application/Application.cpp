@@ -77,13 +77,13 @@ void bolt::Application::run() {
 			std::cout << "FINAL: " << Timer::instance()->getTime() - main << "\n";
 		}
 	*/
-	auto pw = CreateShared<PhysicsWorld>();
-	lm->addLayer(pw);
-
-	// using a loop generic event to add entities to the physic world
-	ed->subscribe(events::loop::LoopGeneric, [&pw](auto &&p) {
-		pw->addEntity(EntityManager::instance()->getCurrentId() - 1);
-	});
+	// auto pw = CreateShared<PhysicsWorld>();
+	// lm->addLayer(pw);
+	//
+	// // using a loop generic event to add entities to the physic world
+	// ed->subscribe(events::loop::LoopGeneric, [&pw](auto &&p) {
+	// 	pw->addEntity(EntityManager::instance()->getCurrentId() - 1);
+	// });
 
 	// TEST END
 

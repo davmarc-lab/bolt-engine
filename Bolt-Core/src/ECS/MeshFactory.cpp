@@ -30,7 +30,7 @@ namespace bolt {
 						comp->vertices.push_back(vec3(cubeGeometry[i], cubeGeometry[i + 1], cubeGeometry[i + 3]));
 					}
 
-					auto colors = getColorVector(sizeof(cubeGeometry) / sizeof(float) / 3, vec4(1, 0, 0, 1));
+					auto colors = getColorVector(sizeof(cubeGeometry) / sizeof(float) / 3, vec4(0, 0, 0, 1));
 					comp->colorComponent.colors = std::vector<vec4>(colors);
 
 					// shader
@@ -73,7 +73,7 @@ namespace bolt {
 				}
 
 				auto shader = em->getEntityComponent<ShaderComponent>(id);
-				shader->shader = CreateUnique<ShaderProgram>("shader/defaultPerspVertShader.glsl", "shader/defaultFragShader.glsl");
+				shader->shader = CreateUnique<ShaderProgram>("shader/defaultPerspVertShader.glsl", "shader/defaultFragShader.glsl", "shader/geometryShader.glsl");
 				shader->shader->createShaderProgram();
 
 				// render

@@ -10,6 +10,7 @@ namespace bolt {
 		switch (type) {
 		case shader::SHADER_VERTEX: return GL_VERTEX_SHADER;
 		case shader::SHADER_FRAGMENT: return GL_FRAGMENT_SHADER;
+		case shader::SHADER_GEOMETRY: return GL_GEOMETRY_SHADER;
 		case shader::SHADER_PROGRAM: /* BT_ERROR_CORE("Cannot find the correct shader type."); */ assert(false);
 		default: /* BT_ERROR_CORE("Cannot find the correct shader type."); */ assert(false);
 		}
@@ -19,6 +20,7 @@ namespace bolt {
 		switch (type) {
 		case shader::SHADER_VERTEX: return "VERTEX";
 		case shader::SHADER_FRAGMENT: return "FRAGMENT";
+		case shader::SHADER_GEOMETRY: return "GEOMETRY";
 		case shader::SHADER_PROGRAM: return "PROGRAM";
 		default: return "NONE";
 		}
@@ -84,16 +86,23 @@ namespace bolt {
 		if (!this->m_frag->isShaderCreated())
 			this->m_frag->createShader();
 
+		if (this->m_geom != nullptr) {
+			if (!this->m_geom->isShaderCreated())
+				this->m_geom->createShader();
+		}
+
 		this->m_id = glCreateProgram();
 		glAttachShader(this->m_id, this->m_vert->getShaderId());
 		glAttachShader(this->m_id, this->m_frag->getShaderId());
+		if (this->m_geom != nullptr)
+			glAttachShader(this->m_id, this->m_geom->getShaderId());
 		glLinkProgram(this->m_id);
 		checkLinkingError(this->m_id);
 
 		glDeleteShader(this->m_vert->getShaderId());
 		glDeleteShader(this->m_frag->getShaderId());
 	}
-
+	
 	void ShaderProgram::use() const {
 		glUseProgram(this->m_id);
 	}
