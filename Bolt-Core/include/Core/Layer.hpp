@@ -10,7 +10,6 @@
 #include <vector>
 
 namespace bolt {
-
 	/*
 	 * Interface for implementing a custom `Layer`.
 	 *
@@ -33,7 +32,7 @@ namespace bolt {
 		virtual void onDetach() {}
 
 		/// ???
-		virtual void onEvent(const Event &e) {}
+		virtual void onEvent(const Event& e) {}
 
 		/// Updates `Layer` elements in the game loop.
 		virtual void onUpdate() {}
@@ -58,9 +57,9 @@ namespace bolt {
 		LayerStack() = default;
 
 	public:
-		LayerStack(LayerStack &other) = delete;
+		LayerStack(LayerStack& other) = delete;
 
-		void operator=(const LayerStack &other) = delete;
+		void operator=(const LayerStack& other) = delete;
 
 		inline static Shared<LayerStack> instance() {
 			std::lock_guard<std::mutex> lock(s_mutex);
@@ -76,5 +75,4 @@ namespace bolt {
 
 		inline std::vector<Shared<Layer>> getLayers() const { return this->m_layers; }
 	};
-
 } // namespace Bolt

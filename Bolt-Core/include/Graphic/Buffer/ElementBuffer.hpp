@@ -27,7 +27,7 @@ namespace bolt {
 		 * @param size The size in bytes of the data.
 		 * @param usage The usage type.
 		 */
-		virtual void setup(const f32 *indices, const i64 &size, const u32 &usage) const;
+		virtual void setup(const f32* indices, const i64& size, const u32& usage) const;
 
 		/**
 		 * @brief Sets up the data for the buffer.
@@ -46,6 +46,6 @@ namespace bolt {
 		 * @param usage The usage type.
 		 */
 		template <typename T>
-		void setup(const std::vector<T> &indices, const u32 &usage = 0);
+		void setup(const std::vector<T>& indices, const u32& usage = 0);
 	};
 } // namespace Bolt

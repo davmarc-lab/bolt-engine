@@ -14,11 +14,11 @@ namespace bolt {
 		IMGUI_CHECKVERSION();
 
 		ImGui::CreateContext();
-		ImGuiIO &io = ImGui::GetIO();
+		ImGuiIO& io = ImGui::GetIO();
 
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Vieports
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable Vieports
 
 		//float fontSize = 17.f;
 		//io.FontDefault = io.Fonts->AddFontFromFileTTF("../Bolt-imgui/include/imgui/misc/fonts/DroidSans.ttf", fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
@@ -30,7 +30,7 @@ namespace bolt {
 
 		// Setup Dear ImGui style
 		// ImGui::StyleColorsDark();
-		ImGuiStyle &style = ImGui::GetStyle();
+		ImGuiStyle& style = ImGui::GetStyle();
 
 		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 		style.WindowRounding = 10.0f;
@@ -38,7 +38,7 @@ namespace bolt {
 		style.GrabRounding = 4.f;
 		style.Colors[ImGuiCol_WindowBg].w = 0.8f;
 
-		const auto window = static_cast<GLFWwindow *>(this->m_window->getCurrentWindow());
+		const auto window = static_cast<GLFWwindow*>(this->m_window->getCurrentWindow());
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -51,7 +51,7 @@ namespace bolt {
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::onEvent(const Event &e) {
+	void ImGuiLayer::onEvent(const Event& e) {
 		// BT_INFO_CORE("No Implementation of Event handling.");
 	}
 
@@ -62,7 +62,7 @@ namespace bolt {
 	}
 
 	void ImGuiLayer::end() {
-		ImGuiIO &io = ImGui::GetIO();
+		ImGuiIO& io = ImGui::GetIO();
 		io.DisplaySize = ImVec2(this->m_window->getWidth(), this->m_window->getHeight());
 
 		// Rendering
@@ -76,5 +76,4 @@ namespace bolt {
 			glfwMakeContextCurrent(backup_current_context);
 		}
 	}
-
 } // namespace bolt

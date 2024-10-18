@@ -50,7 +50,7 @@ using Unique = std::unique_ptr<T>;
  * @return an `unique_ptr` of type T, using the constructor with `Args...` parameters.
  */
 template <typename T, typename... Args>
-constexpr Unique<T> CreateUnique(Args &&...args) {
+constexpr Unique<T> CreateUnique(Args&&... args) {
 	return std::make_unique<T>(std::forward<Args>(args)...);
 }
 
@@ -71,7 +71,7 @@ using Shared = std::shared_ptr<T>;
  * @return a `shared_ptr` of type T, using the constructor with `Args...` parameters.
  */
 template <typename T, typename... Args>
-constexpr Shared<T> CreateShared(Args &&...args) {
+constexpr Shared<T> CreateShared(Args&&... args) {
 	return std::make_shared<T>(std::forward<Args>(args)...);
 }
 
@@ -94,4 +94,3 @@ STATIC_ASSERT(sizeof(i64) == 8, "Expected i64 to be 8 bytes.");
 STATIC_ASSERT(sizeof(f64) == 8, "Expected f64 to be 8 bytes.");
 
 #undef STATIC_ASSERT
-

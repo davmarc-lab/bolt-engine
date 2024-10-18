@@ -14,8 +14,7 @@
 namespace bolt {
 	namespace factory {
 		namespace mesh {
-
-			void createCustomMesh(const u32 &id, config::MeshConfig config, config::MeshShape shape) {
+			void createCustomMesh(const u32& id, config::MeshConfig config, config::MeshShape shape) {
 				auto em = EntityManager::instance();
 				Shared<Mesh> comp;
 
@@ -38,12 +37,11 @@ namespace bolt {
 					shader = CreateShared<ShaderComponent>();
 
 					// render
-				}
-				else
+				} else
 					comp = em->getEntityComponent<Mesh>(id);
 			}
 
-			void initCustomMesh(const u32 &id, config::MeshConfig config, config::MeshShape shape) {
+			void initCustomMesh(const u32& id, config::MeshConfig config, config::MeshShape shape) {
 				auto em = EntityManager::instance();
 				if (!em->entityHasComponent<Mesh>(id))
 					return;
@@ -59,7 +57,7 @@ namespace bolt {
 				if (config & config::mesh_colors) {
 					comp->colorComponent.vbo_c.onAttach();
 					comp->colorComponent.vbo_c.setup(comp->colorComponent.colors, 0);
-					comp->vao.linkAttribFast(1, 4, 0, false, 0, (void *)0);
+					comp->vao.linkAttribFast(1, 4, 0, false, 0, (void*)0);
 				}
 
 				if (config & config::mesh_texture) {
@@ -73,7 +71,7 @@ namespace bolt {
 				}
 
 				auto shader = em->getEntityComponent<ShaderComponent>(id);
-				shader->shader = CreateUnique<ShaderProgram>("shader/defaultPerspVertShader.glsl", "shader/defaultFragShader.glsl", "shader/geometryShader.glsl");
+				shader->shader = CreateUnique<ShaderProgram>("shader/defaultPerspVertShader.glsl", "shader/defaultFragShader.glsl");
 				shader->shader->createShaderProgram();
 
 				// render
@@ -87,7 +85,7 @@ namespace bolt {
 				comp->instanced = true;
 			}
 
-			void createEmptySquare(const u32 &id, config::MeshConfig) {
+			void createEmptySquare(const u32& id, config::MeshConfig) {
 				auto em = EntityManager::instance();
 				Shared<Mesh> comp;
 
@@ -109,12 +107,11 @@ namespace bolt {
 					shader = CreateShared<ShaderComponent>();
 
 					// render
-				}
-				else
+				} else
 					comp = em->getEntityComponent<Mesh>(id);
 			}
 
-			void initSquareMesh(const u32 &id, config::MeshConfig config) {
+			void initSquareMesh(const u32& id, config::MeshConfig config) {
 				auto em = EntityManager::instance();
 				if (!em->entityHasComponent<Mesh>(id))
 					return;
@@ -131,7 +128,7 @@ namespace bolt {
 				comp->vao.linkAttribFast(0, 3, 0, false, 3 * sizeof(float), 0);
 
 				comp->colorComponent.vbo_c.setup(comp->colorComponent.colors, 0);
-				comp->vao.linkAttribFast(1, 4, 0, false, 0, (void *)0);
+				comp->vao.linkAttribFast(1, 4, 0, false, 0, (void*)0);
 
 				comp->vbo_t.setup(squareTexCoord, sizeof(squareTexCoord), 0);
 				comp->vao.linkAttribFast(2, 2, 0, false, 2 * sizeof(float), 0);
@@ -150,7 +147,6 @@ namespace bolt {
 
 				comp->instanced = true;
 			}
-
 		} // namespace mesh
-	} // namespace factory
-} // namespace bolt
+	}     // namespace factory
+}         // namespace bolt

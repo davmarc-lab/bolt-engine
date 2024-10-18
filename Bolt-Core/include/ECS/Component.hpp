@@ -37,18 +37,18 @@ namespace bolt {
 
 		inline void enableModelMatrix(b8 flag) { this->enableModel = flag; }
 
-		inline const b8 &isDirty() const { return this->dirty; }
+		inline const b8& isDirty() const { return this->dirty; }
 
-		inline void setDirty(const b8 &dirty) { this->dirty = true; }
+		inline void setDirty(const b8& dirty) { this->dirty = true; }
 
-		inline const mat4 &getModelMatrix() const { return this->modelMatrix; }
+		inline const mat4& getModelMatrix() const { return this->modelMatrix; }
 
 		inline void setModelMatrix(mat4 matrix) {
 			this->modelMatrix = matrix;
 			this->dirty = false;
 		}
 
-		inline const vec3 &getPosition() const { return this->position; }
+		inline const vec3& getPosition() const { return this->position; }
 
 		inline void setPosition(vec3 pos) {
 			this->position = pos;
@@ -59,21 +59,21 @@ namespace bolt {
 			this->setPosition(this->position += pos);
 		}
 
-		inline const vec3 &getScale() const { return this->scale; }
+		inline const vec3& getScale() const { return this->scale; }
 
-		inline void setScale(const vec3 &scale) {
+		inline void setScale(const vec3& scale) {
 			this->scale = scale;
 			this->dirty = true;
 		}
 
-		inline const vec3 &getRotation() const { return this->rotation; }
+		inline const vec3& getRotation() const { return this->rotation; }
 
-		inline void setRotation(const vec3 &rotation) {
+		inline void setRotation(const vec3& rotation) {
 			this->rotation = rotation;
 			this->dirty = true;
 		}
 
-		inline const quat &getQuaternion() const { return this->quaternion; }
+		inline const quat& getQuaternion() const { return this->quaternion; }
 
 		inline void setQuaternion(quat quaternion) {
 			this->quaternion = quaternion;
@@ -95,9 +95,9 @@ namespace bolt {
 	public:
 		std::function<void()> draw;
 
-        void setCall(std::function<void()> &&func) { this->draw = std::move(func); }
+		void setCall(std::function<void()>&& func) { this->draw = std::move(func); }
 
-        void call() { this->draw(); }
+		void call() { this->draw(); }
 
 		RenderComponent() = default;
 
@@ -136,14 +136,13 @@ namespace bolt {
 
 	struct PhysicComponent : public Component {
 	public:
-        f32 mass = 1.f;
-        vec3 velocity = vec3(0);
-        vec3 acceleration = vec3(0);
-        vec3 force = vec3(0);
-        
+		f32 mass = 1.f;
+		vec3 velocity = vec3(0);
+		vec3 acceleration = vec3(0);
+		vec3 force = vec3(0);
+
 		PhysicComponent() = default;
 
 		~PhysicComponent() override = default;
 	};
-
 } // namespace bolt

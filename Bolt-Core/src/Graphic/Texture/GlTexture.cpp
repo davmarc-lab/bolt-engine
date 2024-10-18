@@ -34,14 +34,14 @@ namespace bolt {
 			this->m_parameters.format, this->m_parameters.dataType, data);
 		this->m_created = true;
 	}
-	
+
 	void Texture::fastCreateTexture2D(void* data) {
 		glTexImage2D(this->m_parameters.target, this->m_parameters.level, static_cast<i32>(this->m_parameters.internalFormat), this->m_width, this->m_height, this->m_parameters.border,
 			this->m_parameters.format, this->m_parameters.dataType, data);
 		this->m_created = true;
 	}
 
-	void Texture::rescaleTexture(const u16 &width, const u16 &height) {
+	void Texture::rescaleTexture(const u16& width, const u16& height) {
 		this->m_width = width;
 		this->m_height = height;
 		this->bind();

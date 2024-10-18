@@ -33,7 +33,7 @@ namespace bolt {
 
 		virtual void onAttach() override;
 
-		virtual void onEvent(const Event &e) override;
+		virtual void onEvent(const Event& e) override;
 
 		virtual void onRender() override;
 	};
@@ -48,7 +48,7 @@ namespace bolt {
 
 		~ImGuiEntityTree() override = default;
 
-		virtual void onEvent(const Event &e) override;
+		virtual void onEvent(const Event& e) override;
 
 		virtual void onRender() override;
 	};
@@ -75,7 +75,7 @@ namespace bolt {
 
 		~ImGuiViewPort() override = default;
 
-		void rescaleViewport(const u16 &width, const u16 &height);
+		void rescaleViewport(const u16& width, const u16& height);
 
 		virtual void begin() override { this->bindFBO(); }
 
@@ -83,7 +83,7 @@ namespace bolt {
 
 		virtual void onAttach() override;
 
-		virtual void onEvent(const Event &e) override;
+		virtual void onEvent(const Event& e) override;
 
 		virtual void onRender() override;
 	};
@@ -100,7 +100,7 @@ namespace bolt {
 
 		~ImGuiUtility() override = default;
 
-		virtual void onEvent(const Event &e) override;
+		virtual void onEvent(const Event& e) override;
 
 		virtual void onRender() override;
 	};
@@ -117,7 +117,7 @@ namespace bolt {
 
 		~ImGuiProperties() override = default;
 
-		virtual void onEvent(const Event &e) override;
+		virtual void onEvent(const Event& e) override;
 
 		virtual void onRender() override;
 	};

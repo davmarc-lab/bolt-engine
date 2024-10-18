@@ -8,7 +8,7 @@ int main(int argc, char* argv[]) {
 	auto ls = bolt::LayerStack::instance();
 
 	ls->addCustomLayer(CreateShared<bolt::SceneLayer>());
-	
+
 	bolt::Application::enableImGui();
 	ls->addCustomLayer(CreateShared<bolt::ImGuiDockSpace>());
 	ls->addCustomLayer(CreateShared<bolt::ImGuiEntityTree>());

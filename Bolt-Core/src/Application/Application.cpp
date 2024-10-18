@@ -35,13 +35,13 @@ void bolt::Application::run() {
 
 	lm->addLayersFromStack();
 
-	ed->subscribe(events::loop::LoopUpdate, [](auto &&ph1) { systems::transform::updateAllModelMatrix(); });
+	ed->subscribe(events::loop::LoopUpdate, [](auto&& ph1) { systems::transform::updateAllModelMatrix(); });
 
 	UniformBuffer ub = UniformBuffer();
 	ub.onAttach();
 	ub.setup(sizeof(mat4), 0);
 	ub.update(0, sizeof(mat4), value_ptr(s_projection));
-	ed->subscribe(events::shader::ShaderProjectionChanged, [this, &ub](auto &&p) {
+	ed->subscribe(events::shader::ShaderProjectionChanged, [this, &ub](auto&& p) {
 		ub.update(0, sizeof(mat4), value_ptr(s_projection));
 	});
 
@@ -89,17 +89,17 @@ void bolt::Application::run() {
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
-		lm->execute([e](const Shared<Layer> &l) { l->onEvent(e); });
-		lm->execute([](const Shared<Layer> &l) { l->onUpdate(); });
+		lm->execute([e](const Shared<Layer>& l) { l->onEvent(e); });
+		lm->execute([](const Shared<Layer>& l) { l->onUpdate(); });
 
 		ed->post(events::loop::LoopUpdate);
 
 		// Before rendering operations
-		lm->execute([](const Shared<Layer> &l) { l->begin(); });
-		lm->execute([](const Shared<Layer> &l) { l->onRender(); });
+		lm->execute([](const Shared<Layer>& l) { l->begin(); });
+		lm->execute([](const Shared<Layer>& l) { l->onRender(); });
 
-		lm->execute([](const Shared<Layer> &l) { l->end(); });
+		lm->execute([](const Shared<Layer>& l) { l->end(); });
 		// After rendering operations
 	}
-	lm->execute([](const Shared<Layer> &l) { l->onDetach(); });
+	lm->execute([](const Shared<Layer>& l) { l->onDetach(); });
 }

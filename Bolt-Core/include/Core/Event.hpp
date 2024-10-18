@@ -18,10 +18,9 @@ namespace bolt {
 	public:
 		using EventType = std::string;
 
-		explicit Event(std::string name = "Basic Event") :
-			m_name(std::move(name)) {}
+		explicit Event(std::string name = "Basic Event") : m_name(std::move(name)) {}
 
-		b8 operator==(const Event &other) const { return this->m_name == other.getType(); }
+		b8 operator==(const Event& other) const { return this->m_name == other.getType(); }
 
 		~Event() = default;
 
@@ -30,7 +29,7 @@ namespace bolt {
 		 *
 		 * @return event description `std::string`.
 		 */
-		const EventType &getType() const { return this->m_name; }
+		const EventType& getType() const { return this->m_name; }
 
 	private:
 		EventType m_name;
@@ -84,8 +83,7 @@ namespace bolt {
 		namespace shader {
 			BT_AUTOCONST ShaderProjectionChanged = Event("Changed Projection");
 		} // namespace shader
-
-	}; // namespace events
+	};    // namespace events
 
 	/*
 	 * Implementation of an Event manager using observers.
@@ -96,11 +94,11 @@ namespace bolt {
 	 */
 	class EventDispatcher {
 	public:
-		using EventCallback = std::function<void(const Event &)>;
+		using EventCallback = std::function<void(const Event&)>;
 
-		EventDispatcher(EventDispatcher &other) = delete;
+		EventDispatcher(EventDispatcher& other) = delete;
 
-		void operator=(const EventDispatcher &other) = delete;
+		void operator=(const EventDispatcher& other) = delete;
 
 		/*
 		 * Retrieves the instance of the EventDispatcher if it's not created.
@@ -125,14 +123,14 @@ namespace bolt {
 		 * @param event the `Event` to be observed.
 		 * @param callback the callback function to be executed.
 		 */
-		void subscribe(const Event &event, EventCallback &&callback);
+		void subscribe(const Event& event, EventCallback&& callback);
 
 		/*
 		 * Dispatch the given `Event` and execute all the callbacks.
 		 *
 		 * @param event the `Event` to be dispatched.
 		 */
-		void post(const Event &event) const;
+		void post(const Event& event) const;
 
 	private:
 		inline static Shared<EventDispatcher> s_pointer = nullptr;

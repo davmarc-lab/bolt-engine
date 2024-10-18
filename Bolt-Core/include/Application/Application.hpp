@@ -3,7 +3,6 @@
 #include "../Core/Scene.hpp"
 
 namespace bolt {
-
 	struct ApplicationSetting {
 		scene::SceneType type;
 	};
@@ -16,14 +15,13 @@ namespace bolt {
 		inline static bool s_enableImGui = false;
 
 		inline static ApplicationSetting s_settings{};
-		
+
 		inline static mat4 s_projection{};
 
 	public:
-		Application() :
-			Application({scene::SceneType::SCENE_3D}) {}
+		Application() : Application({scene::SceneType::SCENE_3D}) {}
 
-		Application(const ApplicationSetting &settings) {
+		Application(const ApplicationSetting& settings) {
 			s_settings = settings;
 		}
 

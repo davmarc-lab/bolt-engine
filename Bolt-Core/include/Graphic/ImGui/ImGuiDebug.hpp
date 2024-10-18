@@ -18,14 +18,14 @@ namespace bolt {
 
 		virtual ~ImGuiDebug() override = default;
 
-        virtual void onRender() override;
+		virtual void onRender() override;
 
-		void setVisible(const b8 &visible) { this->m_showing = visible; }
+		void setVisible(const b8& visible) { this->m_showing = visible; }
 
 		b8 isOpened() const { return this->m_showing; }
 
 	private:
-        std::string m_title;
+		std::string m_title;
 		b8 m_showing = false;
 	};
 } // namespace bolt

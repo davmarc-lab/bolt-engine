@@ -11,12 +11,11 @@
 namespace bolt {
 	class PhysicsWorld : public Layer {
 	public:
-		PhysicsWorld() :
-			Layer("Physic World") {}
+		PhysicsWorld() : Layer("Physic World") {}
 
-		void addEntity(const u32 &entity);
+		void addEntity(const u32& entity);
 
-		inline b8 removeEntity(const u32 &entity) { return this->m_entities.erase(entity); }
+		inline b8 removeEntity(const u32& entity) { return this->m_entities.erase(entity); }
 
 		inline u16 Count() const { return this->m_entities.size(); }
 
@@ -42,5 +41,4 @@ namespace bolt {
 
 		vec3 m_gravity = vec3(0, -9.81f, 0);
 	};
-
 } // namespace bolt

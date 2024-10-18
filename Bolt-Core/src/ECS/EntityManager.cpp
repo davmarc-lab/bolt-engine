@@ -12,7 +12,7 @@ namespace bolt {
 		this->m_initEvents = true;
 		auto ed = EventDispatcher::instance();
 
-		ed->subscribe(events::ecs::CreateMeshEvent, [this](auto &&p) {
+		ed->subscribe(events::ecs::CreateMeshEvent, [this](auto&& p) {
 			auto id = this->createEntity();
 			if (Application::getSceneType() == scene::SCENE_3D) {
 				factory::mesh::createCustomMesh(id, config::cubeConfig, {});
@@ -21,11 +21,11 @@ namespace bolt {
 			} else {
 				factory::mesh::createEmptySquare(id);
 				factory::mesh::initSquareMesh(id);
-                auto comp = this->getEntityComponent<Transform>(id);
+				auto comp = this->getEntityComponent<Transform>(id);
 				this->addComponent<PhysicComponent>(id);
-                comp->setPosition(vec3(400, 400, 0));
-                comp->setScale(vec3(200, 200, 1));
-            }
+				comp->setPosition(vec3(400, 400, 0));
+				comp->setScale(vec3(200, 200, 1));
+			}
 			Scene::instance()->addEntity(id);
 			EventDispatcher::instance()->post(events::loop::LoopGeneric);
 		});
@@ -45,7 +45,7 @@ namespace bolt {
 		return this->m_currentId++;
 	}
 
-	b8 EntityManager::removeEntity(const u32 &id) {
+	b8 EntityManager::removeEntity(const u32& id) {
 		const auto ec_res = static_cast<bool>(this->m_ettComponents.erase(id));
 		const auto e_res = static_cast<bool>(this->m_entities.erase(id));
 		return ec_res && e_res;

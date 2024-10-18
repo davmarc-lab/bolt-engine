@@ -7,7 +7,6 @@
 #include "Utils.hpp"
 
 namespace bolt {
-
 	namespace res {
 		BT_AUTOCONST DEFAULT_LOCATION = std::string("./resources/");
 	}
@@ -20,14 +19,11 @@ namespace bolt {
 		std::string m_content;
 
 	public:
-		Resource() :
-			Resource(res::DEFAULT_LOCATION, "") {}
+		Resource() : Resource(res::DEFAULT_LOCATION, "") {}
 
-		Resource(std::string location, std::string name) :
-			m_location(CreateUnique<std::string>(std::move(location))), m_name(CreateUnique<std::string>(std::move(name))) {}
+		Resource(std::string location, std::string name) : m_location(CreateUnique<std::string>(std::move(location))), m_name(CreateUnique<std::string>(std::move(name))) {}
 
-		Resource(std::string name) :
-			Resource(res::DEFAULT_LOCATION, name) {}
+		Resource(std::string name) : Resource(res::DEFAULT_LOCATION, name) {}
 
 		~Resource() = default;
 
@@ -58,9 +54,9 @@ namespace bolt {
 		ResourceManager() = default;
 
 	public:
-		ResourceManager(ResourceManager &other) = delete;
+		ResourceManager(ResourceManager& other) = delete;
 
-		void operator=(const ResourceManager &other) = delete;
+		void operator=(const ResourceManager& other) = delete;
 
 		void loadResource();
 

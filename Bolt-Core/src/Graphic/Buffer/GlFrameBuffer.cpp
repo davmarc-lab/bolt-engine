@@ -21,7 +21,11 @@ namespace bolt {
 		this->m_textureAttach.unbind();
 
 		this->m_renderBuffer = RenderBuffer(rbo::Config{
-			GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT, this->m_textureAttach.getWidth(), this->m_textureAttach.getHeight()});
+			GL_DEPTH24_STENCIL8,
+			GL_DEPTH_STENCIL_ATTACHMENT,
+			this->m_textureAttach.getWidth(),
+			this->m_textureAttach.getHeight()
+		});
 		this->m_renderBuffer.onAttach();
 		glFramebufferRenderbuffer(this->m_config.operation, this->m_renderBuffer.getAttachmentType(), GL_RENDERBUFFER, this->m_renderBuffer.getId());
 
@@ -34,7 +38,9 @@ namespace bolt {
 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	}
 
-	void FrameBuffer::onDetach() { glDeleteFramebuffers(1, &this->m_id); }
+	void FrameBuffer::onDetach() {
+		glDeleteFramebuffers(1, &this->m_id);
+	}
 
 	void FrameBuffer::bind() const {
 		glBindFramebuffer(this->m_config.operation, this->m_id);
@@ -47,7 +53,7 @@ namespace bolt {
 		glBindFramebuffer(this->m_config.operation, 0);
 	}
 
-	void FrameBuffer::rescaleFrameBuffer(const u16 &width, const u16 &height) {
+	void FrameBuffer::rescaleFrameBuffer(const u16& width, const u16& height) {
 		if (width != 0 && height != 0) {
 			this->m_config.size = {width, height};
 			glBindFramebuffer(this->m_config.operation, this->m_id);
@@ -58,5 +64,4 @@ namespace bolt {
 			glFramebufferRenderbuffer(this->m_config.operation, this->m_renderBuffer.getAttachmentType(), GL_RENDERBUFFER, this->m_renderBuffer.getId());
 		}
 	}
-
 } // namespace bolt

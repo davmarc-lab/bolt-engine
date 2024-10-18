@@ -23,9 +23,9 @@ namespace bolt {
 		RenderApi() = default;
 
 	public:
-		RenderApi(RenderApi &other) = delete;
+		RenderApi(RenderApi& other) = delete;
 
-		void operator=(const RenderApi &other) = delete;
+		void operator=(const RenderApi& other) = delete;
 
 		inline static Shared<RenderApi> instance() {
 			std::lock_guard<std::mutex> lock(s_mutex);
@@ -37,19 +37,19 @@ namespace bolt {
 			return s_pointer;
 		}
 
-		inline void init(const RenderApiConfig &config = config::render_unknonw) {
-            // different renderer types
+		inline void init(const RenderApiConfig& config = config::render_unknonw) {
+			// different renderer types
 			if (config & config::render_opengl)
 				this->m_render = CreateShared<Renderer>();
 
 			if (this->m_render == nullptr) {
-                // BT_CRITICAL_CORE("No renderer attached, closing the application.");
-                // close app
-                exit(-1);
+				// BT_CRITICAL_CORE("No renderer attached, closing the application.");
+				// close app
+				exit(-1);
 			}
 
-            this->m_render->onAttach();
-            this->m_attached = true;
+			this->m_render->onAttach();
+			this->m_attached = true;
 		}
 
 		Shared<Renderer> getRenderer() const { return this->m_render; }

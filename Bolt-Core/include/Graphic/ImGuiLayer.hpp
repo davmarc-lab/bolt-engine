@@ -8,10 +8,10 @@
 #include "Window.hpp"
 
 namespace bolt {
-
 	class ImGuiLayer final : public Layer {
 	private:
 		Shared<Window> m_window;
+
 	public:
 		explicit ImGuiLayer(Shared<Window> w) : Layer("ImGui"), m_window(std::move(w)) {}
 

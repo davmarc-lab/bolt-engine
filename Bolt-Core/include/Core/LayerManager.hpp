@@ -8,7 +8,6 @@
 #include "../Graphic/Window.hpp"
 
 namespace bolt {
-
 	/*
 	 * This class use a thread safe sinleton to create only one instance of this object.
 	 *
@@ -24,9 +23,9 @@ namespace bolt {
 		LayerManager() {}
 
 	public:
-		LayerManager(LayerManager &other) = delete;
+		LayerManager(LayerManager& other) = delete;
 
-		void operator=(const LayerManager &other) = delete;
+		void operator=(const LayerManager& other) = delete;
 
 		/*
 		 * Retrieves the instance of the `LayerManager` if it's not created.
@@ -50,19 +49,21 @@ namespace bolt {
 		 *
 		 * @param `Shared<Layer>` the layer to be stored.
 		 */
-		void addLayer(const Shared<Layer> &layer);
+		void addLayer(const Shared<Layer>& layer);
 
-        void addLayersFromStack();
+		void addLayersFromStack();
 
 		/// ???
 		template <class T>
-		inline void getLayerFromType() const { /* BT_WARN_CORE("{0} method not implemented.", __FILE__); */ }
+		inline void getLayerFromType() const {
+			/* BT_WARN_CORE("{0} method not implemented.", __FILE__); */
+		}
 
 		/*
 		 * Executes an operation for each layer.
 		 *
 		 * @param lambda expression.
 		 */
-		void execute(const std::function<void(Shared<Layer>)> &action);
+		void execute(const std::function<void(Shared<Layer>)>& action);
 	};
 }

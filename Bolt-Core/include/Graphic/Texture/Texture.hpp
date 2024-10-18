@@ -3,7 +3,6 @@
 #include "../../Core/Utils.hpp"
 
 namespace bolt {
-
 	namespace texture {
 		struct Parameters {
 			u32 target;
@@ -27,7 +26,7 @@ namespace bolt {
 		b8 m_created = false;
 
 	public:
-        Texture() = default;
+		Texture() = default;
 
 		Texture(const texture::Parameters& params, const u16 width, const u16 height) : m_width(width), m_height(height), m_parameters(params) { this->m_ready = true; }
 
@@ -44,10 +43,10 @@ namespace bolt {
 		void setTexParameter(u32 pname, i32 pval);
 
 		void createTexture2D(void* data);
-		
+
 		void fastCreateTexture2D(void* data);
 
-		void rescaleTexture(const u16 &width, const u16 &height);
+		void rescaleTexture(const u16& width, const u16& height);
 
 		void generateMipmap();
 
@@ -56,9 +55,9 @@ namespace bolt {
 		u32 getId() const { return this->m_id; }
 
 		b8 isTextureCreated() const { return this->m_created; }
-		
+
 		inline u16 getWidth() const { return this->m_width; }
-		
+
 		inline u16 getHeight() const { return this->m_height; }
 	};
 } // namespace Bolt

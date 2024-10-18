@@ -10,16 +10,16 @@
 #include <vector>
 
 namespace bolt {
-    namespace scene {
-        enum SceneType {
-            SCENE_2D,
-            SCENE_3D
-        };
+	namespace scene {
+		enum SceneType {
+			SCENE_2D,
+			SCENE_3D
+		};
 
 		void updatePerspective(const f32& fov, const f32& ratio, const f32& near, const f32& far);
 
-    	void updateOrtho(const f32& left, const f32& right, const f32& bottom, const f32& up);
-    }
+		void updateOrtho(const f32& left, const f32& right, const f32& bottom, const f32& up);
+	}
 
 	class Scene {
 	private:
@@ -30,9 +30,9 @@ namespace bolt {
 		Scene() = default;
 
 	public:
-		Scene(Scene &other) = delete;
+		Scene(Scene& other) = delete;
 
-		void operator=(const Scene &other) = delete;
+		void operator=(const Scene& other) = delete;
 
 		inline static Shared<Scene> instance() {
 			std::lock_guard<std::mutex> lock(s_mutex);

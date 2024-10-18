@@ -9,8 +9,9 @@
 
 namespace bolt {
 	class VertexBuffer {
-    protected:
-        u32 m_id;
+	protected:
+		u32 m_id;
+
 	public:
 		VertexBuffer() = default;
 		virtual ~VertexBuffer() = default;

@@ -11,7 +11,7 @@ namespace bolt {
 			u16 height;
 		};
 	}
-	
+
 	class RenderBuffer {
 	private:
 		u32 m_id = 0;
@@ -29,14 +29,14 @@ namespace bolt {
 
 		void onDetach();
 
-        void bind() const;
-        
+		void bind() const;
+
 		void unbind() const;
-		
-		void rescaleRenderBuffer(const u16 &width, const u16 &height);
+
+		void rescaleRenderBuffer(const u16& width, const u16& height);
 
 		u32 getAttachmentType() const;
 
-		const u32 &getId() const { return this->m_id; }
+		const u32& getId() const { return this->m_id; }
 	};
 } // namespace Bolt

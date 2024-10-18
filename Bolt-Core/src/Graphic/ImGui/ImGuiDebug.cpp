@@ -5,8 +5,8 @@
 namespace bolt {
 	void ImGuiDebug::onRender() {
 		ImGui::Begin(this->m_title.c_str());
-        ImGuiIO& io = ImGui::GetIO();
-        ImGui::Text("Average frame per seconds: %f", io.Framerate);
+		ImGuiIO& io = ImGui::GetIO();
+		ImGui::Text("Average frame per seconds: %f", io.Framerate);
 		ImGui::End();
 	}
 } // namespace bolt

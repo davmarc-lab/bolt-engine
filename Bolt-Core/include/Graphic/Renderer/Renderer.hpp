@@ -8,7 +8,7 @@ namespace bolt {
 		Renderer() = default;
 
 		virtual ~Renderer() = default;
-		
+
 		virtual void onAttach();
 
 		virtual void onDetach();

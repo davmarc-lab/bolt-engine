@@ -6,16 +6,16 @@ namespace bolt {
 	inline static auto em = EntityManager::instance();
 	inline f32 density = 1.f;
 
-	void PhysicsWorld::addEntity(const u32 &id) {
+	void PhysicsWorld::addEntity(const u32& id) {
 		auto physic = em->getEntityComponent<PhysicComponent>(id);
 		auto model = em->getEntityComponent<Transform>(id);
 		physic->mass = model->getScale().x * model->getScale().y * density;
 		this->m_entities.insert(id);
 	}
-	
+
 	void PhysicsWorld::onAttach() {
 		auto ids = em->getEntitiesFromComponent<PhysicComponent>();
-		for (const auto &id : ids) {
+		for (const auto& id : ids) {
 			this->m_entities.insert(id);
 		}
 	}
@@ -42,5 +42,4 @@ namespace bolt {
 			physic->force = vec3(0);
 		}
 	}
-
 } // namespace bolt

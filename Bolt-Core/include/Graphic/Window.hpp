@@ -16,19 +16,15 @@ namespace bolt {
 
 		b8 m_vsync = false;
 
-		void *m_window = nullptr;
+		void* m_window = nullptr;
 		std::string m_windowTitle = "Glfw Window";
 
 	public:
-		Window() :
-			Window("Bolt Engine", {0, 0}, {1600, 900}) {}
+		Window() : Window("Bolt Engine", {0, 0}, {1600, 900}) {}
 
-		Window(std::string title, const u16 xpos, const u16 ypos, const u16 width, const u16 height) :
-			Window(std::move(title), {xpos, ypos}, {width, height}) {}
+		Window(std::string title, const u16 xpos, const u16 ypos, const u16 width, const u16 height) : Window(std::move(title), {xpos, ypos}, {width, height}) {}
 
-		Window(std::string title, const WinPos position, const WinSize size) :
-			Layer("Glfw Window"), m_windowTitle(std::move(title)) {
-
+		Window(std::string title, const WinPos position, const WinSize size) : Layer("Glfw Window"), m_windowTitle(std::move(title)) {
 			this->setPosition(position);
 			this->setSize(size);
 			switch (Application::getSceneType()) {
@@ -44,30 +40,30 @@ namespace bolt {
 
 		virtual ~Window() = default;
 
-		inline const u16 &getWidth() const { return this->m_size.width; }
+		inline const u16& getWidth() const { return this->m_size.width; }
 
-		inline const u16 &getHeight() const { return this->m_size.height; }
+		inline const u16& getHeight() const { return this->m_size.height; }
 
-		inline void setSize(const WinSize &size) { this->m_size = size; }
+		inline void setSize(const WinSize& size) { this->m_size = size; }
 
-		inline const WinPos &getPosition() const { return this->m_position; }
+		inline const WinPos& getPosition() const { return this->m_position; }
 
-		inline void setPosition(const WinPos &position) { this->m_position = position; }
+		inline void setPosition(const WinPos& position) { this->m_position = position; }
 
 		virtual b8 shouldWindowClose() const;
 
-		virtual void setVsync(const bool &vsync);
+		virtual void setVsync(const bool& vsync);
 
-		inline const b8 &isVerticalSyncEnable() const { return this->m_vsync; }
+		inline const b8& isVerticalSyncEnable() const { return this->m_vsync; }
 
-		inline void *getCurrentWindow() const { return this->m_window; }
+		inline void* getCurrentWindow() const { return this->m_window; }
 
 		// --- Layer ---
 		virtual void onAttach() override;
 
 		virtual void onDetach() override;
 
-		virtual void onEvent(const Event &e) override;
+		virtual void onEvent(const Event& e) override;
 
 		virtual void onUpdate() override;
 

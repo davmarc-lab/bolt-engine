@@ -8,21 +8,21 @@
 namespace bolt {
 	GLenum getShaderTypeValue(shader::ShaderType type) {
 		switch (type) {
-		case shader::SHADER_VERTEX: return GL_VERTEX_SHADER;
-		case shader::SHADER_FRAGMENT: return GL_FRAGMENT_SHADER;
-		case shader::SHADER_GEOMETRY: return GL_GEOMETRY_SHADER;
-		case shader::SHADER_PROGRAM: /* BT_ERROR_CORE("Cannot find the correct shader type."); */ assert(false);
-		default: /* BT_ERROR_CORE("Cannot find the correct shader type."); */ assert(false);
+			case shader::SHADER_VERTEX: return GL_VERTEX_SHADER;
+			case shader::SHADER_FRAGMENT: return GL_FRAGMENT_SHADER;
+			case shader::SHADER_GEOMETRY: return GL_GEOMETRY_SHADER;
+			case shader::SHADER_PROGRAM: /* BT_ERROR_CORE("Cannot find the correct shader type."); */ assert(false);
+			default: /* BT_ERROR_CORE("Cannot find the correct shader type."); */ assert(false);
 		}
 	}
 
 	std::string getShaderTypeString(shader::ShaderType type) {
 		switch (type) {
-		case shader::SHADER_VERTEX: return "VERTEX";
-		case shader::SHADER_FRAGMENT: return "FRAGMENT";
-		case shader::SHADER_GEOMETRY: return "GEOMETRY";
-		case shader::SHADER_PROGRAM: return "PROGRAM";
-		default: return "NONE";
+			case shader::SHADER_VERTEX: return "VERTEX";
+			case shader::SHADER_FRAGMENT: return "FRAGMENT";
+			case shader::SHADER_GEOMETRY: return "GEOMETRY";
+			case shader::SHADER_PROGRAM: return "PROGRAM";
+			default: return "NONE";
 		}
 	}
 
@@ -102,7 +102,7 @@ namespace bolt {
 		glDeleteShader(this->m_vert->getShaderId());
 		glDeleteShader(this->m_frag->getShaderId());
 	}
-	
+
 	void ShaderProgram::use() const {
 		glUseProgram(this->m_id);
 	}
@@ -128,7 +128,6 @@ namespace bolt {
 	}
 
 	void ShaderProgram::setVec3(const std::string& name, const vec3& value) {
-
 		glUniform3fv(glGetUniformLocation(this->getId(), name.c_str()), 1, &value[0]);
 	}
 

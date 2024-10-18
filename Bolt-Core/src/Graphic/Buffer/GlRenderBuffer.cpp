@@ -14,13 +14,19 @@ namespace bolt {
 		this->unbind();
 	}
 
-	void RenderBuffer::onDetach() { glDeleteRenderbuffers(1, &this->m_id); }
+	void RenderBuffer::onDetach() {
+		glDeleteRenderbuffers(1, &this->m_id);
+	}
 
-	void RenderBuffer::bind() const { glBindRenderbuffer(GL_RENDERBUFFER, this->m_id); }
+	void RenderBuffer::bind() const {
+		glBindRenderbuffer(GL_RENDERBUFFER, this->m_id);
+	}
 
-	void RenderBuffer::unbind() const { glBindRenderbuffer(GL_RENDERBUFFER, 0); }
+	void RenderBuffer::unbind() const {
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	}
 
-	void RenderBuffer::rescaleRenderBuffer(const u16 &width, const u16 &height) {
+	void RenderBuffer::rescaleRenderBuffer(const u16& width, const u16& height) {
 		this->m_config.width = width;
 		this->m_config.height = height;
 		this->bind();

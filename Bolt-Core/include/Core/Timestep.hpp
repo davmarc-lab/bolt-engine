@@ -10,9 +10,9 @@
 namespace bolt {
 	class Timer final {
 	public:
-		Timer(Timer &other) = delete;
+		Timer(Timer& other) = delete;
 
-		void operator=(const Timer &other) = delete;
+		void operator=(const Timer& other) = delete;
 
 		/*
 		 * Retrieves the instance of the Timer if it's not created.
@@ -59,10 +59,9 @@ namespace bolt {
 	public:
 		f32 getTime() const { return static_cast<f32>(Timer::instance()->getTime()); }
 
-		const f32 &getTimeStep() const { return this->m_timeStep; }
+		const f32& getTimeStep() const { return this->m_timeStep; }
 
-		Timestep(const f32 &timeStep = 1 / 60.f) :
-			m_timeStep(timeStep) {}
+		Timestep(const f32& timeStep = 1 / 60.f) : m_timeStep(timeStep) {}
 
 		~Timestep() = default;
 
