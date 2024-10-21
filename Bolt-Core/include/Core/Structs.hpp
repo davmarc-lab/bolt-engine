@@ -3,13 +3,8 @@
 #include "Utils.hpp"
 
 namespace bolt {
-	struct WinPos {
-		u16 x = 0;
-		u16 y = 0;
-	};
-
-	struct WinSize {
-		u16 width = 0;
-		u16 height = 0;
+	template <typename T>
+	struct Pair {
+		T x, y;
 	};
 } // namespace Bolt

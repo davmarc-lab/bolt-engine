@@ -121,8 +121,8 @@ namespace bolt {
 
 	void ImGuiViewPort::onAttach() {
 		// preparing framebuffer
-		// scene::perspectiveProjection = perspective(45.0f, static_cast<f32>(this->m_size.width) / this->m_size.height, 0.1f, 100.f);;
-		// scene::orthoProjection = ortho(0.f, static_cast<f32>(this->m_size.width), 0.f, static_cast<f32>(this->m_size.height));
+		// scene::perspectiveProjection = perspective(45.0f, static_cast<f32>(this->m_size.x) / this->m_size.y, 0.1f, 100.f);;
+		// scene::orthoProjection = ortho(0.f, static_cast<f32>(this->m_size.x), 0.f, static_cast<f32>(this->m_size.y));
 	}
 
 	void ImGuiViewPort::onEvent(const Event& e) {}
@@ -139,15 +139,15 @@ namespace bolt {
 
 			this->m_fboReady = true;
 			const auto dim = ImGui::GetContentRegionAvail();
-			this->m_size.width = static_cast<u16>(dim.x);
-			this->m_size.height = static_cast<u16>(dim.y);
+			this->m_size.x = static_cast<u16>(dim.x);
+			this->m_size.y = static_cast<u16>(dim.y);
 
 			switch (Application::getSceneType()) {
 				case scene::SceneType::SCENE_2D:
-					scene::updateOrtho(0.f, static_cast<f32>(this->m_size.width), 0.f, static_cast<f32>(this->m_size.height));
+					scene::updateOrtho(0.f, static_cast<f32>(this->m_size.x), 0.f, static_cast<f32>(this->m_size.y));
 					break;
 				case scene::SceneType::SCENE_3D:
-					scene::updatePerspective(45.0f, static_cast<f32>(this->m_size.width) / this->m_size.height, 0.1f, 100.f);
+					scene::updatePerspective(45.0f, static_cast<f32>(this->m_size.x) / this->m_size.y, 0.1f, 100.f);
 					break;
 			}
 			EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
@@ -164,23 +164,23 @@ namespace bolt {
 		ImGui::BeginChild("Render");
 
 		auto dim = ImGui::GetContentRegionAvail();
-		if (dim.x != this->m_size.width || dim.y != this->m_size.height) {
+		if (dim.x != this->m_size.x || dim.y != this->m_size.y) {
 			this->m_fbo.rescaleFrameBuffer(static_cast<u16>(dim.x), static_cast<u16>(dim.y));
-			this->m_size.width = static_cast<u16>(dim.x);
-			this->m_size.height = static_cast<u16>(dim.y);
+			this->m_size.x = static_cast<u16>(dim.x);
+			this->m_size.y = static_cast<u16>(dim.y);
 
 			switch (Application::getSceneType()) {
 				case scene::SceneType::SCENE_2D:
-					scene::updateOrtho(0.f, static_cast<f32>(this->m_size.width), 0.f, static_cast<f32>(this->m_size.height));
+					scene::updateOrtho(0.f, this->m_size.x, 0.f, this->m_size.y);
 					break;
 				case scene::SceneType::SCENE_3D:
-					scene::updatePerspective(45.0f, static_cast<f32>(this->m_size.width) / this->m_size.height, 0.1f, 100.f);
+					scene::updatePerspective(45.0f, static_cast<f32>(this->m_size.x) / this->m_size.y, 0.1f, 100.f);
 					break;
 			}
 			EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 		}
 
-		ImGui::Image((void*)(intptr_t)this->m_fbo.getTextureId(), ImVec2(this->m_size.width, this->m_size.height), ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((void*)(intptr_t)this->m_fbo.getTextureId(), ImVec2(this->m_size.x, this->m_size.y), ImVec2(0, 1), ImVec2(1, 0));
 
 		ImGui::EndChild();
 		ImGui::End();

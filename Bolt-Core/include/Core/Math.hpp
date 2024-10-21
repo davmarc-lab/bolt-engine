@@ -62,6 +62,8 @@ namespace bolt {
 	using glm::value_ptr;
 
 	BT_CONSTEXPR auto identity = mat4(1);
+	BT_CONSTEXPR auto FPI = glm::pi<f32>();
+	BT_CONSTEXPR auto DPI = glm::pi<f64>();
 } // namespace bolt
 
 namespace bmath {

@@ -18,7 +18,7 @@ namespace bolt {
 		};
 
 		struct Config {
-			WinSize size = {0, 0};
+			Pair<u16> size = {0, 0};
 			Operation operation = FB_DEFAULT;
 		} inline defaultConfig;
 	} // namespace fbo

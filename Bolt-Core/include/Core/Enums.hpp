@@ -15,8 +15,9 @@ namespace bolt {
 			mesh_default_shader = 1 << 4,
 		};
 
-		inline const MeshConfig cubeConfig = config::mesh_colors;
-		inline const MeshConfig squareConfig = config::mesh_colors;
+		inline BT_CONSTEXPR MeshConfig cubeConfig = config::mesh_colors;
+		inline BT_CONSTEXPR MeshConfig squareConfig = config::mesh_colors;
+		inline BT_CONSTEXPR MeshConfig circleConfig = config::mesh_colors;
 
 		enum MeshShape {
 			shape_square,
@@ -26,7 +27,7 @@ namespace bolt {
 			shape_custom,
 		};
 
-		/// Congfigs for rrender api.
+		/// Congfigs for render api.
 		enum RenderApiConfig {
 			render_unknonw,
 			render_opengl,

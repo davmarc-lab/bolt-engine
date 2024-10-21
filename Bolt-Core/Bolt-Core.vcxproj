@@ -106,6 +106,7 @@
     <ClInclude Include="include\Core\Structs.hpp" />
     <ClInclude Include="include\Core\Timestep.hpp" />
     <ClInclude Include="include\Core\Utils.hpp" />
+    <ClInclude Include="include\Graphics.hpp" />
     <ClInclude Include="include\Graphic\Buffer\UniformBuffer.hpp" />
     <ClInclude Include="include\Graphic\Camera\Camera.hpp" />
     <ClInclude Include="include\Graphic\ImGui\ImGuiDebug.hpp" />

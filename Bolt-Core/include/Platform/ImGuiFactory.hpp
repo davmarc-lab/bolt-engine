@@ -56,7 +56,7 @@ namespace bolt {
 	class ImGuiViewPort : public Layer {
 	private:
 		std::string m_name = "Viewport";
-		WinSize m_size;
+		Pair<u16> m_size;
 		FrameBuffer m_fbo;
 		b8 m_fboReady = false;
 		u32 fbo = 0;

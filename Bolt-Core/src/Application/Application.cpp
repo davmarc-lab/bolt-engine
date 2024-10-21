@@ -12,14 +12,19 @@
 
 #include "../../include/Core/Physics.hpp"
 
+#include "../../include/Graphics.hpp"
+
 void bolt::Application::run() {
 	const auto lm = LayerManager::instance();
 
 	// This window is unique.
-	Shared<Window> w = CreateShared<Window>(Window());
+	Shared<Window> w = CreateShared<Window>(Window(s_settings));
 	lm->addLayer(w);
 
-	if (Application::isImGuiEnabled()) {
+	w->setVsync(s_settings.baseWindowProperties.vsync);
+	w->setClearColor(s_settings.baseWindowProperties.backgroundColor);
+
+	if (isImGuiEnabled()) {
 		Shared<ImGuiLayer> ig = CreateShared<ImGuiLayer>(w);
 		lm->addLayer(ig);
 	}
@@ -35,14 +40,25 @@ void bolt::Application::run() {
 
 	lm->addLayersFromStack();
 
-	ed->subscribe(events::loop::LoopUpdate, [](auto&& ph1) { systems::transform::updateAllModelMatrix(); });
+	ed->subscribe(events::loop::LoopUpdate, [](auto &&ph1) { systems::transform::updateAllModelMatrix(); });
 
 	UniformBuffer ub = UniformBuffer();
 	ub.onAttach();
 	ub.setup(sizeof(mat4), 0);
 	ub.update(0, sizeof(mat4), value_ptr(s_projection));
-	ed->subscribe(events::shader::ShaderProjectionChanged, [this, &ub](auto&& p) {
+	ed->subscribe(events::shader::ShaderProjectionChanged, [this, &ub](auto &&p) {
 		ub.update(0, sizeof(mat4), value_ptr(s_projection));
+	});
+
+	ed->subscribe(events::input::KeyPressedEvent, [&w](auto &&ph1) {
+		auto entities = EntityManager::instance()->getEntitiesFromComponent<InputComponent>();
+		for (auto entity : entities) {
+			auto comp = EntityManager::instance()->getEntityComponent<InputComponent>(entity);
+			for (auto c : comp->getAllKeys()) {
+				if (glfwGetKey((GLFWwindow *)w->getCurrentWindow(), c) == GLFW_PRESS)
+					comp->call(c);
+			}
+		}
 	});
 
 	Timer::instance()->start();
@@ -76,30 +92,30 @@ void bolt::Application::run() {
 			}
 			std::cout << "FINAL: " << Timer::instance()->getTime() - main << "\n";
 		}
+	
+	auto pw = CreateShared<PhysicsWorld>();
+	lm->addLayer(pw);
+	
+	// using a loop generic event to add entities to the physic world
+	ed->subscribe(events::loop::LoopGeneric, [&pw](auto &&p) {
+		pw->addEntity(EntityManager::instance()->getCurrentId() - 1);
+	});
 	*/
-	// auto pw = CreateShared<PhysicsWorld>();
-	// lm->addLayer(pw);
-	//
-	// // using a loop generic event to add entities to the physic world
-	// ed->subscribe(events::loop::LoopGeneric, [&pw](auto &&p) {
-	// 	pw->addEntity(EntityManager::instance()->getCurrentId() - 1);
-	// });
-
 	// TEST END
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
-		lm->execute([e](const Shared<Layer>& l) { l->onEvent(e); });
-		lm->execute([](const Shared<Layer>& l) { l->onUpdate(); });
+		lm->execute([e](const Shared<Layer> &l) { l->onEvent(e); });
+		lm->execute([](const Shared<Layer> &l) { l->onUpdate(); });
 
 		ed->post(events::loop::LoopUpdate);
 
 		// Before rendering operations
-		lm->execute([](const Shared<Layer>& l) { l->begin(); });
-		lm->execute([](const Shared<Layer>& l) { l->onRender(); });
+		lm->execute([](const Shared<Layer> &l) { l->begin(); });
+		lm->execute([](const Shared<Layer> &l) { l->onRender(); });
 
-		lm->execute([](const Shared<Layer>& l) { l->end(); });
+		lm->execute([](const Shared<Layer> &l) { l->end(); });
 		// After rendering operations
 	}
-	lm->execute([](const Shared<Layer>& l) { l->onDetach(); });
+	lm->execute([](const Shared<Layer> &l) { l->onDetach(); });
 }

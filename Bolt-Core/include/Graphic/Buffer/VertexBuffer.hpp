@@ -40,6 +40,10 @@ namespace bolt {
 		 */
 		template <typename T>
 		void setup(const T* vertices, const i64& size, const u32& usage);
+		
+		virtual void setup(const std::vector<vec2> &vertices, const u32 &usage);
+		
+		virtual void setup(const std::vector<vec3> &vertices, const u32 &usage);
 
 		/**
 		 * @brief Sets up the data for the buffer.

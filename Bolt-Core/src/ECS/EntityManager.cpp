@@ -15,16 +15,16 @@ namespace bolt {
 		ed->subscribe(events::ecs::CreateMeshEvent, [this](auto&& p) {
 			auto id = this->createEntity();
 			if (Application::getSceneType() == scene::SCENE_3D) {
-				factory::mesh::createCustomMesh(id, config::cubeConfig, {});
-				factory::mesh::initCustomMesh(id, config::cubeConfig, {});
+				factory::mesh::createCustomMesh(id, config::cubeConfig, config::shape_cube);
+				factory::mesh::initCustomMesh(id, config::cubeConfig, config::shape_cube);
 				this->addComponent<PhysicComponent>(id);
 			} else {
-				factory::mesh::createEmptySquare(id);
-				factory::mesh::initSquareMesh(id);
+				factory::mesh::createCustomMesh(id, config::squareConfig, config::shape_circle);
+				factory::mesh::initCustomMesh(id, config::squareConfig, config::shape_circle);
 				auto comp = this->getEntityComponent<Transform>(id);
 				this->addComponent<PhysicComponent>(id);
-				comp->setPosition(vec3(400, 400, 0));
-				comp->setScale(vec3(200, 200, 1));
+				comp->setPosition(vec3(200, 200, 0));
+				comp->setScale(vec3(40, 40, 1));
 			}
 			Scene::instance()->addEntity(id);
 			EventDispatcher::instance()->post(events::loop::LoopGeneric);

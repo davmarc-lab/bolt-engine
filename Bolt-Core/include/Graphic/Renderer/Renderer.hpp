@@ -22,6 +22,8 @@ namespace bolt {
 		virtual void drawElementsLines(const VertexArray& vao, const i32& count);
 
 		virtual void drawArraysTriangles(const VertexArray& vao, const i32& count, const i32& first = 0);
+		
+		virtual void drawArraysTriangleFan(const VertexArray& vao, const i32& count, const i32& first = 0);
 
 		virtual void drawElementsTriangles(const VertexArray& vao, const i32& count);
 	};

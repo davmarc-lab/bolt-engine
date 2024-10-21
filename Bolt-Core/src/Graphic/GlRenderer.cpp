@@ -30,6 +30,10 @@ namespace bolt {
 	void Renderer::drawArraysTriangles(const VertexArray& vao, const i32& count, const i32& first) {
 		this->drawArrays(vao, GL_TRIANGLES, first, count);
 	}
+	
+	void Renderer::drawArraysTriangleFan(const VertexArray& vao, const i32& count, const i32& first) {
+		this->drawArrays(vao, GL_TRIANGLE_FAN, first, count);
+	}
 
 	void Renderer::drawElementsTriangles(const VertexArray& vao, const i32& count) {
 		this->drawElements(vao, GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);

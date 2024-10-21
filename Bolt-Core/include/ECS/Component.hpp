@@ -2,6 +2,8 @@
 
 #include <functional>
 #include <vector>
+#include <ranges>
+
 #include "../Core/Math.hpp"
 
 #include "../Graphic/Buffer/ElementBuffer.hpp"
@@ -110,7 +112,29 @@ namespace bolt {
 
 		ShaderComponent() = default;
 
-		~ShaderComponent() = default;
+		~ShaderComponent() override = default;
+	};
+
+	struct InputComponent : public Component {
+	public:
+		std::unordered_map<u32, std::function<void()>> callbacks;
+		
+		inline void registerAction(const u32& key, std::function<void()> &&callback) {
+			this->callbacks.emplace(key, std::move(callback));
+		}
+
+		inline void call(const u32& key) {
+			this->callbacks.at(key)();
+		}
+
+		inline std::vector<u32> getAllKeys() const {
+			auto kv = std::views::keys(this->callbacks);
+			return std::vector<u32>{kv.begin(), kv.end()};
+		}
+		
+		InputComponent() = default;
+		
+		~InputComponent() override = default;
 	};
 
 	struct Mesh : public Component {

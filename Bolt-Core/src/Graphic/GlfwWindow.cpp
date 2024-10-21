@@ -23,33 +23,48 @@ namespace bolt {
 	static u16 s_windowCount = 0;
 
 	#ifdef BT_ENABLE_DEBUG
-	const char* getErrorSource(const GLenum& source) {
+	const char *getErrorSource(const GLenum &source) {
 		switch (source) {
-			case GL_DEBUG_SOURCE_API: return "API";
-			case GL_DEBUG_SOURCE_WINDOW_SYSTEM: return "Window System";
-			case GL_DEBUG_SOURCE_SHADER_COMPILER: return "Shader Compiler";
-			case GL_DEBUG_SOURCE_THIRD_PARTY: return "Third Party";
-			case GL_DEBUG_SOURCE_APPLICATION: return "Application";
-			default: return "Other";
+			case GL_DEBUG_SOURCE_API:
+				return "API";
+			case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+				return "Window System";
+			case GL_DEBUG_SOURCE_SHADER_COMPILER:
+				return "Shader Compiler";
+			case GL_DEBUG_SOURCE_THIRD_PARTY:
+				return "Third Party";
+			case GL_DEBUG_SOURCE_APPLICATION:
+				return "Application";
+			default:
+				return "Other";
 		}
 	}
 
-	const char* getErrorType(const GLenum& type) {
+	const char *getErrorType(const GLenum &type) {
 		switch (type) {
-			case GL_DEBUG_TYPE_ERROR: return "Error";
-			case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "Deprecated Behaviour";
-			case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: return "Undefined Behaviour";
-			case GL_DEBUG_TYPE_PORTABILITY: return "Portability";
-			case GL_DEBUG_TYPE_PERFORMANCE: return "Performance";
-			case GL_DEBUG_TYPE_MARKER: return "Marker";
-			case GL_DEBUG_TYPE_PUSH_GROUP: return "Push Group";
-			case GL_DEBUG_TYPE_POP_GROUP: return "Pop Group";
-			default: return "Other";
+			case GL_DEBUG_TYPE_ERROR:
+				return "Error";
+			case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+				return "Deprecated Behaviour";
+			case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+				return "Undefined Behaviour";
+			case GL_DEBUG_TYPE_PORTABILITY:
+				return "Portability";
+			case GL_DEBUG_TYPE_PERFORMANCE:
+				return "Performance";
+			case GL_DEBUG_TYPE_MARKER:
+				return "Marker";
+			case GL_DEBUG_TYPE_PUSH_GROUP:
+				return "Push Group";
+			case GL_DEBUG_TYPE_POP_GROUP:
+				return "Pop Group";
+			default:
+				return "Other";
 		}
 	}
 
 	// TODO : Try to implement a macro for the string created (or use streams)
-	void glDebugOutput(const GLenum source, const GLenum type, const u32 id, const GLenum severity, const GLsizei length, const char* message, const void* userParam) {
+	void glDebugOutput(const GLenum source, const GLenum type, const u32 id, const GLenum severity, const GLsizei length, const char *message, const void *userParam) {
 		// ignore non-significant error/warning codes
 		if (id == 131169 || id == 131185 || id == 131218 || id == 131204)
 			return;
@@ -76,12 +91,12 @@ namespace bolt {
 	}
 	#endif
 
-	static void glfwErrorCallback(i32 code, const char* description) {
+	static void glfwErrorCallback(i32 code, const char *description) {
 		/* BT_ERROR_CORE("GLFW error ({0} -> {1})", code, description); */
 		std::cerr << "GLFW error (" << code << ") -> (" << description << ")\n";
 	}
 
-	static void glfwResizeCallback(GLFWwindow* window, i32 width, i32 height) {
+	static void glfwResizeCallback(GLFWwindow *window, i32 width, i32 height) {
 		glViewport(0, 0, width, height);
 
 		switch (Application::getSceneType()) {
@@ -101,35 +116,47 @@ namespace bolt {
 		/* BT_INFO_CORE("Window resized: w={0}, h={1}", width, height); */
 	}
 
-	static void glfwKeyboardCallback(GLFWwindow* window, int key, int code, int action, int mod) {
+	static void glfwKeyboardCallback(GLFWwindow *window, int key, int code, int action, int mod) {
 		if (key == GLFW_KEY_ESCAPE) {
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
 		}
 
-		// needs to be changed with WOLRD::AXIS
-		if (key == GLFW_KEY_W && action != GLFW_RELEASE) {
-			standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraFront());
-		}
-		if (key == GLFW_KEY_S && action != GLFW_RELEASE) {
-			standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraFront());
-		}
-
-		if (key == GLFW_KEY_A && action != GLFW_RELEASE) {
-			standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraRight());
-		}
-		if (key == GLFW_KEY_D && action != GLFW_RELEASE) {
-			standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraRight());
+		switch (action) {
+			case GLFW_REPEAT:
+			case GLFW_PRESS:
+				EventDispatcher::instance()->post(events::input::KeyPressedEvent);
+				break;
+			case GLFW_RELEASE:
+				EventDispatcher::instance()->post(events::input::KeyReleasedEvent);
+				break;
+			default:
+				break;
 		}
 
-		if (key == GLFW_KEY_SPACE && action != GLFW_RELEASE) {
-			standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraUp());
-		}
-		if (key == GLFW_KEY_LEFT_SHIFT && action != GLFW_RELEASE) {
-			standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraUp());
-		}
+		// // needs to be changed with WOLRD::AXIS
+		// if (key == GLFW_KEY_W && action != GLFW_RELEASE) {
+		// 	standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraFront());
+		// }
+		// if (key == GLFW_KEY_S && action != GLFW_RELEASE) {
+		// 	standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraFront());
+		// }
+		//
+		// if (key == GLFW_KEY_A && action != GLFW_RELEASE) {
+		// 	standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraRight());
+		// }
+		// if (key == GLFW_KEY_D && action != GLFW_RELEASE) {
+		// 	standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraRight());
+		// }
+		//
+		// if (key == GLFW_KEY_SPACE && action != GLFW_RELEASE) {
+		// 	standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraUp());
+		// }
+		// if (key == GLFW_KEY_LEFT_SHIFT && action != GLFW_RELEASE) {
+		// 	standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraUp());
+		// }
 	}
 
-	static void glfwMouseMovementCallback(GLFWwindow* window, double x, double y) {
+	static void glfwMouseMovementCallback(GLFWwindow *window, double x, double y) {
 		if (mouse.firstMouse) {
 			mouse.lastX = x;
 			mouse.lastY = y;
@@ -142,9 +169,9 @@ namespace bolt {
 		mouse.lastY = y;
 	}
 
-	bool Window::shouldWindowClose() const { return glfwWindowShouldClose(static_cast<GLFWwindow*>(this->m_window)); }
+	bool Window::shouldWindowClose() const { return glfwWindowShouldClose(static_cast<GLFWwindow *>(this->m_window)); }
 
-	void Window::setVsync(const b8& enabled) {
+	void Window::setVsync(const b8 &enabled) {
 		if (enabled) {
 			glfwSwapInterval(1);
 			/* BT_INFO_CORE("VSync enabled for Window \"{0}\"", this->m_windowTitle); */
@@ -184,16 +211,16 @@ namespace bolt {
 			exit(EXIT_FAILURE);
 		}
 
-		glfwMakeContextCurrent(static_cast<GLFWwindow*>(this->m_window));
+		glfwMakeContextCurrent(static_cast<GLFWwindow *>(this->m_window));
 
 		int width, height, channels;
-		unsigned char* pixels = stbi_load("../assets/icons/Engine-little.png", &width, &height, &channels, 4);
+		unsigned char *pixels = stbi_load("../assets/icons/Engine-little.png", &width, &height, &channels, 4);
 		if (pixels != NULL) {
 			GLFWimage icon[1]{};
 			icon[0].width = width;
 			icon[0].height = height;
 			icon[0].pixels = pixels;
-			glfwSetWindowIcon(static_cast<GLFWwindow*>(this->m_window), 1, icon);
+			glfwSetWindowIcon(static_cast<GLFWwindow *>(this->m_window), 1, icon);
 			stbi_image_free(icon[0].pixels);
 		}
 
@@ -226,9 +253,9 @@ namespace bolt {
 		this->setVsync(this->isVerticalSyncEnable());
 
 		// Callbacks time
-		glfwSetFramebufferSizeCallback(static_cast<GLFWwindow*>(this->m_window), glfwResizeCallback);
+		glfwSetFramebufferSizeCallback(static_cast<GLFWwindow *>(this->m_window), glfwResizeCallback);
 
-		glfwSetKeyCallback(static_cast<GLFWwindow*>(this->m_window), glfwKeyboardCallback);
+		glfwSetKeyCallback(static_cast<GLFWwindow *>(this->m_window), glfwKeyboardCallback);
 
 		// They are ready to work - BUG on Trello -
 		// glfwSetInputMode(static_cast<GLFWwindow*>(this->m_window), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -239,7 +266,7 @@ namespace bolt {
 
 		{
 			i32 width, height;
-			glfwGetWindowSize(static_cast<GLFWwindow*>(this->m_window), &width, &height);
+			glfwGetWindowSize(static_cast<GLFWwindow *>(this->m_window), &width, &height);
 			if (width >= 0 && height >= 0) {
 				this->setSize({static_cast<u16>(width), static_cast<u16>(height)});
 			} else {
@@ -250,30 +277,17 @@ namespace bolt {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		switch (Application::getSceneType()) {
-			case scene::SceneType::SCENE_2D:
-				scene::updateOrtho(0.f, static_cast<f32>(width), 0.f, static_cast<f32>(height));
-				break;
-			case scene::SceneType::SCENE_3D:
-				scene::updatePerspective(45.0f, static_cast<f32>(width) / height, 0.1f, 100.f);
-				glEnable(GL_DEPTH_TEST);
-				glEnable(GL_CULL_FACE);
-				glCullFace(GL_BACK);
-				break;
-		}
-		EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
-
 		s_windowCount++;
 	}
 
 	void Window::onDetach() {
-		glfwDestroyWindow(static_cast<GLFWwindow*>(this->m_window));
+		glfwDestroyWindow(static_cast<GLFWwindow *>(this->m_window));
 		s_windowCount--;
 
 		if (s_windowCount == 0) {}
 	}
 
-	void Window::onEvent(const Event& e) {
+	void Window::onEvent(const Event &e) {
 		// BT_INFO_CORE("No Implementation of Event handling.");
 	}
 
@@ -281,9 +295,9 @@ namespace bolt {
 
 	void Window::onRender() {
 		// Default clear operations.
-		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+		glClearColor(this->m_clearColor.x, this->m_clearColor.y, this->m_clearColor.z, this->m_clearColor.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void Window::end() { glfwSwapBuffers(static_cast<GLFWwindow*>(this->m_window)); }
+	void Window::end() { glfwSwapBuffers(static_cast<GLFWwindow *>(this->m_window)); }
 } // namespace bolt
