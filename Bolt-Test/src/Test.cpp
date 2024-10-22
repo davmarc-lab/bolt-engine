@@ -29,7 +29,6 @@ int main(int argc, char *argv[]) {
 
 	ls->addCustomLayer(CreateShared<SceneLayer>());
 
-	
 	const auto first = em->createEntity();
 	factory::mesh::createCustomMesh(first, config::mesh_colors, config::shape_square);
 	const auto comp = em->getEntityComponent<Transform>(first);
@@ -37,6 +36,9 @@ int main(int argc, char *argv[]) {
 	comp->setScale(plongDim);
 	scene->addEntity(first);
 	em->addComponent<PhysicComponent>(first);
+    const auto colliderFirst = em->addComponent<Collider>(first);
+    colliderFirst->type = ColliderType::AABB;
+    colliderFirst->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
 	const auto firstInput = em->addComponent<InputComponent>(first);
 
 	firstInput->registerAction(GLFW_KEY_W, [&comp]() {
@@ -53,7 +55,11 @@ int main(int argc, char *argv[]) {
 	other->setScale(plongDim);
 	scene->addEntity(second);
 	em->addComponent<PhysicComponent>(second);
-	const auto secondInput = em->addComponent<InputComponent>(second);
+    const auto colliderSecond = em->addComponent<Collider>(second);
+    colliderSecond->type = ColliderType::AABB;
+    colliderSecond->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
+    const auto secondInput = em->addComponent<InputComponent>(second);
+
 	secondInput->registerAction(GLFW_KEY_UP, [&other]() {
 		other->addPosition(plongVel);
 	});

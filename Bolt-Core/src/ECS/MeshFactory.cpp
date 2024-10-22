@@ -26,12 +26,10 @@ namespace bolt {
 					comp = em->addComponent<Mesh>(id);
 
 					if (shape == config::shape_cube) {
-						for (size_t i = 0; i < std::size(cubeGeometry); i += 3) {
-							comp->vertices.emplace_back(cubeGeometry[i], cubeGeometry[i + 1], cubeGeometry[i + 2]);
-						}
+                        comp->vertices = cubeGeometry;
 
 						if (config & config::mesh_colors) {
-							auto colors = getColorVector(sizeof(cubeGeometry) / sizeof(float) / 3, vec4(1, 1, 1, 1));
+							auto colors = getColorVector(cubeGeometry.size(), vec4(1, 1, 1, 1));
 							comp->colorComponent.colors = std::vector<vec4>(colors);
 						}
 
@@ -43,12 +41,10 @@ namespace bolt {
 					}
 
 					if (shape == config::shape_square) {
-						for (size_t i = 0; i < std::size(squareGeometry); i += 3) {
-							comp->vertices.emplace_back(squareGeometry[i], squareGeometry[i + 1], squareGeometry[i + 2]);
-						}
+                        comp->vertices = squareGeometry;
 
 						if (config & config::mesh_colors) {
-							auto colors = getColorVector(sizeof(squareGeometry) / sizeof(float) / 3, vec4(1, 1, 1, 1));
+							auto colors = getColorVector(squareGeometry.size(), vec4(1, 1, 1, 1));
 							comp->colorComponent.colors = std::vector(colors);
 						}
 
