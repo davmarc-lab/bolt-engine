@@ -2,6 +2,8 @@
 
 #include "../../include/Core/Utils.hpp"
 
+#include "../../include/Core/InputManager.hpp"
+
 #include "../../../Bolt-Graphics/include/glad/glad.h"
 #include "../../../Bolt-Vendor/include/glfw/include/GLFW/glfw3.h"
 
@@ -124,10 +126,12 @@ namespace bolt {
 		switch (action) {
 			case GLFW_REPEAT:
 			case GLFW_PRESS:
-				EventDispatcher::instance()->post(events::input::KeyPressedEvent);
+                InputManager::instance()->keyPressed(key);
+				// EventDispatcher::instance()->post(events::input::KeyPressedEvent);
 				break;
 			case GLFW_RELEASE:
-				EventDispatcher::instance()->post(events::input::KeyReleasedEvent);
+                InputManager::instance()->keyReleased(key);
+				// EventDispatcher::instance()->post(events::input::KeyReleasedEvent);
 				break;
 			default:
 				break;

@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
 
 	ls->addCustomLayer(CreateShared<SceneLayer>());
 
+	
 	const auto first = em->createEntity();
 	factory::mesh::createCustomMesh(first, config::mesh_colors, config::shape_square);
 	const auto comp = em->getEntityComponent<Transform>(first);
@@ -67,6 +68,7 @@ int main(int argc, char *argv[]) {
 	ballComp->setScale(ballDim);
 	scene->addEntity(ball);
 	em->addComponent<PhysicComponent>(ball);
+	
 
 	if constexpr (false) {
 		Application::enableImGui();

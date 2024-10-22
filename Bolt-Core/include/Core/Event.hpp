@@ -72,6 +72,7 @@ namespace bolt {
 		} // namespace ecs
 
 		namespace loop {
+			BT_AUTOCONST LoopInput = Event("Input");
 			BT_AUTOCONST LoopUpdate = Event("Update");
 			BT_AUTOCONST LoopRender = Event("Render");
 			BT_AUTOCONST LoopPauseEvent = Event("Loop Pause");

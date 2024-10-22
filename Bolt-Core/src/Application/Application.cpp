@@ -1,6 +1,7 @@
 #include "../../include/Application/Application.hpp"
 
 #include "../../include/Core/LayerManager.hpp"
+#include "../../include/Core/InputManager.hpp"
 #include "../../include/Core/RenderApi.hpp"
 
 #include "../../include/ECS/EntityManager.hpp"
@@ -50,12 +51,12 @@ void bolt::Application::run() {
 		ub.update(0, sizeof(mat4), value_ptr(s_projection));
 	});
 
-	ed->subscribe(events::input::KeyPressedEvent, [&w](auto &&ph1) {
+	ed->subscribe(events::loop::LoopInput, [&w](auto &&ph1) {
 		auto entities = EntityManager::instance()->getEntitiesFromComponent<InputComponent>();
 		for (auto entity : entities) {
 			auto comp = EntityManager::instance()->getEntityComponent<InputComponent>(entity);
 			for (auto c : comp->getAllKeys()) {
-				if (glfwGetKey((GLFWwindow *)w->getCurrentWindow(), c) == GLFW_PRESS)
+				if (InputManager::instance()->isKeyPressed(c))
 					comp->call(c);
 			}
 		}
@@ -92,10 +93,10 @@ void bolt::Application::run() {
 			}
 			std::cout << "FINAL: " << Timer::instance()->getTime() - main << "\n";
 		}
-	
+
 	auto pw = CreateShared<PhysicsWorld>();
 	lm->addLayer(pw);
-	
+
 	// using a loop generic event to add entities to the physic world
 	ed->subscribe(events::loop::LoopGeneric, [&pw](auto &&p) {
 		pw->addEntity(EntityManager::instance()->getCurrentId() - 1);
@@ -105,10 +106,11 @@ void bolt::Application::run() {
 
 	while (!w->shouldWindowClose()) {
 		auto e = Event();
+		ed->post(events::loop::LoopInput);
 		lm->execute([e](const Shared<Layer> &l) { l->onEvent(e); });
-		lm->execute([](const Shared<Layer> &l) { l->onUpdate(); });
 
 		ed->post(events::loop::LoopUpdate);
+		lm->execute([](const Shared<Layer> &l) { l->onUpdate(); });
 
 		// Before rendering operations
 		lm->execute([](const Shared<Layer> &l) { l->begin(); });

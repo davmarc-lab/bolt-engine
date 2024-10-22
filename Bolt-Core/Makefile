@@ -68,6 +68,7 @@ OBJECTS := \
 	$(OBJDIR)/glad.o \
 	$(OBJDIR)/Application.o \
 	$(OBJDIR)/Event.o \
+	$(OBJDIR)/InputManager.o \
 	$(OBJDIR)/Layer.o \
 	$(OBJDIR)/LayerManager.o \
 	$(OBJDIR)/Log.o \
@@ -155,6 +156,9 @@ $(OBJDIR)/Application.o: src/Application/Application.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Event.o: src/Core/Event.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/InputManager.o: src/Core/InputManager.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Layer.o: src/Core/Layer.cpp
