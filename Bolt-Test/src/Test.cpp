@@ -10,6 +10,7 @@ constexpr auto plongGap = 30;
 constexpr auto plongVel = vec3(0, 5, 0);
 
 constexpr auto ballDim = vec3(20, 20, 0);
+constexpr auto ballVel = vec3(-5, 0, 0);
 
 int main(int argc, char *argv[]) {
 	WindowProperties properties{};
@@ -22,6 +23,7 @@ int main(int argc, char *argv[]) {
 	settings.name = "Plin Plin Plon";
 	settings.dimension = {1600, 900};
 	settings.baseWindowProperties = properties;
+	settings.enableCollisions = true;
 
 	const auto app = CreateUnique<Application>(settings);
 
@@ -50,13 +52,6 @@ int main(int argc, char *argv[]) {
 		comp->addPosition(-plongVel);
 	});
 
-	firstInput->registerAction(GLFW_KEY_D, [&comp]() {
-		comp->addPosition(vec3(5, 0, 0));
-	});
-	firstInput->registerAction(GLFW_KEY_A, [&comp]() {
-		comp->addPosition(vec3(-5, 0, 0));
-	});
-
 	const auto second = em->createEntity();
 	factory::mesh::createCustomMesh(second, config::mesh_colors, config::shape_square);
 	const auto other = em->getEntityComponent<Transform>(second);
@@ -82,24 +77,62 @@ int main(int argc, char *argv[]) {
 	ballComp->setPosition(vec3(settings.dimension.x / 2, settings.dimension.y / 2, 0));
 	ballComp->setScale(ballDim);
 	scene->addEntity(ball);
-	em->addComponent<PhysicComponent>(ball);
+	auto ballPhysic = em->addComponent<PhysicComponent>(ball);
+	ballPhysic->velocity = ballVel;
 	const auto ballCollider = em->addComponent<Collider>(ball);
 	ballCollider->type = ColliderType::AABB;
 	ballCollider->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
 
-	EventDispatcher::instance()->subscribe(events::loop::LoopGeneric, [](auto ph1) {
-		auto first = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(0);
-		auto ball = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(2);
+	EventDispatcher::instance()->subscribe(events::loop::LoopUpdate, [&ballComp, &ballPhysic, &settings](auto p) {
+		if (static_cast<i32>(ballComp->getPosition().y) >= settings.dimension.y || static_cast<i32>(ballComp->getPosition().y <= 0))
+			ballPhysic->velocity *= vec3(1, -1, 0);
+		ballComp->addPosition(ballPhysic->velocity);
+	});
 
-		auto firstColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(0);
-		auto ballColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(2);
+	EventDispatcher::instance()->subscribe(events::loop::LoopBeforeRender, [](auto ph1) {
+		const auto first = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(0);
+		const auto second = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(1);
+		const auto ball = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(2);
 
-        auto var = vec3(first->getModelMatrix() * vec4(firstColl->points[0], 1));
+		const auto firstColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(0);
+		const auto secondColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(1);
+		const auto ballColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(2);
 
-		auto coll = Collision2D({vec3(first->getModelMatrix() * vec4(firstColl->points[0], 1)), vec3(first->getModelMatrix() * vec4(firstColl->points[1], 1))},
-		                        {vec3(ball->getModelMatrix() * vec4(ballColl->points[0], 1)), vec3(ball->getModelMatrix() * vec4(ballColl->points[1], 1))});
+		const auto firstBot = vec3(first->getModelMatrix() * vec4(firstColl->points[0], 1));
+		const auto firstTop = vec3(first->getModelMatrix() * vec4(firstColl->points[1], 1));
+		const auto secondBot = vec3(second->getModelMatrix() * vec4(secondColl->points[0], 1));
+		const auto secondTop = vec3(second->getModelMatrix() * vec4(secondColl->points[1], 1));
+		const auto ballBot = vec3(ball->getModelMatrix() * vec4(ballColl->points[0], 1));
+		const auto ballTop = vec3(ball->getModelMatrix() * vec4(ballColl->points[1], 1));
 
-        // std::cout << (coll.isColliding()) << "\n";
+		const auto collf = Collision2D({firstBot, firstTop}, {ballBot, ballTop});
+		const auto colls = Collision2D({secondBot, secondTop}, {ballBot, ballTop});
+
+		if (collf.isColliding()) {
+			auto vel = bolt::EntityManager::instance()->getEntityComponent<PhysicComponent>(2);
+			auto half = (firstTop.y + firstBot.y) / 2;
+			if (vel->velocity.x < 0) {
+				std::cout << to_string(ball->getPosition()) << "\t" << half << "\n";
+				if (ball->getPosition().y > half) {
+					vel->velocity = {-vel->velocity.x, -5, 0};
+				} else {
+					vel->velocity = {-vel->velocity.x, 5, 0};
+				}
+			}
+			return;
+		}
+
+		if (colls.isColliding()) {
+			auto vel = bolt::EntityManager::instance()->getEntityComponent<PhysicComponent>(2);
+			auto half = (secondTop.y + secondBot.y) / 2;
+			if (vel->velocity.x > 0) {
+				if (ball->getPosition().y > half) {
+					vel->velocity = {-vel->velocity.x, -5, 0};
+				} else {
+					vel->velocity = {-vel->velocity.x, 5, 0};
+				}
+			}
+		}
 	});
 
 	if constexpr (false) {

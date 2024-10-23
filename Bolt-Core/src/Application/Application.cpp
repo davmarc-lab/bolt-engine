@@ -63,6 +63,11 @@ void bolt::Application::run() {
 		}
 	});
 
+	if (s_settings.enableCollisions) {
+		// enable collision detection
+		ed->subscribe(events::loop::LoopBeforeRender, [](auto p){});
+	}
+
 	Timer::instance()->start();
 
 	// TEST START
@@ -113,7 +118,7 @@ void bolt::Application::run() {
 		ed->post(events::loop::LoopUpdate);
 		lm->execute([](const Shared<Layer> &l) { l->onUpdate(); });
 		
-		ed->post(events::loop::LoopGeneric);
+		ed->post(events::loop::LoopBeforeRender);
 		
 		// Before rendering operations
 		lm->execute([](const Shared<Layer> &l) { l->begin(); });

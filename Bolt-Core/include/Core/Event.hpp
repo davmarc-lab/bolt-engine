@@ -74,6 +74,7 @@ namespace bolt {
 		namespace loop {
 			BT_AUTOCONST LoopInput = Event("Input");
 			BT_AUTOCONST LoopUpdate = Event("Update");
+			BT_AUTOCONST LoopBeforeRender = Event("Before Render");
 			BT_AUTOCONST LoopRender = Event("Render");
 			BT_AUTOCONST LoopPauseEvent = Event("Loop Pause");
 			BT_AUTOCONST LoopResumeEvent = Event("Loop Resume");

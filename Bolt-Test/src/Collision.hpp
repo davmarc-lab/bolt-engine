@@ -6,7 +6,7 @@ class Collision {
 public:
 	Collision() {}
 
-	virtual b8 isColliding() = 0;
+	virtual b8 isColliding() const = 0;
 
 	virtual ~Collision() = default;
 };
@@ -18,7 +18,7 @@ struct CollisionPoints {
 
 class Collision2D : public Collision {
 public:
-	virtual b8 isColliding() override;
+	virtual b8 isColliding() const override;
 	
 	Collision2D(const CollisionPoints &first, const CollisionPoints &second) :
 		m_first(first), m_second(second) {}

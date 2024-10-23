@@ -16,6 +16,7 @@ namespace bolt {
 		Pair<u16> dimension = {1600, 900};
 		Pair<u16> position = {};
 		WindowProperties baseWindowProperties;
+		b8 enableCollisions = false;
 	};
 
 	/*
