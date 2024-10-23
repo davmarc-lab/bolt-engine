@@ -34,9 +34,7 @@ namespace bolt {
 						}
 
 						if (config & config::mesh_texture) {
-							for (size_t i = 0; i < std::size(cubeTexCoord); i += 2) {
-								comp->texCoord.emplace_back(cubeTexCoord[i], cubeTexCoord[i + 1]);
-							}
+							comp->texCoord = cubeTexCoord;
 						}
 					}
 
@@ -49,9 +47,7 @@ namespace bolt {
 						}
 
 						if (config & config::mesh_texture) {
-							for (size_t i = 0; i < std::size(squareTexCoord); i += 2) {
-								comp->texCoord.emplace_back(squareTexCoord[i], squareTexCoord[i + 1]);
-							}
+							comp->texCoord = squareTexCoord;
 						}
 					}
 

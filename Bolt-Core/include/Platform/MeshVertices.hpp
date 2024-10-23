@@ -97,12 +97,18 @@ namespace bolt {
 				{0.0f, 0.0f}};
 
 			inline std::vector<vec3> squareGeometry{
-				{-1.0f, -1.0f, 1.0f}, // bottom-le}t
-				{1.0f, -1.0f, 1.0f},  // bottom-rig}t
-				{1.0f, 1.0f, 1.0f},	  // top-rig}t
-				{1.0f, 1.0f, 1.0f},	  // top-rig}t
-				{-1.0f, 1.0f, 1.0f},  // top-le}t
-				{-1.0f, -1.0f, 1.0f}  // bottom-le}t
+				// bottom-le}t
+				{-1.0f, -1.0f, 1.0f},
+				// bottom-rig}t
+				{1.0f, -1.0f, 1.0f},
+				// top-rig}t
+				{1.0f, 1.0f, 1.0f},
+				// top-rig}t
+				{1.0f, 1.0f, 1.0f},
+				// top-le}t
+				{-1.0f, 1.0f, 1.0f},
+				// bottom-left
+				{-1.0f, -1.0f, 1.0f}
 			};
 
 			inline std::vector<vec2> squareTexCoord{
@@ -120,7 +126,7 @@ namespace bolt {
 
 			inline MeshVertices getCircleVertices(const Pair<f32> &center, const Pair<f32> &radius, const u16 &numTriangles, const vec4 &color = vec4(0, 0, 0, 1)) {
 				auto info = MeshVertices{};
-				float stepA = (2 * FPI) / numTriangles;
+				float stepA = (2 * FPI) / static_cast<f32>(numTriangles);
 				float t, xx, yy;
 
 				info.vertices.emplace_back(center.x, center.y, 0.0f);
@@ -137,13 +143,13 @@ namespace bolt {
 				return info;
 			}
 
-			inline std::vector<vec4> getColorVector(i32 size, vec4 color) {
+			inline std::vector<vec4> getColorVector(const size_t &size, const vec4 &color) {
 				std::vector<vec4> colorVector;
 				colorVector.reserve(size);
-				for (auto i = 0; i < size; i++)
+				for (size_t i = 0; i < size; i++)
 					colorVector.push_back(color);
 				return colorVector;
 			}
 		} // namespace mesh
-	} // namespace factory
-} // namespace bolt
+	}     // namespace factory
+}         // namespace bolt

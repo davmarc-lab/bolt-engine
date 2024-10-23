@@ -1,5 +1,6 @@
 #include "../../include/Application/Application.hpp"
 
+#include "../../../Bolt-Test/src/Collision.hpp"
 #include "../../include/Core/LayerManager.hpp"
 #include "../../include/Core/InputManager.hpp"
 #include "../../include/Core/RenderApi.hpp"
@@ -111,7 +112,9 @@ void bolt::Application::run() {
 
 		ed->post(events::loop::LoopUpdate);
 		lm->execute([](const Shared<Layer> &l) { l->onUpdate(); });
-
+		
+		ed->post(events::loop::LoopGeneric);
+		
 		// Before rendering operations
 		lm->execute([](const Shared<Layer> &l) { l->begin(); });
 		lm->execute([](const Shared<Layer> &l) { l->onRender(); });

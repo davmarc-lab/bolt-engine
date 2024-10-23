@@ -94,6 +94,7 @@
     <ClInclude Include="include\Core\Core.hpp" />
     <ClInclude Include="include\Core\Enums.hpp" />
     <ClInclude Include="include\Core\Event.hpp" />
+    <ClInclude Include="include\Core\InputManager.hpp" />
     <ClInclude Include="include\Core\Layer.hpp" />
     <ClInclude Include="include\Core\LayerManager.hpp" />
     <ClInclude Include="include\Core\Log.hpp" />
@@ -132,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="src\Application\Application.cpp" />
     <ClCompile Include="src\Core\Event.cpp" />
+    <ClCompile Include="src\Core\InputManager.cpp" />
     <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\LayerManager.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />

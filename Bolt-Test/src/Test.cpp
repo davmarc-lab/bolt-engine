@@ -1,13 +1,15 @@
 #include "../../Bolt-Core/include/Engine.hpp"
 #include "../../Bolt-Core/include/Graphics.hpp"
 
+#include "Collision.hpp"
+
 using namespace bolt;
 
-constexpr auto plongDim = vec3(25, 150, 0);
+constexpr auto plongDim = vec3(12, 75, 0);
 constexpr auto plongGap = 30;
-constexpr auto plongVel = vec3(0, 10, 0);
+constexpr auto plongVel = vec3(0, 5, 0);
 
-constexpr auto ballDim = vec3(40, 40, 0);
+constexpr auto ballDim = vec3(20, 20, 0);
 
 int main(int argc, char *argv[]) {
 	WindowProperties properties{};
@@ -36,9 +38,9 @@ int main(int argc, char *argv[]) {
 	comp->setScale(plongDim);
 	scene->addEntity(first);
 	em->addComponent<PhysicComponent>(first);
-    const auto colliderFirst = em->addComponent<Collider>(first);
-    colliderFirst->type = ColliderType::AABB;
-    colliderFirst->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
+	const auto colliderFirst = em->addComponent<Collider>(first);
+	colliderFirst->type = ColliderType::AABB;
+	colliderFirst->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
 	const auto firstInput = em->addComponent<InputComponent>(first);
 
 	firstInput->registerAction(GLFW_KEY_W, [&comp]() {
@@ -48,6 +50,13 @@ int main(int argc, char *argv[]) {
 		comp->addPosition(-plongVel);
 	});
 
+	firstInput->registerAction(GLFW_KEY_D, [&comp]() {
+		comp->addPosition(vec3(5, 0, 0));
+	});
+	firstInput->registerAction(GLFW_KEY_A, [&comp]() {
+		comp->addPosition(vec3(-5, 0, 0));
+	});
+
 	const auto second = em->createEntity();
 	factory::mesh::createCustomMesh(second, config::mesh_colors, config::shape_square);
 	const auto other = em->getEntityComponent<Transform>(second);
@@ -55,10 +64,10 @@ int main(int argc, char *argv[]) {
 	other->setScale(plongDim);
 	scene->addEntity(second);
 	em->addComponent<PhysicComponent>(second);
-    const auto colliderSecond = em->addComponent<Collider>(second);
-    colliderSecond->type = ColliderType::AABB;
-    colliderSecond->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
-    const auto secondInput = em->addComponent<InputComponent>(second);
+	const auto colliderSecond = em->addComponent<Collider>(second);
+	colliderSecond->type = ColliderType::AABB;
+	colliderSecond->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
+	const auto secondInput = em->addComponent<InputComponent>(second);
 
 	secondInput->registerAction(GLFW_KEY_UP, [&other]() {
 		other->addPosition(plongVel);
@@ -74,7 +83,19 @@ int main(int argc, char *argv[]) {
 	ballComp->setScale(ballDim);
 	scene->addEntity(ball);
 	em->addComponent<PhysicComponent>(ball);
-	
+
+	// EventDispatcher::instance()->subscribe(events::loop::LoopGeneric, [](auto ph1) {
+	// 	auto first = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(0);
+	// 	auto ball = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(2);
+	//
+	// 	auto firstColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(0);
+	// 	auto ballColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(2);
+	//
+	// 	auto coll = Collision2D({first->getPosition() * firstColl->points[0], first->getPosition() * firstColl->points[1]},
+	// 	                        {ball->getPosition() * ballColl->points[0], ball->getPosition() * ballColl->points[1]});
+	//
+	// 	std::cout << coll.isColliding() << "\n";
+	// });
 
 	if constexpr (false) {
 		Application::enableImGui();
