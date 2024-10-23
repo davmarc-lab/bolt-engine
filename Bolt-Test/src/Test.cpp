@@ -83,19 +83,24 @@ int main(int argc, char *argv[]) {
 	ballComp->setScale(ballDim);
 	scene->addEntity(ball);
 	em->addComponent<PhysicComponent>(ball);
+	const auto ballCollider = em->addComponent<Collider>(ball);
+	ballCollider->type = ColliderType::AABB;
+	ballCollider->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
 
-	// EventDispatcher::instance()->subscribe(events::loop::LoopGeneric, [](auto ph1) {
-	// 	auto first = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(0);
-	// 	auto ball = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(2);
-	//
-	// 	auto firstColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(0);
-	// 	auto ballColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(2);
-	//
-	// 	auto coll = Collision2D({first->getPosition() * firstColl->points[0], first->getPosition() * firstColl->points[1]},
-	// 	                        {ball->getPosition() * ballColl->points[0], ball->getPosition() * ballColl->points[1]});
-	//
-	// 	std::cout << coll.isColliding() << "\n";
-	// });
+	EventDispatcher::instance()->subscribe(events::loop::LoopGeneric, [](auto ph1) {
+		auto first = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(0);
+		auto ball = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(2);
+
+		auto firstColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(0);
+		auto ballColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(2);
+
+        auto var = vec3(first->getModelMatrix() * vec4(firstColl->points[0], 1));
+
+		auto coll = Collision2D({vec3(first->getModelMatrix() * vec4(firstColl->points[0], 1)), vec3(first->getModelMatrix() * vec4(firstColl->points[1], 1))},
+		                        {vec3(ball->getModelMatrix() * vec4(ballColl->points[0], 1)), vec3(ball->getModelMatrix() * vec4(ballColl->points[1], 1))});
+
+        // std::cout << (coll.isColliding()) << "\n";
+	});
 
 	if constexpr (false) {
 		Application::enableImGui();
