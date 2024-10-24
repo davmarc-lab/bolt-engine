@@ -12,9 +12,9 @@ endif
 
 ifeq ($(config),debug)
   RESCOMP = windres
-  TARGETDIR = ../bin/linux-x86_64/Debug/Bolt-Game
-  TARGET = $(TARGETDIR)/Bolt-Game
-  OBJDIR = ../bin/int/linux-x86_64/Debug/Bolt-Game
+  TARGETDIR = ../bin/linux-x86_64/Debug/Bolt-Pong
+  TARGET = $(TARGETDIR)/Bolt-Pong
+  OBJDIR = ../bin/int/linux-x86_64/Debug/Bolt-Pong
   DEFINES += -DBT_ENABLE_DEBUG
   INCLUDES += -Iinclude -I../Bolt-Core/include
   FORCE_INCLUDE +=
@@ -39,9 +39,9 @@ endif
 
 ifeq ($(config),release)
   RESCOMP = windres
-  TARGETDIR = ../bin/linux-x86_64/Release/Bolt-Game
-  TARGET = $(TARGETDIR)/Bolt-Game
-  OBJDIR = ../bin/int/linux-x86_64/Release/Bolt-Game
+  TARGETDIR = ../bin/linux-x86_64/Release/Bolt-Pong
+  TARGET = $(TARGETDIR)/Bolt-Pong
+  OBJDIR = ../bin/int/linux-x86_64/Release/Bolt-Pong
   DEFINES +=
   INCLUDES += -Iinclude -I../Bolt-Core/include
   FORCE_INCLUDE +=
@@ -65,7 +65,8 @@ all: prebuild prelink $(TARGET)
 endif
 
 OBJECTS := \
-	$(OBJDIR)/main.o \
+	$(OBJDIR)/Collision.o \
+	$(OBJDIR)/Test.o \
 
 RESOURCES := \
 
@@ -77,7 +78,7 @@ ifeq (.exe,$(findstring .exe,$(ComSpec)))
 endif
 
 $(TARGET): $(GCH) ${CUSTOMFILES} $(OBJECTS) $(LDDEPS) $(RESOURCES) | $(TARGETDIR)
-	@echo Linking Bolt-Game
+	@echo Linking Bolt-Pong
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -100,7 +101,7 @@ else
 endif
 
 clean:
-	@echo Cleaning Bolt-Game
+	@echo Cleaning Bolt-Pong
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(OBJDIR)
@@ -124,7 +125,10 @@ else
 $(OBJECTS): | $(OBJDIR)
 endif
 
-$(OBJDIR)/main.o: src/main.cpp
+$(OBJDIR)/Collision.o: src/Collision.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Test.o: src/Test.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

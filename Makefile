@@ -13,27 +13,27 @@ ifeq ($(config),debug)
   Bolt_imgui_config = debug
   Bolt_Core_config = debug
   Bolt_Test_config = debug
-  Bolt_Game_config = debug
+  Bolt_Pong_config = debug
 endif
 ifeq ($(config),release)
   Bolt_Graphics_config = release
   Bolt_imgui_config = release
   Bolt_Core_config = release
   Bolt_Test_config = release
-  Bolt_Game_config = release
+  Bolt_Pong_config = release
 endif
 
-PROJECTS := Bolt-Graphics Bolt-imgui Bolt-Core Bolt-Test Bolt-Game
+PROJECTS := Bolt-Graphics Bolt-imgui Bolt-Core Bolt-Test Bolt-Pong
 
-.PHONY: all clean help $(PROJECTS) Bolt-Core Bolt-Game Bolt-Graphics Bolt-Test Bolt-imgui
+.PHONY: all clean help $(PROJECTS) Bolt-Core Bolt-Graphics Bolt-Pong Bolt-Test Bolt-imgui
 
 all: $(PROJECTS)
 
 Bolt-Core: Bolt-Core
 
-Bolt-Game: Bolt-Game
-
 Bolt-Graphics: Bolt-Graphics
+
+Bolt-Pong: Bolt-Pong
 
 Bolt-Test: Bolt-Test
 
@@ -63,10 +63,10 @@ ifneq (,$(Bolt_Test_config))
 	@${MAKE} --no-print-directory -C Bolt-Test -f Makefile config=$(Bolt_Test_config)
 endif
 
-Bolt-Game: Bolt-Core Bolt-imgui
-ifneq (,$(Bolt_Game_config))
-	@echo "==== Building Bolt-Game ($(Bolt_Game_config)) ===="
-	@${MAKE} --no-print-directory -C Bolt-Game -f Makefile config=$(Bolt_Game_config)
+Bolt-Pong: Bolt-Core Bolt-imgui
+ifneq (,$(Bolt_Pong_config))
+	@echo "==== Building Bolt-Pong ($(Bolt_Pong_config)) ===="
+	@${MAKE} --no-print-directory -C Bolt-Pong -f Makefile config=$(Bolt_Pong_config)
 endif
 
 clean:
@@ -74,7 +74,7 @@ clean:
 	@${MAKE} --no-print-directory -C Bolt-imgui -f Makefile clean
 	@${MAKE} --no-print-directory -C Bolt-Core -f Makefile clean
 	@${MAKE} --no-print-directory -C Bolt-Test -f Makefile clean
-	@${MAKE} --no-print-directory -C Bolt-Game -f Makefile clean
+	@${MAKE} --no-print-directory -C Bolt-Pong -f Makefile clean
 
 help:
 	@echo "Usage: make [config=name] [target]"
@@ -90,6 +90,6 @@ help:
 	@echo "   Bolt-imgui"
 	@echo "   Bolt-Core"
 	@echo "   Bolt-Test"
-	@echo "   Bolt-Game"
+	@echo "   Bolt-Pong"
 	@echo ""
 	@echo "For more information, see https://github.com/premake/premake-core/wiki"

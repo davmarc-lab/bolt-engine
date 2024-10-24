@@ -13,18 +13,18 @@ namespace bolt {
 
 		virtual void onDetach();
 
-		virtual void drawArrays(const VertexArray& vao, const u32& mode, const i32& first, const i32& count);
+		virtual void drawArrays(const VertexArray &vao, const u32 &mode, const i32 &first, const i32 &count);
 
-		virtual void drawElements(const VertexArray& vao, const u32& mode, const i32& count, const u32& type, const void* indices = nullptr);
+		virtual void drawElements(const VertexArray &vao, const u32 &mode, const i32 &count, const u32 &type, const void *indices = nullptr);
 
-		virtual void drawArraysLines(const VertexArray& vao, const i32& count, const i32& first = 0);
+		virtual void drawArraysLines(const VertexArray &vao, const i32 &count, const i32 &first = 0);
 
-		virtual void drawElementsLines(const VertexArray& vao, const i32& count);
+		virtual void drawElementsLines(const VertexArray &vao, const i32 &count);
 
-		virtual void drawArraysTriangles(const VertexArray& vao, const i32& count, const i32& first = 0);
-		
-		virtual void drawArraysTriangleFan(const VertexArray& vao, const i32& count, const i32& first = 0);
+		virtual void drawArraysTriangles(const VertexArray &vao, const i32 &count, const i32 &first = 0);
 
-		virtual void drawElementsTriangles(const VertexArray& vao, const i32& count);
+		virtual void drawArraysTriangleFan(const VertexArray &vao, const i32 &count, const i32 &first = 0);
+
+		virtual void drawElementsTriangles(const VertexArray &vao, const i32 &count);
 	};
-}
+} // namespace bolt

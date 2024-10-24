@@ -1,6 +1,5 @@
 #include "../../include/Application/Application.hpp"
 
-#include "../../../Bolt-Test/src/Collision.hpp"
 #include "../../include/Core/LayerManager.hpp"
 #include "../../include/Core/InputManager.hpp"
 #include "../../include/Core/RenderApi.hpp"
@@ -8,28 +7,12 @@
 #include "../../include/ECS/EntityManager.hpp"
 #include "../../include/ECS/System.hpp"
 
-#include "../../include/Graphic/ImGuiLayer.hpp"
-
 #include "../../include/Graphic/Buffer/UniformBuffer.hpp"
 
-#include "../../include/Core/Physics.hpp"
-
-#include "../../include/Graphics.hpp"
+#include "../../include/Core/Timestep.hpp"
 
 void bolt::Application::run() {
 	const auto lm = LayerManager::instance();
-
-	// This window is unique.
-	Shared<Window> w = CreateShared<Window>(Window(s_settings));
-	lm->addLayer(w);
-
-	w->setVsync(s_settings.baseWindowProperties.vsync);
-	w->setClearColor(s_settings.baseWindowProperties.backgroundColor);
-
-	if (isImGuiEnabled()) {
-		Shared<ImGuiLayer> ig = CreateShared<ImGuiLayer>(w);
-		lm->addLayer(ig);
-	}
 
 	using namespace bmath;
 
@@ -52,7 +35,7 @@ void bolt::Application::run() {
 		ub.update(0, sizeof(mat4), value_ptr(s_projection));
 	});
 
-	ed->subscribe(events::loop::LoopInput, [&w](auto &&ph1) {
+	ed->subscribe(events::loop::LoopInput, [](auto &&ph1) {
 		auto entities = EntityManager::instance()->getEntitiesFromComponent<InputComponent>();
 		for (auto entity : entities) {
 			auto comp = EntityManager::instance()->getEntityComponent<InputComponent>(entity);
@@ -68,8 +51,7 @@ void bolt::Application::run() {
 		ed->subscribe(events::loop::LoopBeforeRender, [](auto p){});
 	}
 
-    ed->subscribe(events::window::WindowCloseEvent, [&w, this](auto p){
-        w->shouldWindowClose();
+    ed->subscribe(events::window::WindowCloseEvent, [this](auto p){
         this->closeApplication();
     });
 

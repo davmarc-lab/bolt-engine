@@ -62,6 +62,8 @@ namespace bolt {
 					shader = CreateShared<ShaderComponent>();
 				} else
 					comp = em->getEntityComponent<Mesh>(id);
+
+                // init mesh
 			}
 
 			void initCustomMesh(const u32 &id, config::MeshConfig config, config::MeshShape shape) {

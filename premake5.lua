@@ -21,5 +21,5 @@ include "Bolt-Core/BuildCore.lua"
 group "Bolt-Test"
     include "Bolt-Test/BuildTest.lua"
 
-group "Bolt-Game"
-    include "Bolt-Game/BuildGame.lua"
+group "Bolt-Pong"
+    include "Bolt-Pong/BuildPong.lua"

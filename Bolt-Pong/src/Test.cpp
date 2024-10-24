@@ -10,9 +10,17 @@ constexpr auto plongGap = 30;
 constexpr auto plongVel = vec3(0, 5, 0);
 
 constexpr auto ballDim = vec3(20, 20, 0);
+auto ballPos = vec3(0);
 constexpr auto ballVel = vec3(-5, 0, 0);
 
+struct Score {
+	u16 first;
+	u16 second;
+} score;
+
 int main(int argc, char *argv[]) {
+	const auto ls = LayerStack::instance();
+
 	WindowProperties properties{};
 	properties.maximized = false;
 	properties.vsync = true;
@@ -27,7 +35,9 @@ int main(int argc, char *argv[]) {
 
 	const auto app = CreateUnique<Application>(settings);
 
-	const auto ls = LayerStack::instance();
+	const auto w = CreateShared<Window>(settings);
+	ls->addCustomLayer(w);
+
 	const auto em = EntityManager::instance();
 	const auto scene = Scene::instance();
 
@@ -71,10 +81,11 @@ int main(int argc, char *argv[]) {
 		other->addPosition(-plongVel);
 	});
 
+	ballPos = vec3(settings.dimension.x / 2, settings.dimension.y / 2, 0);
 	const auto ball = em->createEntity();
 	factory::mesh::createCustomMesh(ball, config::mesh_colors, config::shape_square);
 	const auto ballComp = em->getEntityComponent<Transform>(ball);
-	ballComp->setPosition(vec3(settings.dimension.x / 2, settings.dimension.y / 2, 0));
+	ballComp->setPosition(ballPos);
 	ballComp->setScale(ballDim);
 	scene->addEntity(ball);
 	auto ballPhysic = em->addComponent<PhysicComponent>(ball);
@@ -84,9 +95,29 @@ int main(int argc, char *argv[]) {
 	ballCollider->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
 
 	EventDispatcher::instance()->subscribe(events::loop::LoopUpdate, [&ballComp, &ballPhysic, &settings](auto p) {
-		if (static_cast<i32>(ballComp->getPosition().y) >= settings.dimension.y || static_cast<i32>(ballComp->getPosition().y <= 0))
+		i32 xpos = static_cast<i32>(ballComp->getPosition().x);
+		i32 ypos = static_cast<i32>(ballComp->getPosition().y);
+		if (ypos >= settings.dimension.y || ypos <= 0)
 			ballPhysic->velocity *= vec3(1, -1, 0);
 		ballComp->addPosition(ballPhysic->velocity);
+
+		if (xpos < 0 || xpos > settings.dimension.x) {
+			if (xpos < 0) {
+				score.second++;
+				ballComp->setPosition(ballPos);
+			} else if (xpos > settings.dimension.x) {
+				score.first++;
+				ballComp->setPosition(ballPos);
+			}
+			std::cout << "Score-> " << score.first << " : " << score.second << "\n";
+			if (score.first == 2) {
+				std::cout << "First player win!\n";
+                EventDispatcher::instance()->post(events::window::WindowCloseEvent);
+			} else if (score.second == 2) {
+				std::cout << "Second player win!\n";
+                EventDispatcher::instance()->post(events::window::WindowCloseEvent);
+			}
+		}
 	});
 
 	EventDispatcher::instance()->subscribe(events::loop::LoopBeforeRender, [](auto ph1) {
@@ -108,6 +139,7 @@ int main(int argc, char *argv[]) {
 		const auto collf = Collision2D({firstBot, firstTop}, {ballBot, ballTop});
 		const auto colls = Collision2D({secondBot, secondTop}, {ballBot, ballTop});
 
+		// ball collision with first player
 		if (collf.isColliding()) {
 			auto vel = bolt::EntityManager::instance()->getEntityComponent<PhysicComponent>(2);
 			auto half = (firstTop.y + firstBot.y) / 2;
@@ -121,6 +153,7 @@ int main(int argc, char *argv[]) {
 			return;
 		}
 
+		// ball collision with second player
 		if (colls.isColliding()) {
 			auto vel = bolt::EntityManager::instance()->getEntityComponent<PhysicComponent>(2);
 			auto half = (secondTop.y + secondBot.y) / 2;

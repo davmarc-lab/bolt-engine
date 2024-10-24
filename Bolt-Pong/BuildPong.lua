@@ -1,4 +1,4 @@
-project "Bolt-Game"
+project "Bolt-Pong"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++20"
