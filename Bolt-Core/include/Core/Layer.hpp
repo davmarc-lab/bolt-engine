@@ -18,6 +18,7 @@ namespace bolt {
 	class Layer {
 	protected:
 		std::string m_layerName;
+        b8 m_attached = false;
 
 	public:
 		explicit Layer(std::string name = "Layer");
@@ -45,6 +46,8 @@ namespace bolt {
 
 		/// Called after `Layer::onRender()`.
 		virtual void end() {}
+
+        inline b8 isAttached() const { return this->m_attached; }
 	};
 
 	class LayerStack {

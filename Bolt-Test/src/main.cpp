@@ -22,14 +22,27 @@ int main(int argc, char *argv[]) {
 	const auto ls = LayerStack::instance();
 
 	const auto w = CreateShared<Window>(settings);
+    // it needs to be attached due to UniforBuffer usage
+    w->onAttach();
 	ls->addCustomLayer(w);
+
+    const auto scene = Scene::instance();
+    ls->addCustomLayer(CreateShared<SceneLayer>());
+
+	UniformBuffer ub = UniformBuffer();
+	ub.onAttach();
+	ub.setup(sizeof(mat4), 0);
+    auto proj = Application::getProjectionMatrix();
+	ub.update(0, sizeof(mat4), value_ptr(proj));
+    EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&proj, &ub](auto &&p) {
+		ub.update(0, sizeof(mat4), value_ptr(proj));
+	});
+
+    EntityManager::instance()->subscribeEventCallbacks();
 
     Application::enableImGui();
     const auto ig = CreateShared<ImGuiLayer>(w);
     ls->addCustomLayer(ig);
-
-	const auto scene = Scene::instance();
-	ls->addCustomLayer(CreateShared<SceneLayer>());
 
 	ls->addCustomLayer(CreateShared<ImGuiDockSpace>());
 	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());

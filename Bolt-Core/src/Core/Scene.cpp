@@ -21,6 +21,7 @@ namespace bolt {
 			} else
 				factory::mesh::initCustomMesh(id, config::squareConfig, config::shape_square);
 		}
+        this->m_attached = true;
 	}
 
 	void SceneLayer::onRender() {

@@ -16,6 +16,7 @@ namespace bolt {
 
 	void ImGuiDockSpace::onAttach() {
 		this->m_debugWindow = ImGuiDebug("Debug");
+        this->m_attached = true;
 	}
 
 	void ImGuiDockSpace::onRender() {
@@ -131,6 +132,7 @@ namespace bolt {
 		// preparing framebuffer
 		// scene::perspectiveProjection = perspective(45.0f, static_cast<f32>(this->m_size.x) / this->m_size.y, 0.1f, 100.f);;
 		// scene::orthoProjection = ortho(0.f, static_cast<f32>(this->m_size.x), 0.f, static_cast<f32>(this->m_size.y));
+        this->m_attached = true;
 	}
 
 	void ImGuiViewPort::onEvent(const Event &e) {}

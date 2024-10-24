@@ -23,32 +23,9 @@ void bolt::Application::run() {
 
 	const auto im = InputManager::instance();
 
-	auto ed = EventDispatcher::instance();
-
-	EntityManager::instance()->subscribeEventCallbacks();
+	const auto ed = EventDispatcher::instance();
 
 	lm->addLayersFromStack();
-
-	ed->subscribe(events::loop::LoopUpdate, [](auto &&ph1) { systems::transform::updateAllModelMatrix(); });
-
-	UniformBuffer ub = UniformBuffer();
-	ub.onAttach();
-	ub.setup(sizeof(mat4), 0);
-	ub.update(0, sizeof(mat4), value_ptr(s_projection));
-	ed->subscribe(events::shader::ShaderProjectionChanged, [this, &ub](auto &&p) {
-		ub.update(0, sizeof(mat4), value_ptr(s_projection));
-	});
-
-	ed->subscribe(events::loop::LoopInput, [&im](auto &&ph1) {
-		auto entities = EntityManager::instance()->getEntitiesFromComponent<InputComponent>();
-		for (auto entity : entities) {
-			auto comp = EntityManager::instance()->getEntityComponent<InputComponent>(entity);
-			for (auto c : comp->getAllKeys()) {
-				if (im->isKeyPressed(c))
-					comp->call(c);
-			}
-		}
-	});
 
 	if (s_settings.enableCollisions) {
 		// enable collision detection

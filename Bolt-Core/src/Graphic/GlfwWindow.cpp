@@ -272,6 +272,7 @@ namespace bolt {
 		}
 
 		s_windowCount++;
+        this->m_attached = true;
 	}
 
 	void Window::onDetach() {

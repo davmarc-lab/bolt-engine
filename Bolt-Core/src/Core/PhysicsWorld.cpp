@@ -18,6 +18,7 @@ namespace bolt {
 		for (const auto& id : ids) {
 			this->m_entities.insert(id);
 		}
+        this->m_attached = true;
 	}
 
 	void PhysicsWorld::onDetach() {}
