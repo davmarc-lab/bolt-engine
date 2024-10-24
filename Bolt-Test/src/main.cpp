@@ -8,15 +8,15 @@ int main(int argc, char *argv[]) {
 	properties.maximized = false;
 	properties.vsync = true;
 	properties.backgroundColor = vec4(0.3, 0.3, 0.3, 1);
-	properties.cull = {true, GL_BACK};
-	properties.depth = {true, true, GL_LESS};
+    properties.cull = {true, GL_BACK};
+    properties.depth = {true, true, GL_LESS};
 
 	ApplicationSetting settings{};
 	settings.type = scene::SCENE_3D;
-	settings.name = "Test";
+	settings.name = "Testing";
 	settings.dimension = {1600, 900};
 	settings.properties = properties;
-	settings.defaultCameraMovement = true;
+    settings.defaultCameraMovement = true;
 
 	const auto app = CreateUnique<Application>(settings);
 	const auto ls = LayerStack::instance();
@@ -24,9 +24,9 @@ int main(int argc, char *argv[]) {
 	const auto w = CreateShared<Window>(settings);
 	ls->addCustomLayer(w);
 
-	Application::enableImGui();
-	const auto ig = CreateShared<ImGuiLayer>(w);
-	ls->addCustomLayer(ig);
+    Application::enableImGui();
+    const auto ig = CreateShared<ImGuiLayer>(w);
+    ls->addCustomLayer(ig);
 
 	const auto scene = Scene::instance();
 	ls->addCustomLayer(CreateShared<SceneLayer>());

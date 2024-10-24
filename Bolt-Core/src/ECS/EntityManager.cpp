@@ -17,7 +17,7 @@ namespace bolt {
 			if (Application::getSceneType() == scene::SCENE_3D) {
 				factory::mesh::createCustomMesh(id, config::cubeConfig, config::shape_cube);
 				factory::mesh::initCustomMesh(id, config::cubeConfig, config::shape_cube);
-				this->addComponent<PhysicComponent>(id);
+				// this->addComponent<PhysicComponent>(id);
 			} else {
 				factory::mesh::createCustomMesh(id, config::squareConfig, config::shape_circle);
 				factory::mesh::initCustomMesh(id, config::squareConfig, config::shape_circle);
