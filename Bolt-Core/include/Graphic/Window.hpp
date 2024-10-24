@@ -15,30 +15,24 @@ namespace bolt {
 		Pair<u16> m_size{};
 
 		b8 m_vsync = false;
-
 		vec4 m_clearColor = vec4(0, 0, 0, 1);
+
+		ApplicationSetting m_settings{};
 
 		void *m_window = nullptr;
 		std::string m_windowTitle = "Glfw Window";
+        u32 m_clearMask = 0;
 
 	public:
-		Window() :
-			Window("Bolt Engine", {0, 0}, {1600, 900}) {}
-
-		Window(std::string title, const u16 xpos, const u16 ypos, const u16 width, const u16 height) :
-			Window(std::move(title), {xpos, ypos}, {width, height}) {}
-
 		Window(const ApplicationSetting &settings) :
-			Window(settings.name, settings.position, settings.dimension) {
-			this->m_vsync = settings.baseWindowProperties.vsync;
-			this->m_clearColor = settings.baseWindowProperties.backgroundColor;
-		}
+			Layer("Glfw Window"), m_windowTitle(std::move(settings.name)) {
+			this->m_position = settings.position;
+			this->m_size = settings.dimension;
+			this->m_vsync = settings.properties.vsync;
+			this->m_clearColor = settings.properties.backgroundColor;
 
-		Window(std::string title, const Pair<u16> position, const Pair<u16> size) :
-			Layer("Glfw Window"), m_windowTitle(std::move(title)) {
-			this->m_position = position;
-			this->m_size = size;
-			
+			this->m_settings = settings;
+
 			switch (Application::getSceneType()) {
 				case scene::SceneType::SCENE_2D:
 					scene::updateOrtho(0.f, this->m_size.x, 0.f, this->m_size.y);

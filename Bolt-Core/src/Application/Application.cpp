@@ -1,7 +1,7 @@
 #include "../../include/Application/Application.hpp"
 
-#include "../../include/Core/LayerManager.hpp"
 #include "../../include/Core/InputManager.hpp"
+#include "../../include/Core/LayerManager.hpp"
 #include "../../include/Core/RenderApi.hpp"
 
 #include "../../include/ECS/EntityManager.hpp"
@@ -11,6 +11,8 @@
 
 #include "../../include/Core/Timestep.hpp"
 
+#include "../../include/Graphics.hpp"
+
 void bolt::Application::run() {
 	const auto lm = LayerManager::instance();
 
@@ -18,6 +20,8 @@ void bolt::Application::run() {
 
 	const auto rd = RenderApi::instance();
 	rd->init(config::RenderApiConfig::render_opengl);
+
+	const auto im = InputManager::instance();
 
 	auto ed = EventDispatcher::instance();
 
@@ -35,12 +39,12 @@ void bolt::Application::run() {
 		ub.update(0, sizeof(mat4), value_ptr(s_projection));
 	});
 
-	ed->subscribe(events::loop::LoopInput, [](auto &&ph1) {
+	ed->subscribe(events::loop::LoopInput, [&im](auto &&ph1) {
 		auto entities = EntityManager::instance()->getEntitiesFromComponent<InputComponent>();
 		for (auto entity : entities) {
 			auto comp = EntityManager::instance()->getEntityComponent<InputComponent>(entity);
 			for (auto c : comp->getAllKeys()) {
-				if (InputManager::instance()->isKeyPressed(c))
+				if (im->isKeyPressed(c))
 					comp->call(c);
 			}
 		}
@@ -48,12 +52,40 @@ void bolt::Application::run() {
 
 	if (s_settings.enableCollisions) {
 		// enable collision detection
-		ed->subscribe(events::loop::LoopBeforeRender, [](auto p){});
+		ed->subscribe(events::loop::LoopBeforeRender, [](auto p) {});
 	}
 
-    ed->subscribe(events::window::WindowCloseEvent, [this](auto p){
-        this->closeApplication();
-    });
+	if (s_settings.defaultCameraMovement && this->getSceneType() == scene::SCENE_3D) {
+		ed->subscribe(events::loop::LoopInput, [&im](auto p) {
+			if (im->isKeyPressed(GLFW_KEY_W)) {
+				standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraFront());
+			}
+
+			if (im->isKeyPressed(GLFW_KEY_S)) {
+				standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraFront());
+			}
+
+			if (im->isKeyPressed(GLFW_KEY_D)) {
+				standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraRight());
+			}
+
+			if (im->isKeyPressed(GLFW_KEY_A)) {
+				standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraRight());
+			}
+
+			if (im->isKeyPressed(GLFW_KEY_SPACE)) {
+				standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraUp());
+			}
+
+			if (im->isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
+				standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraUp());
+			}
+		});
+	}
+
+	ed->subscribe(events::window::WindowCloseEvent, [this](auto p) {
+		this->closeApplication();
+	});
 
 	Timer::instance()->start();
 
@@ -104,9 +136,9 @@ void bolt::Application::run() {
 
 		ed->post(events::loop::LoopUpdate);
 		lm->execute([](const Shared<Layer> &l) { l->onUpdate(); });
-		
+
 		ed->post(events::loop::LoopBeforeRender);
-		
+
 		// Before rendering operations
 		lm->execute([](const Shared<Layer> &l) { l->begin(); });
 		lm->execute([](const Shared<Layer> &l) { l->onRender(); });

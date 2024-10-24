@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
 	settings.type = scene::SCENE_2D;
 	settings.name = "Plin Plin Plon";
 	settings.dimension = {1600, 900};
-	settings.baseWindowProperties = properties;
+	settings.properties = properties;
 	settings.enableCollisions = true;
 
 	const auto app = CreateUnique<Application>(settings);

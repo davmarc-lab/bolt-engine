@@ -24,7 +24,7 @@ namespace bolt {
 
 	static u16 s_windowCount = 0;
 
-	#ifdef BT_ENABLE_DEBUG
+#ifdef BT_ENABLE_DEBUG
 	const char *getErrorSource(const GLenum &source) {
 		switch (source) {
 			case GL_DEBUG_SOURCE_API:
@@ -91,7 +91,7 @@ namespace bolt {
 			}
 		}
 	}
-	#endif
+#endif
 
 	static void glfwErrorCallback(i32 code, const char *description) {
 		/* BT_ERROR_CORE("GLFW error ({0} -> {1})", code, description); */
@@ -121,44 +121,20 @@ namespace bolt {
 	static void glfwKeyboardCallback(GLFWwindow *window, int key, int code, int action, int mod) {
 		if (key == GLFW_KEY_ESCAPE) {
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
-            EventDispatcher::instance()->post(events::window::WindowCloseEvent);
+			EventDispatcher::instance()->post(events::window::WindowCloseEvent);
 		}
 
 		switch (action) {
 			case GLFW_REPEAT:
 			case GLFW_PRESS:
-                InputManager::instance()->keyPressed(key);
-				// EventDispatcher::instance()->post(events::input::KeyPressedEvent);
+				InputManager::instance()->keyPressed(key);
 				break;
 			case GLFW_RELEASE:
-                InputManager::instance()->keyReleased(key);
-				// EventDispatcher::instance()->post(events::input::KeyReleasedEvent);
+				InputManager::instance()->keyReleased(key);
 				break;
 			default:
 				break;
 		}
-
-		// // needs to be changed with WOLRD::AXIS
-		// if (key == GLFW_KEY_W && action != GLFW_RELEASE) {
-		// 	standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraFront());
-		// }
-		// if (key == GLFW_KEY_S && action != GLFW_RELEASE) {
-		// 	standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraFront());
-		// }
-		//
-		// if (key == GLFW_KEY_A && action != GLFW_RELEASE) {
-		// 	standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraRight());
-		// }
-		// if (key == GLFW_KEY_D && action != GLFW_RELEASE) {
-		// 	standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraRight());
-		// }
-		//
-		// if (key == GLFW_KEY_SPACE && action != GLFW_RELEASE) {
-		// 	standardCamera.moveCamera(standardCamera.getCameraVelocity() * standardCamera.getCameraUp());
-		// }
-		// if (key == GLFW_KEY_LEFT_SHIFT && action != GLFW_RELEASE) {
-		// 	standardCamera.moveCamera(standardCamera.getCameraVelocity() * -standardCamera.getCameraUp());
-		// }
 	}
 
 	static void glfwMouseMovementCallback(GLFWwindow *window, double x, double y) {
@@ -194,19 +170,19 @@ namespace bolt {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		#ifdef __APPLE__
+#ifdef __APPLE__
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-		#endif
+#endif
 
 		// Error callback function must use the logger
 		glfwSetErrorCallback(glfwErrorCallback);
 
 		/* BT_INFO_CORE("Creating Window \"{0}\"", this->m_windowTitle); */
 
-		#ifdef BT_ENABLE_DEBUG
+#ifdef BT_ENABLE_DEBUG
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-		/* BT_INFO_CORE("Debug activated"); */
-		#endif
+/* BT_INFO_CORE("Debug activated"); */
+#endif
 
 		// Creating window
 		this->m_window = glfwCreateWindow(this->getWidth(), this->getHeight(), this->m_windowTitle.c_str(), NULL, NULL);
@@ -237,7 +213,7 @@ namespace bolt {
 			exit(EXIT_FAILURE);
 		}
 
-		#ifdef BT_ENABLE_DEBUG
+#ifdef BT_ENABLE_DEBUG
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
 		{
@@ -252,10 +228,10 @@ namespace bolt {
 				/* BT_INFO_CORE("GLFW Debugger Initialized."); */
 			}
 		}
-		#endif
+#endif
 
 		// Enabling vsync
-		this->setVsync(this->isVerticalSyncEnable());
+		this->setVsync(this->m_vsync);
 
 		// Callbacks time
 		glfwSetFramebufferSizeCallback(static_cast<GLFWwindow *>(this->m_window), glfwResizeCallback);
@@ -281,6 +257,19 @@ namespace bolt {
 		/* BT_INFO_CORE("The renderer should do these things"); */
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		this->m_clearMask |= GL_COLOR_BUFFER_BIT;
+
+		if (this->m_settings.properties.depth.enabled) {
+			glEnable(GL_DEPTH_TEST);
+			glDepthMask(this->m_settings.properties.depth.mask ? GL_TRUE : GL_FALSE);
+			glDepthFunc(this->m_settings.properties.depth.func);
+			this->m_clearMask |= GL_DEPTH_BUFFER_BIT;
+		}
+
+		if (this->m_settings.properties.cull.enabled) {
+			glEnable(GL_CULL_FACE);
+			glCullFace(this->m_settings.properties.cull.mode);
+		}
 
 		s_windowCount++;
 	}
@@ -289,7 +278,8 @@ namespace bolt {
 		glfwDestroyWindow(static_cast<GLFWwindow *>(this->m_window));
 		s_windowCount--;
 
-		if (s_windowCount == 0) {}
+		if (s_windowCount == 0) {
+		}
 	}
 
 	void Window::onEvent(const Event &e) {
@@ -301,7 +291,7 @@ namespace bolt {
 	void Window::onRender() {
 		// Default clear operations.
 		glClearColor(this->m_clearColor.x, this->m_clearColor.y, this->m_clearColor.z, this->m_clearColor.w);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(this->m_clearMask);
 	}
 
 	void Window::end() { glfwSwapBuffers(static_cast<GLFWwindow *>(this->m_window)); }
