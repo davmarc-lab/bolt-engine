@@ -68,6 +68,11 @@ void bolt::Application::run() {
 		ed->subscribe(events::loop::LoopBeforeRender, [](auto p){});
 	}
 
+    ed->subscribe(events::window::WindowCloseEvent, [&w, this](auto p){
+        w->shouldWindowClose();
+        this->closeApplication();
+    });
+
 	Timer::instance()->start();
 
 	// TEST START
@@ -110,7 +115,7 @@ void bolt::Application::run() {
 	*/
 	// TEST END
 
-	while (!w->shouldWindowClose()) {
+	while (!this->shouldClose()) {
 		auto e = Event();
 		ed->post(events::loop::LoopInput);
 		lm->execute([e](const Shared<Layer> &l) { l->onEvent(e); });

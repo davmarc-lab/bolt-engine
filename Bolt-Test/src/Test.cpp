@@ -112,7 +112,6 @@ int main(int argc, char *argv[]) {
 			auto vel = bolt::EntityManager::instance()->getEntityComponent<PhysicComponent>(2);
 			auto half = (firstTop.y + firstBot.y) / 2;
 			if (vel->velocity.x < 0) {
-				std::cout << to_string(ball->getPosition()) << "\t" << half << "\n";
 				if (ball->getPosition().y > half) {
 					vel->velocity = {-vel->velocity.x, -5, 0};
 				} else {

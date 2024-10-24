@@ -18,6 +18,8 @@ include "Bolt-imgui/BuildImGui.lua"
 group "Bolt-Core"
 include "Bolt-Core/BuildCore.lua"
 
-group ""
+group "Bolt-Test"
     include "Bolt-Test/BuildTest.lua"
 
+group "Bolt-Game"
+    include "Bolt-Game/BuildGame.lua"

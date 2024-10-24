@@ -121,6 +121,7 @@ namespace bolt {
 	static void glfwKeyboardCallback(GLFWwindow *window, int key, int code, int action, int mod) {
 		if (key == GLFW_KEY_ESCAPE) {
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
+            EventDispatcher::instance()->post(events::window::WindowCloseEvent);
 		}
 
 		switch (action) {

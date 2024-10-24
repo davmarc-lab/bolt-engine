@@ -24,7 +24,9 @@ namespace bolt {
 	 */
 	class Application {
 	private:
-		inline static bool s_enableImGui = false;
+		inline static b8 s_enableImGui = false;
+
+		inline static b8 s_close = false;
 
 		inline static ApplicationSetting s_settings{};
 
@@ -54,6 +56,10 @@ namespace bolt {
 		inline static void setProjectionMatrix(const mat4 &proj) {
 			s_projection = proj;
 		}
+
+		inline void closeApplication() { s_close = true; }
+
+		inline b8 shouldClose() const { return s_close; }
 
 		~Application() = default;
 	};
