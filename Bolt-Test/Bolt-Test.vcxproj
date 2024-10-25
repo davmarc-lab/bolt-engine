@@ -106,16 +106,12 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Collision.cpp" />
-    <ClCompile Include="src\Test.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bolt-Core\Bolt-Core.vcxproj">
       <Project>{a2d78893-c3fe-423f-8bea-a49533cc13bd}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Collision.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

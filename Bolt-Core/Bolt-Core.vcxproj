@@ -111,6 +111,7 @@
     <ClInclude Include="include\Graphic\Buffer\UniformBuffer.hpp" />
     <ClInclude Include="include\Graphic\Camera\Camera.hpp" />
     <ClInclude Include="include\Graphic\ImGui\ImGuiDebug.hpp" />
+    <ClInclude Include="include\Graphic\Text\TextManager.hpp" />
     <ClInclude Include="include\Graphic\Window.hpp" />
     <ClInclude Include="include\ECS\Component.hpp" />
     <ClInclude Include="include\ECS\Entity.hpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="src\Graphic\ImGui\ImGuiDebug.cpp" />
     <ClCompile Include="src\Graphic\Shader\GlShader.cpp" />
     <ClCompile Include="src\Graphic\Texture\GlTexture.cpp" />
+    <ClCompile Include="src\Graphic\Text\TextManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bolt-Graphics\Bolt-Graphics.vcxproj">
