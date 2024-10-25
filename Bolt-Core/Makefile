@@ -90,6 +90,7 @@ OBJECTS := \
 	$(OBJDIR)/ImGuiFactory.o \
 	$(OBJDIR)/ImGuiLayer.o \
 	$(OBJDIR)/GlShader.o \
+	$(OBJDIR)/TextManager.o \
 	$(OBJDIR)/GlTexture.o \
 
 RESOURCES := \
@@ -222,6 +223,9 @@ $(OBJDIR)/ImGuiLayer.o: src/Graphic/ImGuiLayer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlShader.o: src/Graphic/Shader/GlShader.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/TextManager.o: src/Graphic/Text/TextManager.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlTexture.o: src/Graphic/Texture/GlTexture.cpp

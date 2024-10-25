@@ -22,7 +22,7 @@ ifeq ($(config),debug)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++20
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../bin/linux-x86_64/Debug/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Debug/Bolt-imgui/libBolt-imgui.a -lglfw
+  LIBS += ../bin/linux-x86_64/Debug/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Debug/Bolt-imgui/libBolt-imgui.a -lglfw -lfreetype
   LDDEPS += ../bin/linux-x86_64/Debug/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Debug/Bolt-imgui/libBolt-imgui.a
   ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
@@ -49,7 +49,7 @@ ifeq ($(config),release)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -g
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -g -std=c++20
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../bin/linux-x86_64/Release/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Release/Bolt-imgui/libBolt-imgui.a -lglfw
+  LIBS += ../bin/linux-x86_64/Release/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Release/Bolt-imgui/libBolt-imgui.a -lglfw -lfreetype
   LDDEPS += ../bin/linux-x86_64/Release/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Release/Bolt-imgui/libBolt-imgui.a
   ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)

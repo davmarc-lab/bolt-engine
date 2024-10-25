@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "Graphic/Texture/Texture.hpp"
+#include "../../../include/Graphic/Texture/Texture.hpp"
 
 namespace bolt {
 	void TextManager::onAttach() {
@@ -34,7 +34,7 @@ namespace bolt {
 		param.format = GL_RED;
 		param.dataType = GL_UNSIGNED_BYTE;
 
-		for (u32 c = 0; c < this->m_settings.numChars; c++) {
+		for (unsigned char c = 0; c < this->m_settings.numChars; c++) {
 			if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
 				std::cout << "ERROR::FREETYTPE: Failed to load Glyph\n";
 				continue;
@@ -48,16 +48,10 @@ namespace bolt {
 			texture.setTexParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			texture.createTexture2D(face->glyph->bitmap.buffer);
 
-			this->m_characters.insert_or_assign(c, Character{
-				                                    texture.getId(),
-				                                    ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-				                                    ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-				                                    face->glyph->advance.x
-			                                    });
-
-			FT_Done_Face(face);
-			FT_Done_FreeType(ft);
+			this->m_characters.insert_or_assign(c, Character{texture.getId(), ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows), ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top), face->glyph->advance.x});
 		}
+		FT_Done_Face(face);
+		FT_Done_FreeType(ft);
 	}
 
 	void TextManager::onDetach() {}
@@ -66,4 +60,4 @@ namespace bolt {
 		return this->m_characters.at(c);
 	}
 
-}
+} // namespace bolt

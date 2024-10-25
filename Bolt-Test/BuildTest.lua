@@ -14,6 +14,7 @@ project "Bolt-Test"
     links {
         "Bolt-Core",
         "glfw",
+        "freetype",
         "Bolt-imgui",
     }
 

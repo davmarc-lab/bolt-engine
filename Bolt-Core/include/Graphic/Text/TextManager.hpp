@@ -16,7 +16,7 @@ namespace bolt {
 	};
 
 	struct TextSettings {
-		std::string fontFace = "fonts/arial.ttf";
+		std::string fontFace = "./resources/fonts/arial.ttf";
 		u32 pixelWidth = 0;
 		u32 pixelHeight = 48;
 		u32 numChars = 128;

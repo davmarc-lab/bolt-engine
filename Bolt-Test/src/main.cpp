@@ -1,6 +1,6 @@
 #include "../../Bolt-Core/include/Engine.hpp"
 #include "../../Bolt-Core/include/Graphics.hpp"
-#include "Graphic/Text/TextManager.hpp"
+#include "../../Bolt-Core/include/Graphic/Text/TextManager.hpp"
 
 using namespace bolt;
 
@@ -53,10 +53,9 @@ int main(int argc, char *argv[]) {
 	ls->addCustomLayer(CreateShared<ImGuiUtility>());
 	ls->addCustomLayer(CreateShared<ImGuiProperties>());
 
-	auto tm = TextManager();
-	tm.onAttach();
+    auto tm = TextManager();
+    tm.onAttach();
 
 	app->run();
-
 	std::cout << "Application closed\n";
 }
