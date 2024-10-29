@@ -28,7 +28,7 @@ namespace bolt {
 		virtual ~UniformBuffer() = default;
 
 	protected:
-		u32 m_id;
+		u32 m_id = 0;
 		u32 m_memAllocated = 0;
 	};
 } // namespace bolt

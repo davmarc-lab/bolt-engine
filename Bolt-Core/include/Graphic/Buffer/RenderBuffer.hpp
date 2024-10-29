@@ -7,8 +7,8 @@ namespace bolt {
 		struct Config {
 			u32 format;
 			u32 attachment;
-			u16 width;
-			u16 height;
+			u32 width;
+			u32 height;
 		};
 	}
 

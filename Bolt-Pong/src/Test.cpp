@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
 	properties.maximized = false;
 	properties.vsync = true;
 	properties.backgroundColor = vec4(0, 0, 0, 1);
+	properties.depth = {true, true, GL_LESS};
 
 	ApplicationSetting settings{};
 	settings.type = scene::SCENE_2D;
@@ -165,6 +166,15 @@ int main(int argc, char *argv[]) {
 				}
 			}
 		}
+	});
+	
+	UniformBuffer ub = UniformBuffer();
+	ub.onAttach();
+	ub.setup(sizeof(mat4), 0);
+	auto proj = Application::getProjectionMatrix();
+	ub.update(0, sizeof(mat4), value_ptr(proj));
+	EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&proj, &ub](auto &&p) {
+		ub.update(0, sizeof(mat4), value_ptr(proj));
 	});
 
 	if constexpr (false) {
