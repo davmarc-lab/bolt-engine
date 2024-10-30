@@ -9,19 +9,23 @@
 
 #include "../../../include/Graphic/Shader/Shader.hpp"
 #include "../../../include/Graphic/Texture/Texture.hpp"
+#include "Application/Application.hpp"
 
 namespace bolt {
 
 	ShaderProgram textShader = ShaderProgram("shader/textVertShader.glsl", "shader/textFragShader.glsl");
-	std::string::const_iterator c;
 
 	void Text::init() {
-        if (this->m_created) return;
+		if (this->m_created)
+			return;
 		this->m_vao.onAttach();
 		this->m_vbo.onAttach();
 		this->m_vao.bind();
 		this->m_vbo.setup(NULL, sizeof(float) * 6 * 4, GL_DYNAMIC_DRAW);
 		this->m_vao.linkAttribFast(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+		this->m_vbo.unbind();
+		this->m_vao.unbind();
+		this->m_created = true;
 	}
 
 	void TextManager::onAttach() {
@@ -56,11 +60,11 @@ namespace bolt {
 
 			Texture texture = Texture(param, face->glyph->bitmap.width, face->glyph->bitmap.rows);
 			texture.onAttach();
+			texture.createTexture2D(face->glyph->bitmap.buffer);
 			texture.setTexParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			texture.setTexParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			texture.setTexParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			texture.setTexParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			texture.createTexture2D(face->glyph->bitmap.buffer);
 
 			this->m_characters.insert_or_assign(c, Character{texture.getId(), ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows), ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top), face->glyph->advance.x});
 		}
@@ -75,6 +79,7 @@ namespace bolt {
 
 	void TextManager::onRender() {
 		textShader.use();
+		textShader.setMat4("proj", Application::getTextProjMatrix());
 		for (auto t : this->m_text) {
 			textShader.setVec3("textColor", t.getColor());
 			glActiveTexture(GL_TEXTURE0);
@@ -84,7 +89,9 @@ namespace bolt {
 			auto y = t.getPosition().y;
 			auto scale = t.getScale();
 
-			for (c = t.getText().begin(); c != t.getText().end(); c++) {
+			std::string::const_iterator c;
+			auto s = t.getText();
+			for (c = s.begin(); c != s.end(); ++c) {
 				auto ch = this->m_characters[*c];
 
 				f32 xpos = x + ch.bearing.x * scale;
@@ -103,19 +110,17 @@ namespace bolt {
 					{xpos + w, ypos + h, 1.0f, 0.0f}};
 
 				glBindTexture(GL_TEXTURE_2D, ch.textureId);
-				t.bindVBO();
+				glBindBuffer(GL_ARRAY_BUFFER, t.getVboId());
 				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 				glDrawArrays(GL_TRIANGLES, 0, 6);
 
 				x += (ch.advance >> 6) * scale;
-                std::cout << "BLOBL";
 			}
 
 			glBindVertexArray(0);
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
-        std::cout << "REDE\n";
 	}
 } // namespace bolt

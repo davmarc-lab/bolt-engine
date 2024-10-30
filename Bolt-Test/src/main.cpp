@@ -43,7 +43,6 @@ int main(int argc, char *argv[]) {
 
 	EntityManager::instance()->subscribeEventCallbacks();
 
-
     auto tm = CreateShared<TextManager>();
     ls->addCustomLayer(tm);
     tm->onAttach();
@@ -51,6 +50,7 @@ int main(int argc, char *argv[]) {
     auto helper = TextHelper{};
     helper.text = "Hello";
     helper.position = {100, 100};
+    helper.scale = 1.f;
     helper.color = vec3(1, 0, 0);
     auto t = Text(helper);
 
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     Application::enableImGui();
     const auto ig = CreateShared<ImGuiLayer>(w);
     ls->addCustomLayer(ig);
-
+    
     ls->addCustomLayer(CreateShared<ImGuiDockSpace>());
     ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
     ls->addCustomLayer(CreateShared<ImGuiViewPort>());

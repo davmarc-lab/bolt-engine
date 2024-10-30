@@ -27,8 +27,8 @@ namespace bolt {
 	struct TextHelper {
 		std::string text = "Simple Text";
 		vec2 position = {0, 0};
-		f32 scale = 25.f;
-		vec3 color = {0, 0, 0};
+		f32 scale = 1.f;
+		vec3 color = {1, 0, 0};
 	};
 
 	class Text {
