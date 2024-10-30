@@ -4,23 +4,23 @@
 #include "../Core/Structs.hpp"
 
 namespace bolt {
-    struct CullFace {
-        b8 enabled = false;
-        u32 mode = 0;
-    };
+	struct CullFace {
+		b8 enabled = false;
+		u32 mode = 0;
+	};
 
-    struct DepthTest {
-        b8 enabled = false;
-        b8 mask = true;
-        u32 func = 0;
-    };
+	struct DepthTest {
+		b8 enabled = false;
+		b8 mask = true;
+		u32 func = 0;
+	};
 
 	struct WindowProperties {
 		b8 maximized = false;
 		b8 vsync = false;
 		vec4 backgroundColor = vec4(0.3f, 0.3f, 0.3f, 1.0f);
-        CullFace cull = {};
-        DepthTest depth = {};
+		CullFace cull = {};
+		DepthTest depth = {};
 	};
 
 	struct ApplicationSetting {
@@ -30,7 +30,7 @@ namespace bolt {
 		Pair<u16> position = {};
 		WindowProperties properties;
 		b8 enableCollisions = false;
-        b8 defaultCameraMovement = false;
+		b8 defaultCameraMovement = false;
 	};
 
 	/*

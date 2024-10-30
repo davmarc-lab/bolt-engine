@@ -37,12 +37,15 @@ int main(int argc, char *argv[]) {
 	const auto app = CreateUnique<Application>(settings);
 
 	const auto w = CreateShared<Window>(settings);
+	w->onAttach();
 	ls->addCustomLayer(w);
 
 	const auto em = EntityManager::instance();
-	const auto scene = Scene::instance();
 
+	const auto scene = Scene::instance();
 	ls->addCustomLayer(CreateShared<SceneLayer>());
+
+	EntityManager::instance()->subscribeEventCallbacks();
 
 	const auto first = em->createEntity();
 	factory::mesh::createCustomMesh(first, config::mesh_colors, config::shape_square);
@@ -59,6 +62,7 @@ int main(int argc, char *argv[]) {
 	firstInput->registerAction(GLFW_KEY_W, [&comp]() {
 		comp->addPosition(plongVel);
 	});
+
 	firstInput->registerAction(GLFW_KEY_S, [&comp]() {
 		comp->addPosition(-plongVel);
 	});
@@ -113,10 +117,10 @@ int main(int argc, char *argv[]) {
 			std::cout << "Score-> " << score.first << " : " << score.second << "\n";
 			if (score.first == 2) {
 				std::cout << "First player win!\n";
-                EventDispatcher::instance()->post(events::window::WindowCloseEvent);
+				EventDispatcher::instance()->post(events::window::WindowCloseEvent);
 			} else if (score.second == 2) {
 				std::cout << "Second player win!\n";
-                EventDispatcher::instance()->post(events::window::WindowCloseEvent);
+				EventDispatcher::instance()->post(events::window::WindowCloseEvent);
 			}
 		}
 	});
@@ -167,15 +171,15 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	});
-	
-	UniformBuffer ub = UniformBuffer();
-	ub.onAttach();
-	ub.setup(sizeof(mat4), 0);
-	auto proj = Application::getProjectionMatrix();
-	ub.update(0, sizeof(mat4), value_ptr(proj));
-	EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&proj, &ub](auto &&p) {
-		ub.update(0, sizeof(mat4), value_ptr(proj));
-	});
+
+    UniformBuffer ub = UniformBuffer();
+    ub.onAttach();
+    ub.setup(sizeof(mat4), 0);
+    auto proj = Application::getProjectionMatrix();
+    ub.update(0, sizeof(mat4), value_ptr(proj));
+    EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&proj, &ub](auto &&p) {
+        ub.update(0, sizeof(mat4), value_ptr(proj));
+    });
 
 	if constexpr (false) {
 		Application::enableImGui();

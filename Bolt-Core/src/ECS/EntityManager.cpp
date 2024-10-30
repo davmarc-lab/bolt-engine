@@ -35,8 +35,8 @@ namespace bolt {
 
 		ed->subscribe(events::loop::LoopUpdate, [](auto &&ph1) { systems::transform::updateAllModelMatrix(); });
 
-        const auto im = InputManager::instance();
-		ed->subscribe(events::loop::LoopInput, [&im](auto &&ph1) {
+		const auto im = InputManager::instance();
+		ed->subscribe(events::loop::LoopInput, [im](auto &&ph1) {
 			auto entities = EntityManager::instance()->getEntitiesFromComponent<InputComponent>();
 			for (auto entity : entities) {
 				auto comp = EntityManager::instance()->getEntityComponent<InputComponent>(entity);

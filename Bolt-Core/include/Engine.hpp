@@ -5,6 +5,7 @@
 #include "Core/Core.hpp"
 #include "Core/Enums.hpp"
 #include "Core/Event.hpp"
+#include "Core/InputManager.hpp"
 #include "Core/Layer.hpp"
 #include "Core/LayerManager.hpp"
 #include "Core/Log.hpp"
@@ -32,14 +33,15 @@
 #include "Graphic/Camera/Camera.hpp"
 #include "Graphic/Renderer/Renderer.hpp"
 #include "Graphic/Shader/Shader.hpp"
+#include "Graphic/Text/TextManager.hpp"
 #include "Graphic/Texture/Texture.hpp"
 
 #ifdef BT_ENABLE_DEBUG
-#include "Graphic/ImGui/ImGuiDebug.hpp"
+	#include "Graphic/ImGui/ImGuiDebug.hpp"
 #endif
 
-#include "Graphic/Window.hpp"
 #include "Graphic/ImGuiLayer.hpp"
+#include "Graphic/Window.hpp"
 
 #include "Platform/ImGuiFactory.hpp"
 #include "Platform/MeshFactory.hpp"

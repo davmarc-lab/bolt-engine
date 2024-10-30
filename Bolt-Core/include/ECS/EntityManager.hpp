@@ -3,10 +3,10 @@
 #include "../Core/Utils.hpp"
 
 #include <algorithm>
+#include <iostream>
 #include <map>
 #include <memory>
 #include <mutex>
-#include <iostream>
 
 #include "Component.hpp"
 #include "Entity.hpp"
@@ -31,9 +31,9 @@ namespace bolt {
 		EntityManager() {}
 
 	public:
-		EntityManager(EntityManager& other) = delete;
+		EntityManager(EntityManager &other) = delete;
 
-		void operator=(const EntityManager& other) = delete;
+		void operator=(const EntityManager &other) = delete;
 
 		inline static Shared<EntityManager> instance() {
 			std::lock_guard<std::mutex> lock(s_mutex);
@@ -48,7 +48,7 @@ namespace bolt {
 		void subscribeEventCallbacks();
 
 		template <typename T>
-		inline Shared<T> addComponent(const u32& id) {
+		inline Shared<T> addComponent(const u32 &id) {
 			if (!this->isEntityValid(id)) {
 				// BT_WARN_CORE("Entity does not exist: id = {0}.", id);
 				return nullptr;
@@ -59,21 +59,21 @@ namespace bolt {
 			return elem;
 		}
 
-		inline b8 isEntityValid(const u32& id) {
+		inline b8 isEntityValid(const u32 &id) {
 			return this->m_entities.find(id) != this->m_entities.end();
 		}
 
 		template <typename T>
-		bool entityHasComponent(const u32& id) {
+		bool entityHasComponent(const u32 &id) {
 			if (!this->isEntityValid(id)) {
 				// BT_WARN_CORE("Entity does not exist: id = {0}.", id);
 				return false;
 			}
 
 			auto vec = this->m_ettComponents.at(id);
-			return std::find_if(vec.begin(), vec.end(), [](const Shared<Component>& c) {
-				return std::dynamic_pointer_cast<T>(c) != nullptr;
-			}) != vec.end();
+			return std::find_if(vec.begin(), vec.end(), [](const Shared<Component> &c) {
+					   return std::dynamic_pointer_cast<T>(c) != nullptr;
+				   }) != vec.end();
 		}
 
 		template <typename T>
@@ -91,7 +91,7 @@ namespace bolt {
 		}
 
 		template <typename T>
-		inline Shared<T> getEntityComponent(const u32& id) {
+		inline Shared<T> getEntityComponent(const u32 &id) {
 			if (this->entityHasComponent<T>(id)) {
 				for (auto it = this->m_ettComponents.at(id).begin(); it != this->m_ettComponents.at(id).end(); it++) {
 					if (auto t = std::dynamic_pointer_cast<T>(*it); t != nullptr) {
@@ -111,7 +111,7 @@ namespace bolt {
 		inline std::vector<Entity> getEntities() const {
 			std::vector<Entity> res;
 			res.reserve(this->m_entities.size());
-			for (const auto& entity : this->m_entities) {
+			for (const auto &entity : this->m_entities) {
 				res.emplace_back(*entity.second);
 			}
 
@@ -121,14 +121,14 @@ namespace bolt {
 		inline std::vector<u32> getEntitiesId() const {
 			std::vector<u32> res;
 			res.reserve(this->m_entities.size());
-			for (const auto& entity : this->m_entities) {
+			for (const auto &entity : this->m_entities) {
 				res.push_back(entity.first);
 			}
 			return res;
 		}
 
-		inline std::string getEntityName(const u32& id) const { return this->m_entities.at(id)->getName(); }
+		inline std::string getEntityName(const u32 &id) const { return this->m_entities.at(id)->getName(); }
 
-		b8 removeEntity(const u32& id);
+		b8 removeEntity(const u32 &id);
 	};
 } // namespace bolt

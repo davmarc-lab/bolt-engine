@@ -21,6 +21,6 @@ namespace bolt {
 	b8 InputManager::isKeyPressed(const u32 &key) const {
 		return std::find_if(this->m_keys.begin(), this->m_keys.end(), [&key](Key elem) {
 				   return elem.key == key;
-		}) != this->m_keys.end();
+			   }) != this->m_keys.end();
 	}
 } // namespace bolt
