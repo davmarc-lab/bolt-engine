@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 
 	ApplicationSetting settings{};
 	settings.type = scene::SCENE_3D;
-	settings.name = "Testing";
+	settings.name = "Bolt Application";
 	settings.dimension = {1600, 900};
 	settings.properties = properties;
 	settings.defaultCameraMovement = true;
@@ -43,18 +43,28 @@ int main(int argc, char *argv[]) {
 
 	EntityManager::instance()->subscribeEventCallbacks();
 
-	Application::enableImGui();
-	const auto ig = CreateShared<ImGuiLayer>(w);
-	ls->addCustomLayer(ig);
 
-	ls->addCustomLayer(CreateShared<ImGuiDockSpace>());
-	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
-	ls->addCustomLayer(CreateShared<ImGuiViewPort>());
-	ls->addCustomLayer(CreateShared<ImGuiUtility>());
-	ls->addCustomLayer(CreateShared<ImGuiProperties>());
+    auto tm = CreateShared<TextManager>();
+    ls->addCustomLayer(tm);
+    tm->onAttach();
 
-    auto tm = TextManager();
-    tm.onAttach();
+    auto helper = TextHelper{};
+    helper.text = "Hello";
+    helper.position = {100, 100};
+    helper.color = vec3(1, 0, 0);
+    auto t = Text(helper);
+
+    tm->addText(t);
+
+    Application::enableImGui();
+    const auto ig = CreateShared<ImGuiLayer>(w);
+    ls->addCustomLayer(ig);
+
+    ls->addCustomLayer(CreateShared<ImGuiDockSpace>());
+    ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
+    ls->addCustomLayer(CreateShared<ImGuiViewPort>());
+    ls->addCustomLayer(CreateShared<ImGuiUtility>());
+    ls->addCustomLayer(CreateShared<ImGuiProperties>());
 
 	app->run();
 	std::cout << "Application closed\n";

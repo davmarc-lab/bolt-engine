@@ -45,6 +45,7 @@ namespace bolt {
 		inline static ApplicationSetting s_settings{};
 
 		inline static mat4 s_projection{};
+		inline static mat4 s_textProjection{};
 
 	public:
 		Application() :
@@ -67,9 +68,11 @@ namespace bolt {
 
 		inline static mat4 getProjectionMatrix() { return s_projection; }
 
-		inline static void setProjectionMatrix(const mat4 &proj) {
-			s_projection = proj;
-		}
+		inline static void setProjectionMatrix(const mat4 &proj) { s_projection = proj; }
+
+		inline static mat4 getTextProjMatrix() { return s_textProjection; }
+
+		inline static void setTextProjMatrix(const mat4 &proj) { s_textProjection = proj; }
 
 		inline void closeApplication() { s_close = true; }
 

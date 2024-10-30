@@ -23,6 +23,8 @@ namespace bolt {
 
 		virtual void unbind() const;
 
+        inline u32 getId() const { return this->m_id; }
+
 		/**
 		 * @brief Sets up the data for the buffer.
 		 * @param vertices A pointer to an array of floats to use as data.

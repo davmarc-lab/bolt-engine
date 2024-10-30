@@ -41,6 +41,7 @@ namespace bolt {
 					scene::updatePerspective(45.0f, static_cast<f32>(this->m_size.x) / this->m_size.y, 0.1f, 100.f);
 					break;
 			}
+            scene::updateTextProj(0.f, this->m_size.x, 0.f, this->m_size.y);
 			EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 		}
 

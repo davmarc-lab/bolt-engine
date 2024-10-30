@@ -109,6 +109,8 @@ namespace bolt {
 				scene::updatePerspective(45.0f, static_cast<f32>(width) / height, 0.1f, 100.f);
 				break;
 		}
+		scene::updateTextProj(0.f, width, 0.f, height);
+
 		EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 
 		if (width < 0 || height < 0) {
@@ -255,6 +257,7 @@ namespace bolt {
 			}
 		}
 		/* BT_INFO_CORE("The renderer should do these things"); */
+		// enable blend by default
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		this->m_clearMask |= GL_COLOR_BUFFER_BIT;
@@ -272,7 +275,7 @@ namespace bolt {
 		}
 
 		s_windowCount++;
-        this->m_attached = true;
+		this->m_attached = true;
 	}
 
 	void Window::onDetach() {
