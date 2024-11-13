@@ -8,10 +8,6 @@
 namespace bolt {
 	namespace factory {
 		namespace mesh {
-			void createCustomMesh(const u32&, config::MeshConfig, config::MeshShape);
-
-			void initCustomMesh(const u32&, config::MeshConfig, config::MeshShape);
-
             void instanceMesh(const u32& id, const MeshHelper& helper);
 		}
 	}

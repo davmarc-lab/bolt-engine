@@ -28,8 +28,10 @@ namespace bolt {
 				factory::mesh::instanceMesh(id, helper);
 				// this->addComponent<PhysicComponent>(id);
 			} else {
-				factory::mesh::createCustomMesh(id, config::squareConfig, config::shape_circle);
-				factory::mesh::initCustomMesh(id, config::squareConfig, config::shape_circle);
+				MeshHelper helper{};
+				helper.vertex = factory::mesh::squareGeometry;
+				helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLES, 0};
+				factory::mesh::instanceMesh(id, helper);
 				auto comp = this->getEntityComponent<Transform>(id);
 				this->addComponent<PhysicComponent>(id);
 				comp->setPosition(vec3(200, 200, 0));

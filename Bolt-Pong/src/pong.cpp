@@ -48,8 +48,12 @@ int main(int argc, char *argv[]) {
 	EntityManager::instance()->subscribeEventCallbacks();
 
 	const auto first = em->createEntity();
-	factory::mesh::createCustomMesh(first, config::mesh_colors, config::shape_square);
-    factory::mesh::initCustomMesh(first, config::mesh_colors, config::shape_square);
+	{
+		MeshHelper helper{};
+		helper.vertex = factory::mesh::squareGeometry;
+		helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLES, 0};
+		factory::mesh::instanceMesh(first, helper);
+	}
 	const auto comp = em->getEntityComponent<Transform>(first);
 	comp->setPosition(vec3(plongGap, settings.dimension.y / 2, 0));
 	comp->setScale(plongDim);
@@ -68,8 +72,12 @@ int main(int argc, char *argv[]) {
 	});
 
 	const auto second = em->createEntity();
-	factory::mesh::createCustomMesh(second, config::mesh_colors, config::shape_square);
-    factory::mesh::initCustomMesh(second, config::mesh_colors, config::shape_square);
+	{
+		MeshHelper helper{};
+		helper.vertex = factory::mesh::squareGeometry;
+		helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLES, 0};
+		factory::mesh::instanceMesh(second, helper);
+	}
 	const auto other = em->getEntityComponent<Transform>(second);
 	other->setPosition(vec3(settings.dimension.x - plongGap, settings.dimension.y / 2, 0));
 	other->setScale(plongDim);
@@ -88,8 +96,13 @@ int main(int argc, char *argv[]) {
 
 	ballPos = vec3(settings.dimension.x / 2, settings.dimension.y / 2, 0);
 	const auto ball = em->createEntity();
-	factory::mesh::createCustomMesh(ball, config::mesh_colors, config::shape_square);
-    factory::mesh::initCustomMesh(ball, config::mesh_colors, config::shape_square);
+	{
+		MeshHelper helper{};
+		helper.vertex = factory::mesh::squareGeometry;
+		helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLES, 0};
+		factory::mesh::instanceMesh(ball, helper);
+	}
+
 	const auto ballComp = em->getEntityComponent<Transform>(ball);
 	ballComp->setPosition(ballPos);
 	ballComp->setScale(ballDim);
@@ -99,19 +112,19 @@ int main(int argc, char *argv[]) {
 	const auto ballCollider = em->addComponent<SquareCollider>(ball);
 	ballCollider->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
 
-    const auto tm = CreateShared<TextManager>();
-    tm->onAttach();
-    ls->addCustomLayer(tm);
+	const auto tm = CreateShared<TextManager>();
+	tm->onAttach();
+	ls->addCustomLayer(tm);
 
-    auto helper = TextHelper{};
-    helper.text = "0";
-    helper.position = {400, 600};
-    helper.color = {1, 1, 1};
-    auto p1 = CreateShared<Text>(helper);
-    tm->addText(p1);
-    helper.position = {600, 600};
-    auto p2 = CreateShared<Text>(helper);
-    tm->addText(p2);
+	auto helper = TextHelper{};
+	helper.text = "0";
+	helper.position = {400, 600};
+	helper.color = {1, 1, 1};
+	auto p1 = CreateShared<Text>(helper);
+	tm->addText(p1);
+	helper.position = {600, 600};
+	auto p2 = CreateShared<Text>(helper);
+	tm->addText(p2);
 
 	EventDispatcher::instance()->subscribe(events::loop::LoopUpdate, [&p1, &p2, &ballComp, &ballPhysic, &settings](auto p) {
 		i32 xpos = static_cast<i32>(ballComp->getPosition().x);
@@ -123,14 +136,14 @@ int main(int argc, char *argv[]) {
 		if (xpos < 0 || xpos > settings.dimension.x) {
 			if (xpos < 0) {
 				score.second++;
-                p2->setText(std::to_string(score.second));
+				p2->setText(std::to_string(score.second));
 				ballComp->setPosition(ballPos);
-                ballPhysic->velocity = -ballVel;
+				ballPhysic->velocity = -ballVel;
 			} else if (xpos > settings.dimension.x) {
 				score.first++;
-                p1->setText(std::to_string(score.first));
+				p1->setText(std::to_string(score.first));
 				ballComp->setPosition(ballPos);
-                ballPhysic->velocity = ballVel;
+				ballPhysic->velocity = ballVel;
 			}
 			if (score.first == 2) {
 				std::cout << "First player win!\n";

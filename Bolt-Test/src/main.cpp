@@ -29,9 +29,6 @@ int main(int argc, char *argv[]) {
 	w->onAttach();
 	ls->addCustomLayer(w);
 
-	const auto rd = RenderApi::instance();
-	rd->init(config::RenderApiConfig::render_opengl);
-
 	const auto scene = Scene::instance();
 	ls->addCustomLayer(CreateShared<SceneLayer>());
 

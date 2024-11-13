@@ -14,6 +14,9 @@
 #include "../../include/Graphics.hpp"
 
 void bolt::Application::run() {
+	const auto rd = RenderApi::instance();
+	rd->init(config::RenderApiConfig::render_opengl);
+
 	const auto lm = LayerManager::instance();
 
 	using namespace bmath;
