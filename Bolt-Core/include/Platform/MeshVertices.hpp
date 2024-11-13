@@ -124,13 +124,13 @@ namespace bolt {
 				std::vector<vec4> colors;
 			};
 
-			inline MeshVertices getCircleVertices(const Pair<f32> &center, const Pair<f32> &radius, const u16 &numTriangles, const vec4 &color = vec4(0, 0, 0, 1)) {
+			inline MeshVertices getCircleVertices(const Pair<f32> &center, const Pair<f32> &radius, const u16 &numTriangles, const vec4 &mid = vec4(0, 0, 0, 1), const vec4& out = vec4(0, 0, 0, 1)) {
 				auto info = MeshVertices{};
 				float stepA = (2 * FPI) / static_cast<f32>(numTriangles);
 				float t, xx, yy;
 
 				info.vertices.emplace_back(center.x, center.y, 0.0f);
-				info.colors.push_back(color);
+				info.colors.push_back(mid);
 
 				for (int i = 0; i <= numTriangles; i++) {
 					t = (float)i * stepA;
@@ -138,7 +138,7 @@ namespace bolt {
 					yy = center.y + radius.y * sin(t);
 
 					info.vertices.emplace_back(xx, yy, 0.0f);
-					info.colors.push_back(color);
+					info.colors.push_back(out);
 				}
 				return info;
 			}

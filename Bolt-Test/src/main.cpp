@@ -29,6 +29,9 @@ int main(int argc, char *argv[]) {
 	w->onAttach();
 	ls->addCustomLayer(w);
 
+	const auto rd = RenderApi::instance();
+	rd->init(config::RenderApiConfig::render_opengl);
+
 	const auto scene = Scene::instance();
 	ls->addCustomLayer(CreateShared<SceneLayer>());
 
@@ -52,7 +55,7 @@ int main(int argc, char *argv[]) {
     helper.position = {100, 100};
     helper.scale = 1.f;
     helper.color = vec3(1, 0, 0);
-    auto t = Text(helper);
+    auto t = CreateShared<Text>(helper);
 
     tm->addText(t);
 

@@ -18,9 +18,6 @@ void bolt::Application::run() {
 
 	using namespace bmath;
 
-	const auto rd = RenderApi::instance();
-	rd->init(config::RenderApiConfig::render_opengl);
-
 	const auto im = InputManager::instance();
 
 	const auto ed = EventDispatcher::instance();

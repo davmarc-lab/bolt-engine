@@ -19,12 +19,6 @@ namespace bolt {
 	} // namespace scene
 
 	void SceneLayer::onAttach() {
-		for (auto id : Scene::instance()->getEntities()) {
-			if (Application::getSceneType() == scene::SCENE_3D) {
-				factory::mesh::initCustomMesh(id, config::cubeConfig, config::shape_cube);
-			} else
-				factory::mesh::initCustomMesh(id, config::squareConfig, config::shape_square);
-		}
 		this->m_attached = true;
 	}
 

@@ -2,6 +2,8 @@
 #include "../../include/ECS/System.hpp"
 #include "../../include/Platform/MeshFactory.hpp"
 
+#include "../../include/Platform/MeshVertices.hpp"
+
 #include "../../include/Core/InputManager.hpp"
 
 #include "../../include/Core/Enums.hpp"
@@ -18,8 +20,12 @@ namespace bolt {
 		ed->subscribe(events::ecs::CreateMeshEvent, [this](auto &&p) {
 			auto id = this->createEntity();
 			if (Application::getSceneType() == scene::SCENE_3D) {
-				factory::mesh::createCustomMesh(id, config::cubeConfig, config::shape_cube);
-				factory::mesh::initCustomMesh(id, config::cubeConfig, config::shape_cube);
+				MeshHelper helper{};
+				helper.vertex = factory::mesh::cubeGeometry;
+				helper.position = {0, 0, 0};
+				helper.scale = {1, 1, 1};
+				helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLES, 0};
+				factory::mesh::instanceMesh(id, helper);
 				// this->addComponent<PhysicComponent>(id);
 			} else {
 				factory::mesh::createCustomMesh(id, config::squareConfig, config::shape_circle);

@@ -18,14 +18,14 @@ namespace bolt {
 
 	namespace systems {
 		namespace transform {
-			inline void updateEntityPosition(u32 id, const vec3& pos) {
+			inline void updateEntityPosition(u32 id, const vec3 &pos) {
 				auto e = EntityManager::instance()->getEntityComponent<Transform>(id);
 				if (e != nullptr) {
 					e->addPosition(pos);
 				}
 			}
 
-			inline void updateEntityRotation(u32 id, const vec3& rot) {
+			inline void updateEntityRotation(u32 id, const vec3 &rot) {
 				auto e = EntityManager::instance()->getEntityComponent<Transform>(id);
 				if (e != nullptr)
 					e->setRotation(rot);
@@ -91,17 +91,26 @@ namespace bolt {
 				for (const auto id : meshes) {
 					const auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(id);
 					const auto model = EntityManager::instance()->getEntityComponent<Transform>(id);
-					const auto shader = EntityManager::instance()->getEntityComponent<ShaderComponent>(id)->shader.get();
-
-					shader->use();
-					if (Application::getSceneType() == scene::SCENE_3D) {
-						shader->setMat4("view", standardCamera.getViewMatrix());
+					auto shader = EntityManager::instance()->getEntityComponent<ShaderComponent>(id);
+					if (shader == nullptr) {
+						// use default shader
+						const auto s = RenderApi::instance()->getRenderer()->getDefaultShader();
+						s->use();
+						if (Application::getSceneType() == scene::SCENE_3D) {
+							s->setMat4("view", standardCamera.getViewMatrix());
+						}
+						s->setMat4("model", model->getModelMatrix());
+					} else {
+						shader->shader->use();
+						if (Application::getSceneType() == scene::SCENE_3D) {
+							shader->shader->setMat4("view", standardCamera.getViewMatrix());
+						}
+						shader->shader->setMat4("model", model->getModelMatrix());
 					}
-					shader->setMat4("model", model->getModelMatrix());
 
 					mesh->render.call();
 				}
 			}
 		} // namespace render
-	}     // namespace systems
-}         // namespace bolt
+	} // namespace systems
+} // namespace bolt

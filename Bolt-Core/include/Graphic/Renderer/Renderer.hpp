@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../Buffer/VertexArray.hpp"
+#include "../Shader/Shader.hpp"
 
 namespace bolt {
 	class Renderer {
@@ -12,6 +13,8 @@ namespace bolt {
 		virtual void onAttach();
 
 		virtual void onDetach();
+
+        virtual ShaderProgram* getDefaultShader() const;
 
 		virtual void drawArrays(const VertexArray &vao, const u32 &mode, const i32 &first, const i32 &count);
 
@@ -26,5 +29,8 @@ namespace bolt {
 		virtual void drawArraysTriangleFan(const VertexArray &vao, const i32 &count, const i32 &first = 0);
 
 		virtual void drawElementsTriangles(const VertexArray &vao, const i32 &count);
+
+    private:
+        Unique<ShaderProgram> m_shader;
 	};
 } // namespace bolt

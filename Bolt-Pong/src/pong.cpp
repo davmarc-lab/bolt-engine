@@ -49,13 +49,13 @@ int main(int argc, char *argv[]) {
 
 	const auto first = em->createEntity();
 	factory::mesh::createCustomMesh(first, config::mesh_colors, config::shape_square);
+    factory::mesh::initCustomMesh(first, config::mesh_colors, config::shape_square);
 	const auto comp = em->getEntityComponent<Transform>(first);
 	comp->setPosition(vec3(plongGap, settings.dimension.y / 2, 0));
 	comp->setScale(plongDim);
 	scene->addEntity(first);
 	em->addComponent<PhysicComponent>(first);
-	const auto colliderFirst = em->addComponent<Collider>(first);
-	colliderFirst->type = ColliderType::AABB;
+	const auto colliderFirst = em->addComponent<SquareCollider>(first);
 	colliderFirst->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
 	const auto firstInput = em->addComponent<InputComponent>(first);
 
@@ -69,13 +69,13 @@ int main(int argc, char *argv[]) {
 
 	const auto second = em->createEntity();
 	factory::mesh::createCustomMesh(second, config::mesh_colors, config::shape_square);
+    factory::mesh::initCustomMesh(second, config::mesh_colors, config::shape_square);
 	const auto other = em->getEntityComponent<Transform>(second);
 	other->setPosition(vec3(settings.dimension.x - plongGap, settings.dimension.y / 2, 0));
 	other->setScale(plongDim);
 	scene->addEntity(second);
 	em->addComponent<PhysicComponent>(second);
-	const auto colliderSecond = em->addComponent<Collider>(second);
-	colliderSecond->type = ColliderType::AABB;
+	const auto colliderSecond = em->addComponent<SquareCollider>(second);
 	colliderSecond->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
 	const auto secondInput = em->addComponent<InputComponent>(second);
 
@@ -89,17 +89,31 @@ int main(int argc, char *argv[]) {
 	ballPos = vec3(settings.dimension.x / 2, settings.dimension.y / 2, 0);
 	const auto ball = em->createEntity();
 	factory::mesh::createCustomMesh(ball, config::mesh_colors, config::shape_square);
+    factory::mesh::initCustomMesh(ball, config::mesh_colors, config::shape_square);
 	const auto ballComp = em->getEntityComponent<Transform>(ball);
 	ballComp->setPosition(ballPos);
 	ballComp->setScale(ballDim);
 	scene->addEntity(ball);
 	auto ballPhysic = em->addComponent<PhysicComponent>(ball);
 	ballPhysic->velocity = ballVel;
-	const auto ballCollider = em->addComponent<Collider>(ball);
-	ballCollider->type = ColliderType::AABB;
+	const auto ballCollider = em->addComponent<SquareCollider>(ball);
 	ballCollider->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
 
-	EventDispatcher::instance()->subscribe(events::loop::LoopUpdate, [&ballComp, &ballPhysic, &settings](auto p) {
+    const auto tm = CreateShared<TextManager>();
+    tm->onAttach();
+    ls->addCustomLayer(tm);
+
+    auto helper = TextHelper{};
+    helper.text = "0";
+    helper.position = {400, 600};
+    helper.color = {1, 1, 1};
+    auto p1 = CreateShared<Text>(helper);
+    tm->addText(p1);
+    helper.position = {600, 600};
+    auto p2 = CreateShared<Text>(helper);
+    tm->addText(p2);
+
+	EventDispatcher::instance()->subscribe(events::loop::LoopUpdate, [&p1, &p2, &ballComp, &ballPhysic, &settings](auto p) {
 		i32 xpos = static_cast<i32>(ballComp->getPosition().x);
 		i32 ypos = static_cast<i32>(ballComp->getPosition().y);
 		if (ypos >= settings.dimension.y || ypos <= 0)
@@ -109,12 +123,15 @@ int main(int argc, char *argv[]) {
 		if (xpos < 0 || xpos > settings.dimension.x) {
 			if (xpos < 0) {
 				score.second++;
+                p2->setText(std::to_string(score.second));
 				ballComp->setPosition(ballPos);
+                ballPhysic->velocity = -ballVel;
 			} else if (xpos > settings.dimension.x) {
 				score.first++;
+                p1->setText(std::to_string(score.first));
 				ballComp->setPosition(ballPos);
+                ballPhysic->velocity = ballVel;
 			}
-			std::cout << "Score-> " << score.first << " : " << score.second << "\n";
 			if (score.first == 2) {
 				std::cout << "First player win!\n";
 				EventDispatcher::instance()->post(events::window::WindowCloseEvent);
@@ -130,9 +147,9 @@ int main(int argc, char *argv[]) {
 		const auto second = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(1);
 		const auto ball = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(2);
 
-		const auto firstColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(0);
-		const auto secondColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(1);
-		const auto ballColl = bolt::EntityManager::instance()->getEntityComponent<bolt::Collider>(2);
+		const auto firstColl = bolt::EntityManager::instance()->getEntityComponent<bolt::SquareCollider>(0);
+		const auto secondColl = bolt::EntityManager::instance()->getEntityComponent<bolt::SquareCollider>(1);
+		const auto ballColl = bolt::EntityManager::instance()->getEntityComponent<bolt::SquareCollider>(2);
 
 		const auto firstBot = vec3(first->getModelMatrix() * vec4(firstColl->points[0], 1));
 		const auto firstTop = vec3(first->getModelMatrix() * vec4(firstColl->points[1], 1));
@@ -172,23 +189,14 @@ int main(int argc, char *argv[]) {
 		}
 	});
 
-    UniformBuffer ub = UniformBuffer();
-    ub.onAttach();
-    ub.setup(sizeof(mat4), 0);
-    auto proj = Application::getProjectionMatrix();
-    ub.update(0, sizeof(mat4), value_ptr(proj));
-    EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&proj, &ub](auto &&p) {
-        ub.update(0, sizeof(mat4), value_ptr(proj));
-    });
-
-	if constexpr (false) {
-		Application::enableImGui();
-		ls->addCustomLayer(CreateShared<ImGuiDockSpace>());
-		ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
-		ls->addCustomLayer(CreateShared<ImGuiViewPort>());
-		ls->addCustomLayer(CreateShared<ImGuiUtility>());
-		ls->addCustomLayer(CreateShared<ImGuiProperties>());
-	}
+	UniformBuffer ub = UniformBuffer();
+	ub.onAttach();
+	ub.setup(sizeof(mat4), 0);
+	auto proj = Application::getProjectionMatrix();
+	ub.update(0, sizeof(mat4), value_ptr(proj));
+	EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&proj, &ub](auto &&p) {
+		ub.update(0, sizeof(mat4), value_ptr(proj));
+	});
 
 	app->run();
 }

@@ -14,6 +14,7 @@ project "Bolt-Pong"
     links {
         "Bolt-Core",
         "glfw",
+        "freetype",
         "Bolt-imgui",
     }
 

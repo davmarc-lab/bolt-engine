@@ -77,8 +77,8 @@ namespace bolt {
 		TextManager(TextSettings settings) :
 			m_settings(std::move(settings)) {}
 
-        void addText(Text text) {
-            text.init();
+        void addText(Shared<Text> text) {
+            text->init();
             this->m_text.push_back(text);
         }
 
@@ -93,6 +93,6 @@ namespace bolt {
 
 		std::map<u64, Character> m_characters{};
 
-		std::vector<Text> m_text{};
+		std::vector<Shared<Text>> m_text{};
 	};
 } // namespace bolt

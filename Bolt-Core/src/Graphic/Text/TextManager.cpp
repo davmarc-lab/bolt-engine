@@ -9,7 +9,7 @@
 
 #include "../../../include/Graphic/Shader/Shader.hpp"
 #include "../../../include/Graphic/Texture/Texture.hpp"
-#include "Application/Application.hpp"
+#include "../../../include/Application/Application.hpp"
 
 namespace bolt {
 
@@ -81,16 +81,16 @@ namespace bolt {
 		textShader.use();
 		textShader.setMat4("proj", Application::getTextProjMatrix());
 		for (auto t : this->m_text) {
-			textShader.setVec3("textColor", t.getColor());
+			textShader.setVec3("textColor", t->getColor());
 			glActiveTexture(GL_TEXTURE0);
-			t.bindVAO();
+			t->bindVAO();
 
-			auto x = t.getPosition().x;
-			auto y = t.getPosition().y;
-			auto scale = t.getScale();
+			auto x = t->getPosition().x;
+			auto y = t->getPosition().y;
+			auto scale = t->getScale();
 
 			std::string::const_iterator c;
-			auto s = t.getText();
+			auto s = t->getText();
 			for (c = s.begin(); c != s.end(); ++c) {
 				auto ch = this->m_characters[*c];
 
@@ -110,7 +110,7 @@ namespace bolt {
 					{xpos + w, ypos + h, 1.0f, 0.0f}};
 
 				glBindTexture(GL_TEXTURE_2D, ch.textureId);
-				glBindBuffer(GL_ARRAY_BUFFER, t.getVboId());
+				glBindBuffer(GL_ARRAY_BUFFER, t->getVboId());
 				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
