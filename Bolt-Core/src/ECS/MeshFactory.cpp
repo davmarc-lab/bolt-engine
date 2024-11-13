@@ -181,7 +181,7 @@ namespace bolt {
 				auto vao = mesh->vao;
 				auto mode = helper.renderInfo.mode;
 				// TODO: missing error handling if parameters are not set of RenderHelper
-				switch (helper.renderInfo.mode) {
+				switch (helper.renderInfo.type) {
 					case RenderType::render_arrays: {
 						auto first = helper.renderInfo.first;
 						auto size = mesh->vertices.size();
