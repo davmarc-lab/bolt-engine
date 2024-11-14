@@ -4,6 +4,7 @@
 
 using namespace bolt;
 
+
 int main(int argc, char *argv[]) {
 	std::cout << "Application started\n";
 
@@ -11,11 +12,10 @@ int main(int argc, char *argv[]) {
 	properties.maximized = false;
 	properties.vsync = true;
 	properties.backgroundColor = vec4(0.3, 0.3, 0.3, 1);
-	properties.cull = {true, GL_BACK};
 	properties.depth = {true, true, GL_LESS};
 
 	ApplicationSetting settings{};
-	settings.type = scene::SCENE_3D;
+	settings.type = scene::SCENE_2D;
 	settings.name = "Bolt Application";
 	settings.dimension = {1600, 900};
 	settings.properties = properties;
@@ -41,30 +41,32 @@ int main(int argc, char *argv[]) {
 		ub.update(0, sizeof(mat4), value_ptr(proj));
 	});
 
-	EntityManager::instance()->subscribeEventCallbacks();
+	const auto em = EntityManager::instance();
+	em->subscribeEventCallbacks();
 
-    auto tm = CreateShared<TextManager>();
-    ls->addCustomLayer(tm);
-    tm->onAttach();
+	auto elem = em->createEntity();
+	MeshHelper helper{};
+	helper.renderInfo = { RenderType::render_arrays, GL_TRIANGLES, 0};
+	helper.vertex = factory::mesh::squareGeometry;
+	helper.colors = factory::mesh::getColorVector(helper.vertex.size(), {1, 0, 0, 1});
+	helper.position = {200, 600, 0};
+	helper.scale = {20, 20, 0};
+	factory::mesh::instanceMesh(elem, helper);
+	em->addComponent<PhysicComponent>(elem);
+	scene->addEntity(elem);
 
-    auto helper = TextHelper{};
-    helper.text = "Hello";
-    helper.position = {100, 100};
-    helper.scale = 1.f;
-    helper.color = vec3(1, 0, 0);
-    auto t = CreateShared<Text>(helper);
+	const auto pw = CreateShared<PhysicsWorld>();
+	ls->addCustomLayer(pw);
 
-    tm->addText(t);
-
-    Application::enableImGui();
-    const auto ig = CreateShared<ImGuiLayer>(w);
-    ls->addCustomLayer(ig);
-    
-    ls->addCustomLayer(CreateShared<ImGuiDockSpace>());
-    ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
-    ls->addCustomLayer(CreateShared<ImGuiViewPort>());
-    ls->addCustomLayer(CreateShared<ImGuiUtility>());
-    ls->addCustomLayer(CreateShared<ImGuiProperties>());
+	// Application::enableImGui();
+	// const auto ig = CreateShared<ImGuiLayer>(w);
+	// ls->addCustomLayer(ig);
+	//
+	// ls->addCustomLayer(CreateShared<ImGuiDockSpace>());
+	// ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
+	// ls->addCustomLayer(CreateShared<ImGuiViewPort>());
+	// ls->addCustomLayer(CreateShared<ImGuiUtility>());
+	// ls->addCustomLayer(CreateShared<ImGuiProperties>());
 
 	app->run();
 	std::cout << "Application closed\n";

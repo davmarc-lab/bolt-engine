@@ -28,7 +28,7 @@ namespace bolt {
 
 		// std::unordered_map<Component, std::vector<u32>> m_compEntities;
 
-		EntityManager() {}
+		EntityManager() = default;
 
 	public:
 		EntityManager(EntityManager &other) = delete;
@@ -59,8 +59,8 @@ namespace bolt {
 			return elem;
 		}
 
-		inline b8 isEntityValid(const u32 &id) {
-			return this->m_entities.find(id) != this->m_entities.end();
+		inline b8 isEntityValid(const u32 &id) const {
+			return this->m_entities.contains(id);
 		}
 
 		template <typename T>
@@ -82,7 +82,7 @@ namespace bolt {
 
 			std::vector<u32> res = {};
 
-			for (auto [key, val] : this->m_ettComponents) {
+			for (auto [key, _] : this->m_ettComponents) {
 				if (this->entityHasComponent<T>(key))
 					res.push_back(key);
 			}

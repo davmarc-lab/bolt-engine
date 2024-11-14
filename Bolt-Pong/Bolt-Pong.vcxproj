@@ -145,7 +145,7 @@
 
   <ItemGroup>
     <ClCompile Include="src\Collision.cpp" />
-    <ClCompile Include="src\Test.cpp" />
+    <ClCompile Include="src\pong.cpp" />
   </ItemGroup>
 
   <ItemGroup>

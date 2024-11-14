@@ -3,7 +3,7 @@
 #include "../../include/ECS/EntityManager.hpp"
 
 namespace bolt {
-	inline static auto em = EntityManager::instance();
+	inline const auto em = EntityManager::instance();
 	inline f32 density = 1.f;
 
 	void PhysicsWorld::addEntity(const u32& id) {

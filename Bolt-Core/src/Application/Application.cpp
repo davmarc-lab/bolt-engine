@@ -17,15 +17,12 @@ void bolt::Application::run() {
 	const auto rd = RenderApi::instance();
 	rd->init(config::RenderApiConfig::render_opengl);
 
-	const auto lm = LayerManager::instance();
-
 	using namespace bmath;
 
-	const auto im = InputManager::instance();
-
-	const auto ed = EventDispatcher::instance();
-
+	const auto lm = LayerManager::instance(); 
 	lm->addLayersFromStack();
+	const auto im = InputManager::instance();
+	const auto ed = EventDispatcher::instance();
 
 	if (s_settings.enableCollisions) {
 		// enable collision detection
@@ -105,6 +102,7 @@ void bolt::Application::run() {
 	});
 	*/
 	// TEST END
+
 
 	while (!this->shouldClose()) {
 		auto e = Event();
