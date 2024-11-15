@@ -2,6 +2,7 @@
 
 #include "Application/Application.hpp"
 
+#include "Core/Collision.hpp"
 #include "Core/Core.hpp"
 #include "Core/Enums.hpp"
 #include "Core/Event.hpp"

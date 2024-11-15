@@ -24,11 +24,6 @@ void bolt::Application::run() {
 	const auto im = InputManager::instance();
 	const auto ed = EventDispatcher::instance();
 
-	if (s_settings.enableCollisions) {
-		// enable collision detection
-		ed->subscribe(events::loop::LoopBeforeRender, [](auto p) {});
-	}
-
 	if (s_settings.defaultCameraMovement && this->getSceneType() == scene::SCENE_3D) {
 		ed->subscribe(events::loop::LoopInput, [&im](auto p) {
 			if (im->isKeyPressed(GLFW_KEY_W)) {

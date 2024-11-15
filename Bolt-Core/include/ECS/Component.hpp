@@ -1,11 +1,13 @@
 ﻿#pragma once
 
 #include <functional>
+#include <ios>
 #include <iostream>
 #include <ranges>
 #include <vector>
 
 #include "../Core/Math.hpp"
+#include "../Core/Structs.hpp"
 
 #include "../Graphic/Buffer/ElementBuffer.hpp"
 #include "../Graphic/Buffer/VertexArray.hpp"
@@ -169,15 +171,6 @@ namespace bolt {
 		Mesh() = default;
 
 		~Mesh() override = default;
-	};
-
-	struct SquareCollider : public Component {
-	public:
-		std::vector<vec3> points{};
-
-		SquareCollider() = default;
-
-		~SquareCollider() override = default;
 	};
 
 	struct PhysicComponent : public Component {

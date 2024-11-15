@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 	settings.name = "Plin Plin Plon";
 	settings.dimension = {1600, 900};
 	settings.properties = properties;
-	settings.enableCollisions = true;
+	// settings.enableCollisions = true;
 
 	const auto app = CreateUnique<Application>(settings);
 
@@ -59,8 +59,8 @@ int main(int argc, char *argv[]) {
 	comp->setScale(plongDim);
 	scene->addEntity(first);
 	em->addComponent<PhysicComponent>(first);
-	const auto colliderFirst = em->addComponent<SquareCollider>(first);
-	colliderFirst->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
+	// const auto colliderFirst = em->addComponent<SquareCollider>(first);
+	// colliderFirst->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
 	const auto firstInput = em->addComponent<InputComponent>(first);
 
 	firstInput->registerAction(GLFW_KEY_W, [&comp]() {
@@ -83,8 +83,8 @@ int main(int argc, char *argv[]) {
 	other->setScale(plongDim);
 	scene->addEntity(second);
 	em->addComponent<PhysicComponent>(second);
-	const auto colliderSecond = em->addComponent<SquareCollider>(second);
-	colliderSecond->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
+	// const auto colliderSecond = em->addComponent<SquareCollider>(second);
+	// colliderSecond->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
 	const auto secondInput = em->addComponent<InputComponent>(second);
 
 	secondInput->registerAction(GLFW_KEY_UP, [&other]() {
@@ -109,8 +109,8 @@ int main(int argc, char *argv[]) {
 	scene->addEntity(ball);
 	auto ballPhysic = em->addComponent<PhysicComponent>(ball);
 	ballPhysic->velocity = ballVel;
-	const auto ballCollider = em->addComponent<SquareCollider>(ball);
-	ballCollider->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
+	// const auto ballCollider = em->addComponent<SquareCollider>(ball);
+	// ballCollider->points = {vec3(-1, -1, -1), vec3(1, 1, 1)};
 
 	const auto tm = CreateShared<TextManager>();
 	tm->onAttach();
@@ -155,7 +155,7 @@ int main(int argc, char *argv[]) {
 		}
 	});
 
-	EventDispatcher::instance()->subscribe(events::loop::LoopBeforeRender, [](auto ph1) {
+	/* EventDispatcher::instance()->subscribe(events::loop::LoopBeforeRender, [](auto ph1) {
 		const auto first = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(0);
 		const auto second = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(1);
 		const auto ball = bolt::EntityManager::instance()->getEntityComponent<bolt::Transform>(2);
@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
 				}
 			}
 		}
-	});
+	}); */
 
 	UniformBuffer ub = UniformBuffer();
 	ub.onAttach();

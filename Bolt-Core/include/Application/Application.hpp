@@ -29,7 +29,6 @@ namespace bolt {
 		Pair<u16> dimension = {1600, 900};
 		Pair<u16> position = {};
 		WindowProperties properties;
-		b8 enableCollisions = false;
 		b8 defaultCameraMovement = false;
 	};
 

@@ -1,9 +1,9 @@
+#include <utility>
 #include "../../Bolt-Core/include/Engine.hpp"
-#include "../../Bolt-Core/include/Graphics.hpp"
 #include "../../Bolt-Core/include/Graphic/Text/TextManager.hpp"
+#include "../../Bolt-Core/include/Graphics.hpp"
 
 using namespace bolt;
-
 
 int main(int argc, char *argv[]) {
 	std::cout << "Application started\n";
@@ -46,13 +46,15 @@ int main(int argc, char *argv[]) {
 
 	auto elem = em->createEntity();
 	MeshHelper helper{};
-	helper.renderInfo = { RenderType::render_arrays, GL_TRIANGLES, 0};
-	helper.vertex = factory::mesh::squareGeometry;
-	helper.colors = factory::mesh::getColorVector(helper.vertex.size(), {1, 0, 0, 1});
+	helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLE_FAN, 0};
+	auto vec =  factory::mesh::getCircleVertices({0, 0}, {1, 1}, 50);
+    helper.vertex = std::move(vec.vertices);
+    helper.colors = std::move(vec.colors);
 	helper.position = {200, 600, 0};
 	helper.scale = {20, 20, 0};
 	factory::mesh::instanceMesh(elem, helper);
 	em->addComponent<PhysicComponent>(elem);
+	em->addComponent<Collider>(elem);
 	scene->addEntity(elem);
 
 	const auto pw = CreateShared<PhysicsWorld>();

@@ -67,6 +67,7 @@ endif
 OBJECTS := \
 	$(OBJDIR)/glad.o \
 	$(OBJDIR)/Application.o \
+	$(OBJDIR)/Collision.o \
 	$(OBJDIR)/Event.o \
 	$(OBJDIR)/InputManager.o \
 	$(OBJDIR)/Layer.o \
@@ -154,6 +155,9 @@ $(OBJDIR)/glad.o: ../Bolt-Graphics/src/glad/src/glad.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Application.o: src/Application/Application.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Collision.o: src/Core/Collision.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Event.o: src/Core/Event.cpp
