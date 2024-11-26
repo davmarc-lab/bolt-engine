@@ -9,6 +9,8 @@ out VS_OUT {
     vec2 texCoord;
 } vs_out;
 
+out vec3 FragPos;
+
 uniform mat4 view;
 uniform mat4 model;
 
@@ -17,6 +19,7 @@ layout(std140, binding = 0) uniform Matrices {
 };
 
 void main() {
+    FragPos = vec3(model * vec4(aPos, 1.f));
     gl_Position = proj * view * model * vec4(aPos, 1.0f);
     vs_out.vertColor = aColor;
     vs_out.texCoord = aTexCoord;

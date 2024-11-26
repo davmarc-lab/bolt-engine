@@ -218,8 +218,6 @@ namespace bolt {
 			}
 		}
 
-		// inline static void setProjectionMatrix(const mat4 &proj) { s_projection = proj; }
-
 		inline static mat4 getTextProjMatrix() { return s_textProjection; }
 
 		inline static void setTextProjMatrix(const mat4 &proj) { s_textProjection = proj; }

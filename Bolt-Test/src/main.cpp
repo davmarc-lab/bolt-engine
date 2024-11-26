@@ -1,6 +1,5 @@
 #include <utility>
 #include "../../Bolt-Core/include/Engine.hpp"
-#include "../../Bolt-Core/include/Graphic/Text/TextManager.hpp"
 #include "../../Bolt-Core/include/Graphics.hpp"
 #include "../include/ImGuiInfo.hpp"
 
@@ -35,7 +34,7 @@ int main(int argc, char *argv[]) {
 	const auto scene = Scene::instance();
 	ls->addCustomLayer(CreateShared<SceneLayer>());
 
-	UniformBuffer ub = UniformBuffer();
+	UniformBuffer ub = UniformBuffer("Matrices");
 	ub.onAttach();
 	ub.setup(sizeof(mat4), 0);
 	auto proj = Application::getProjectionMatrix();
@@ -44,8 +43,13 @@ int main(int argc, char *argv[]) {
         auto proj = Application::getProjectionMatrix();
 		ub.update(0, sizeof(mat4), value_ptr(proj));
 	});
-
     EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
+
+    UniformBuffer lights = UniformBuffer("Lights");
+    lights.onAttach();
+    lights.setup(sizeof(ShaderLightBlock), 1);
+    ShaderLightBlock slb{};
+    lights.update(0, sizeof(ShaderLightBlock), &slb);
 
 	const auto em = EntityManager::instance();
 	em->subscribeEventCallbacks();
@@ -53,6 +57,7 @@ int main(int argc, char *argv[]) {
 	MeshHelper helper{};
 	helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLE_FAN, 0};
 
+    // meshes
     auto elem = em->createEntity();
 	auto vec = factory::mesh::getCircleVertices({0, 0}, {1, 1}, 50);
 	helper.vertex = std::move(vec.vertices);
@@ -60,22 +65,19 @@ int main(int argc, char *argv[]) {
 	helper.position = {0, 0, 0};
 	helper.scale = {1, 1, 0};
 	factory::mesh::instanceMesh(elem, helper);
-	// em->addComponent<PhysicComponent>(elem);
 	em->addComponent<Collider>(elem);
 	scene->addEntity(elem);
 
-	const auto pw = CreateShared<PhysicsWorld>();
-	ls->addCustomLayer(pw);
+    // lights
+    auto l = em->createEntity();
+    auto light = em->addComponent<SpotLight>(l);
 
 	Application::enableImGui();
 	const auto ig = CreateShared<ImGuiLayer>(w);
 	ls->addCustomLayer(ig);
 
-	// ls->addCustomLayer(CreateShared<ImGuiDockSpace>());
-	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
-	// ls->addCustomLayer(CreateShared<ImGuiViewPort>());
-	// ls->addCustomLayer(CreateShared<ImGuiUtility>());
-	// ls->addCustomLayer(CreateShared<ImGuiProperties>());
+    auto info = CreateShared<ImGuiInfo>();
+    ls->addCustomLayer(info);
 
 	app->run();
 	std::cout << "Application closed\n";

@@ -10,6 +10,38 @@ namespace bolt {
 		T x, y;
 	};
 
+	enum LightType {
+		LIGHT_DIRECTIONAL,
+		LIGHT_POINT,
+		LIGHT_SPOT,
+	};
+
+	struct LightConstraint {
+		f32 constant = 1.f, linear = .09f, quadratic = .032f;
+	};
+
+	struct ShaderLightBlock {
+		int type = LightType::LIGHT_DIRECTIONAL;
+		float intensity = 1;
+		vec3 color{1, 1, 1};
+
+		vec3 position{};
+		vec3 direction{};
+
+		vec3 ambient{};
+		vec3 diffuse{};
+		vec3 specular{};
+
+		float constant = 1;
+		float linear = .09f;
+		float quadratic = .032f;
+
+		float cutoff = 12.5f;
+		float outerCutoff = 17.5f;
+
+		bool isSmooth = false;
+	};
+
 	enum RenderType {
 		render_arrays,
 		render_elements,

@@ -202,7 +202,7 @@ int main(int argc, char *argv[]) {
 		}
 	}); */
 
-	UniformBuffer ub = UniformBuffer();
+	UniformBuffer ub = UniformBuffer("Matrices");
 	ub.onAttach();
 	ub.setup(sizeof(mat4), 0);
 	auto proj = Application::getProjectionMatrix();

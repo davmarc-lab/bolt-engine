@@ -96,6 +96,66 @@ namespace bolt {
 		~Color() override = default;
 	};
 
+    // Default Black plastic
+	struct Material : public Component {
+	public:
+		vec4 ambient{0, 0, 0, 1};
+		vec4 diffuse{.01f, .01f, .01f, 1};
+		vec4 specular{.5f, .5f, .5f, 1};
+		f32 shininess = 32.f;
+
+		Material() = default;
+		~Material() override = default;
+	};
+
+	struct PBRMaterial : public Component {
+	public:
+		vec3 albedo{};
+		f32 metallic{}, roughness{}, ao{};
+
+		PBRMaterial() = default;
+		~PBRMaterial() override = default;
+	};
+
+	struct Light : public Component {
+	public:
+		vec3 color{1, 1, 1};
+		f32 intensity{};
+		LightType type = LightType::LIGHT_DIRECTIONAL;
+
+		b8 showCaster = true;
+
+		Light() = default;
+		virtual ~Light() override = default;
+	};
+
+	struct DirectionalLight : public Light {
+	public:
+		vec3 direction{};
+
+		DirectionalLight() = default;
+		~DirectionalLight() override = default;
+	};
+
+	struct PointLight : public Light {
+	public:
+		vec3 position{};
+        LightConstraint info{};
+
+		PointLight() = default;
+		~PointLight() override = default;
+	};
+
+	struct SpotLight : public Light {
+	public:
+		vec3 position{}, direction{};
+        LightConstraint info{};
+		f32 cutoff = 12.5f, outerCutoff = 17.5f;
+
+		SpotLight() = default;
+		~SpotLight() override = default;
+	};
+
 	struct RenderComponent : public Component {
 	public:
 		std::function<void()> draw;

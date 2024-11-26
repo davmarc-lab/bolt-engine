@@ -11,11 +11,14 @@ out VS_OUT {
 
 uniform mat4 model;
 
+out vec3 FragPos;
+
 layout(std140, binding = 0) uniform Matrices {
     mat4 proj;
 };
 
 void main() {
+    FragPos = vec3(model * vec4(aPos, 1.f));
     gl_Position = proj * model * vec4(aPos, 1.0f);
     vs_out.vertColor = aColor;
     vs_out.texCoord = aTexCoord;

@@ -88,6 +88,7 @@ namespace bolt {
 
 			inline void drawAllMeshes() {
 				const auto meshes = EntityManager::instance()->getEntitiesFromComponent<Mesh>();
+				const auto lights = EntityManager::instance()->getEntitiesFromComponent<Light>();
 				for (const auto id : meshes) {
 					const auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(id);
 					const auto model = EntityManager::instance()->getEntityComponent<Transform>(id);
