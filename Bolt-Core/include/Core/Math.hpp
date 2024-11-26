@@ -69,198 +69,218 @@ namespace bolt {
 namespace bmath {
 	BT_CONSTEXPR f32 F_EPSILON = 1e-9f;
 
-	inline b8 fequal(const f32& a, const f32& b) {
+	inline b8 fequal(const f32 &a, const f32 &b) {
 		return std::abs(a - b) < F_EPSILON;
 	}
 
 	struct bvec2 {
 		f32 x, y;
 
-		bvec2() : bvec2(0) {}
+		bvec2() :
+			bvec2(0) {}
 
-		bvec2(const f32& x, const f32& y) : x(x), y(y) {}
+		bvec2(const f32 &x, const f32 &y) :
+			x(x), y(y) {}
 
-		bvec2(const f32& x) : bvec2(x, x) {}
+		bvec2(const f32 &x) :
+			bvec2(x, x) {}
 
-		bvec2(const bvec2& vec) : bvec2(vec.x, vec.y) {}
-
-		f32& operator[](std::size_t index) {
+		f32 &operator[](const std::size_t &index) {
 			BT_ASSERT(index < 2);
 			switch (index) {
 				default:
-				case 0: return this->x;
-				case 1: return this->y;
+				case 0:
+					return this->x;
+				case 1:
+					return this->y;
 			}
 		}
 
-		friend bvec2 operator+(const bvec2& a, const bvec2& b) {
+		friend bvec2 operator+(const bvec2 &a, const bvec2 &b) {
 			return {a.x + b.x, a.y + b.y};
 		}
 
-		friend bvec2 operator-(const bvec2& a, const bvec2& b) {
+		friend bvec2 operator-(const bvec2 &a, const bvec2 &b) {
 			return {a.x - b.x, a.y - b.y};
 		}
 
-		friend bvec2 operator*(const bvec2& a, const bvec2& b) {
+		friend bvec2 operator*(const bvec2 &a, const bvec2 &b) {
 			return {a.x * b.x, a.y * b.y};
 		}
 
-		friend bvec2 operator/(const bvec2& a, const bvec2& b) {
+		friend bvec2 operator/(const bvec2 &a, const bvec2 &b) {
 			return {a.x / b.x, a.y / b.y};
 		}
 
-		friend b8 operator==(const bvec2& a, const bvec2& b) {
-			return a.x == b.x && a.y == b.y;
+		friend b8 operator==(const bvec2 &a, const bvec2 &b) {
+			return fequal(a.x, b.x) && fequal(a.y, b.y);
 		}
 
-		inline f32 dot(const bvec2& vec) {
+		inline f32 dot(const bvec2 &vec) const {
 			return this->x * vec.x + this->y * vec.y;
 		}
 	};
 
-	inline std::string dump(const bvec2& vec) {
+	inline std::string dump(const bvec2 &vec) {
 		return std::string("Vec2: x = ").append(std::to_string(vec.x)).append(", y = ").append(std::to_string(vec.y));
 	}
 
 	struct bvec3 {
 		f32 x, y, z;
 
-		bvec3() : bvec3(0) {}
+		bvec3() :
+			bvec3(0) {}
 
-		bvec3(const f32& x, const f32& y, const f32& z) : x(x), y(y), z(z) {}
+		bvec3(const f32 &x, const f32 &y, const f32 &z) :
+			x(x), y(y), z(z) {}
 
-		bvec3(const f32& x) : bvec3(x, x, x) {}
+		bvec3(const f32 &x) :
+			bvec3(x, x, x) {}
 
-		bvec3(const i32& x) : bvec3(x, x, x) {}
+		bvec3(const bvec2 &vec, const f32 &z) :
+			bvec3(vec.x, vec.y, z) {}
 
-		bvec3(const bvec2& vec, const f32& z) : bvec3(vec.x, vec.y, z) {}
+		bvec3(const bvec3 &vec) :
+			bvec3(vec.x, vec.y, vec.z) {}
 
-		bvec3(const bvec3& vec) : bvec3(vec.x, vec.y, vec.z) {}
-
-		f32& operator[](std::size_t index) {
+		f32 &operator[](const std::size_t &index) {
 			BT_ASSERT(index < 3);
 			switch (index) {
 				default:
-				case 0: return this->x;
-				case 1: return this->y;
-				case 2: return this->z;
+				case 0:
+					return this->x;
+				case 1:
+					return this->y;
+				case 2:
+					return this->z;
 			}
 		}
 
-		friend bvec3 operator+(const bvec3& a, const bvec3& b) {
+		friend bvec3 operator+(const bvec3 &a, const bvec3 &b) {
 			return {a.x + b.x, a.y + b.y, a.z + b.z};
 		}
 
-		friend bvec3 operator-(const bvec3& a, const bvec3& b) {
+		friend bvec3 operator-(const bvec3 &a, const bvec3 &b) {
 			return {a.x - b.x, a.y - b.y, a.z - b.z};
 		}
 
-		friend bvec3 operator*(const bvec3& a, const bvec3& b) {
+		friend bvec3 operator*(const bvec3 &a, const bvec3 &b) {
 			return {a.x * b.x, a.y * b.y, a.z * b.z};
 		}
 
-		friend bvec3 operator/(const bvec3& a, const bvec3& b) {
+		friend bvec3 operator/(const bvec3 &a, const bvec3 &b) {
 			return {a.x / b.x, a.y / b.y, a.z / b.z};
 		}
 
-		friend b8 operator==(const bvec3& a, const bvec3& b) {
-			return a.x == b.x && a.y == b.y && a.z == b.z;
+		friend b8 operator==(const bvec3 &a, const bvec3 &b) {
+			return fequal(a.x, b.x) && fequal(a.y, b.y) && fequal(a.z, b.z);
 		}
 
-		inline f32 dot(const bvec3& vec) {
+		inline f32 dot(const bvec3 &vec) {
 			return this->x * vec.x + this->y * vec.y + this->z * vec.z;
 		}
 	};
 
-	inline std::string dump(const bvec3& vec) {
+	inline std::string dump(const bvec3 &vec) {
 		return std::string("Vec3: x = ").append(std::to_string(vec.x)).append(", y = ").append(std::to_string(vec.y)).append(", z = ").append(std::to_string(vec.z));
 	}
 
 	struct bvec4 {
-		f32 r = 0, g = 0, b = 0, a = 0;
+		f32 x, y, z, w;
 
-		bvec4(const f32& r = 0, const f32& g = 0, const f32& b = 0, const f32& a = 0) : r(r), g(g), b(b), a(a) {}
+		bvec4(const f32 &r = 0, const f32 &g = 0, const f32 &b = 0, const f32 &a = 0) :
+			x(r), y(g), z(b), w(a) {}
 
-		bvec4(const f32& x) : bvec4(x, x, x, x) {}
+		bvec4(const f32 &x) :
+			bvec4(x, x, x, x) {}
 
-		bvec4(const i32& x) : bvec4(x, x, x, x) {}
+		bvec4(const bvec3 &vec, const f32 &a) :
+			bvec4(vec.x, vec.y, vec.z, a) {}
 
-		bvec4(const bvec3& vec, const f32& a) : bvec4(vec.x, vec.y, vec.z, a) {}
+		bvec4(const bvec4 &vec) :
+			bvec4(vec.x, vec.y, vec.z, vec.w) {}
 
-		bvec4(const bvec4& vec) : bvec4(vec.r, vec.g, vec.b, vec.a) {}
-
-		f32& operator[](std::size_t index) {
+		f32 &operator[](const std::size_t &index) {
 			BT_ASSERT(index < 4);
 			switch (index) {
 				default:
-				case 0: return this->r;
-				case 1: return this->g;
-				case 2: return this->b;
-				case 3: return this->a;
+				case 0:
+					return this->x;
+				case 1:
+					return this->y;
+				case 2:
+					return this->z;
+				case 3:
+					return this->w;
 			}
 		}
 
-		friend bvec4 operator+(const bvec4& a, const bvec4& b) {
-			return {a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a};
+		friend bvec4 operator+(const bvec4 &a, const bvec4 &b) {
+			return {a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w};
 		}
 
-		friend bvec4 operator-(const bvec4& a, const bvec4& b) {
-			return {a.r - b.r, a.g - b.g, a.b - b.b, a.a - b.a};
+		friend bvec4 operator-(const bvec4 &a, const bvec4 &b) {
+			return {a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w};
 		}
 
-		friend bvec4 operator*(const bvec4& a, const bvec4& b) {
-			return {a.r * b.r, a.g * b.g, a.b * b.b, a.a * b.a};
+		friend bvec4 operator*(const bvec4 &a, const bvec4 &b) {
+			return {a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
 		}
 
-		friend bvec4 operator/(const bvec4& a, const bvec4& b) {
-			return {a.r / b.r, a.g / b.g, a.b / b.b, a.a / b.a};
+		friend bvec4 operator/(const bvec4 &a, const bvec4 &b) {
+			return {a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w};
 		}
 
-		friend b8 operator==(const bvec4& a, const bvec4& b) {
-			return a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a;
+		friend b8 operator==(const bvec4 &a, const bvec4 &b) {
+			return fequal(a.x, b.x) && fequal(a.y, b.y) && fequal(a.z, b.z) && fequal(a.w, b.w);
 		}
 
-		inline f32 dot(const bvec4& vec) {
-			return this->r * vec.r + this->g * vec.g + this->b * vec.b + this->a * vec.a;
+		inline f32 dot(const bvec4 &vec) {
+			return this->x * vec.x + this->y * vec.y + this->z * vec.z + this->w * vec.w;
 		}
 	};
 
-	inline std::string dump(const bvec4& vec) {
-		return std::string("Vec4: r = ").append(std::to_string(vec.r)).append(", g = ").append(std::to_string(vec.g)).append(", b = ").append(std::to_string(vec.b)).append(", a = ").append(std::to_string(vec.a));
+	inline std::string dump(const bvec4 &vec) {
+		return std::string("Vec4: r = ").append(std::to_string(vec.x)).append(", g = ").append(std::to_string(vec.y)).append(", b = ").append(std::to_string(vec.z)).append(", a = ").append(std::to_string(vec.w));
 	}
 
 	struct bmat2 {
 		bvec2 value[2];
 
-		bmat2() : bmat2(bvec2(0), bvec2(0)) {}
+		bmat2() :
+			bmat2(bvec2(0), bvec2(0)) {}
 
-		bmat2(const f32& x, const f32& y) : bmat2(bvec2(x, y)) {}
+		bmat2(const f32 &x, const f32 &y) :
+			bmat2(bvec2(x, y)) {}
 
-		bmat2(const bvec2& first) : bmat2(first, first) {}
+		bmat2(const bvec2 &first) :
+			bmat2(first, first) {}
 
-		bmat2(const bvec2& first, const bvec2& second) {
+		bmat2(const bvec2 &first, const bvec2 &second) {
 			this->value[0] = first;
 			this->value[1] = second;
 		}
 
-		bmat2(const bmat2& mat) : bmat2(mat.value[0], mat.value[0]) {}
+		bmat2(const bmat2 &mat) :
+			bmat2(mat.value[0], mat.value[0]) {}
 
-		bmat2(const f32& val) : bmat2({val}, {val}) {}
+		bmat2(const f32 &val) :
+			bmat2({val}, {val}) {}
 
-		bvec2& operator[](std::size_t index) {
+		bvec2 &operator[](std::size_t index) {
 			BT_ASSERT(index < 2);
 			return this->value[index];
 		}
 
-		friend bmat2 operator+(const bmat2& a, const bmat2& b) {
+		friend bmat2 operator+(const bmat2 &a, const bmat2 &b) {
 			return {a.value[0] + b.value[0], a.value[1] + b.value[1]};
 		}
 
-		friend bmat2 operator-(const bmat2& a, const bmat2& b) {
+		friend bmat2 operator-(const bmat2 &a, const bmat2 &b) {
 			return {a.value[0] - b.value[0], a.value[1] - b.value[1]};
 		}
 
-		friend bmat2 operator*(bmat2& a, bmat2& b) {
+		friend bmat2 operator*(bmat2 &a, bmat2 &b) {
 			return bmat2(
 				{
 					a[0][0] * b[0][0] + a[0][1] * b[1][0],
@@ -270,18 +290,18 @@ namespace bmath {
 					a[1][0] * b[0][0] + a[1][1] * b[1][0],
 					a[1][0] * b[0][1] + a[1][1] * b[1][1],
 				}
-			);
+				);
 		}
 
-		bmat2 operator*(const f32& val) {
+		bmat2 operator*(const f32 &val) {
 			return {this->value[0] * val, this->value[1] * val};
 		}
 
-		friend bmat2 operator/(const bmat2& a, const bmat2& b) {
+		friend bmat2 operator/(const bmat2 &a, const bmat2 &b) {
 			return {a.value[0] / b.value[0], a.value[1] / b.value[1]};
 		}
 
-		bmat2 operator/(const f32& val) {
+		bmat2 operator/(const f32 &val) {
 			return {this->value[0] / val, this->value[1] / val};
 		}
 
@@ -290,7 +310,7 @@ namespace bmath {
 		}
 	};
 
-	inline std::string dump(const bmat2& mat) {
+	inline std::string dump(const bmat2 &mat) {
 		return std::string("Mat2:\n").append(dump(mat.value[0])).append("\n").append(dump(mat.value[1]));
 	}
 

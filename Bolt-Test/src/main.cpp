@@ -2,6 +2,7 @@
 #include "../../Bolt-Core/include/Engine.hpp"
 #include "../../Bolt-Core/include/Graphic/Text/TextManager.hpp"
 #include "../../Bolt-Core/include/Graphics.hpp"
+#include "../include/ImGuiInfo.hpp"
 
 using namespace bolt;
 
@@ -10,7 +11,7 @@ int main(int argc, char *argv[]) {
 
 	WindowProperties properties{};
 	properties.maximized = false;
-	properties.vsync = true;
+	properties.vsync = false;
 	properties.backgroundColor = vec4(0.3, 0.3, 0.3, 1);
 	properties.depth = {true, true, GL_LESS};
 
@@ -44,31 +45,70 @@ int main(int argc, char *argv[]) {
 	const auto em = EntityManager::instance();
 	em->subscribeEventCallbacks();
 
-	auto elem = em->createEntity();
 	MeshHelper helper{};
 	helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLE_FAN, 0};
-	auto vec =  factory::mesh::getCircleVertices({0, 0}, {1, 1}, 50);
-    helper.vertex = std::move(vec.vertices);
-    helper.colors = std::move(vec.colors);
-	helper.position = {200, 600, 0};
-	helper.scale = {20, 20, 0};
-	factory::mesh::instanceMesh(elem, helper);
-	em->addComponent<PhysicComponent>(elem);
-	em->addComponent<Collider>(elem);
-	scene->addEntity(elem);
+
+	{
+		auto elem = em->createEntity();
+		auto vec = factory::mesh::getCircleVertices({0, 0}, {1, 1}, 50);
+		helper.vertex = std::move(vec.vertices);
+		helper.colors = std::move(vec.colors);
+		helper.position = {150, 600, 0};
+		helper.scale = {20, 20, 0};
+		factory::mesh::instanceMesh(elem, helper);
+		em->addComponent<PhysicComponent>(elem);
+		em->addComponent<CircleCollider>(elem);
+		scene->addEntity(elem);
+	}
+
+	{
+		auto elem = em->createEntity();
+		auto vec = factory::mesh::getCircleVertices({0, 0}, {1, 1}, 50);
+		helper.vertex = std::move(vec.vertices);
+		helper.colors = std::move(vec.colors);
+		helper.position = {150, 650, 0};
+		helper.scale = {20, 20, 0};
+		factory::mesh::instanceMesh(elem, helper);
+		em->addComponent<PhysicComponent>(elem);
+		em->addComponent<CircleCollider>(elem);
+		scene->addEntity(elem);
+	}
+
+	// helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLES, 0};
+	// {
+	// 	auto elem = em->createEntity();
+	// 	helper.vertex = factory::mesh::squareGeometry;
+	// 	helper.colors = factory::mesh::getColorVector(helper.vertex.size(), {1, 0, 0, 1});
+	// 	helper.position = {100, 500, 0};
+	// 	helper.scale = {200, 10, 0};
+	// 	factory::mesh::instanceMesh(elem, helper);
+	// 	auto physic = em->addComponent<PhysicComponent>(elem);
+	// 	physic->isStatic = true;
+	// 	em->addComponent<PlaneCollider>(elem);
+	// 	scene->addEntity(elem);
+	// }
 
 	const auto pw = CreateShared<PhysicsWorld>();
 	ls->addCustomLayer(pw);
 
+	Application::enableImGui();
+	const auto ig = CreateShared<ImGuiLayer>(w);
+	ls->addCustomLayer(ig);
+	
+	ls->addCustomLayer(CreateShared<ImGuiDockSpace>());
+	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
+	ls->addCustomLayer(CreateShared<ImGuiViewPort>());
+	ls->addCustomLayer(CreateShared<ImGuiUtility>());
+	ls->addCustomLayer(CreateShared<ImGuiProperties>());
+
 	// Application::enableImGui();
-	// const auto ig = CreateShared<ImGuiLayer>(w);
-	// ls->addCustomLayer(ig);
-	//
-	// ls->addCustomLayer(CreateShared<ImGuiDockSpace>());
-	// ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
-	// ls->addCustomLayer(CreateShared<ImGuiViewPort>());
-	// ls->addCustomLayer(CreateShared<ImGuiUtility>());
-	// ls->addCustomLayer(CreateShared<ImGuiProperties>());
+	// {
+	// 	auto ig = CreateShared<ImGuiLayer>(w);
+	// 	ls->addCustomLayer(ig);
+	// 	
+	// 	auto info = CreateShared<ImGuiInfo>();
+	// 	ls->addCustomLayer(info);
+	// }
 
 	app->run();
 	std::cout << "Application closed\n";

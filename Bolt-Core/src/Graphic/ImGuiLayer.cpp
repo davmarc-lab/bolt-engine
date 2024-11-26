@@ -6,7 +6,6 @@
 #include "../../../Bolt-imgui/include/imgui/imgui_impl_glfw.h"
 #include "../../../Bolt-imgui/include/imgui/imgui_impl_opengl3.h"
 
-#include <iostream>
 #include "../../include/Graphic/Window.hpp"
 
 namespace bolt {

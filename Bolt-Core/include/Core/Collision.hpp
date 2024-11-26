@@ -9,12 +9,13 @@ namespace bolt {
 		collider_circle,
 		collider_plane,
 		collider_square,
+		collider_none,
 	};
 
 	struct Collider : public Component {
 		ColliderType type;
 
-		Collider(const ColliderType &type = ColliderType::collider_square) :
+		Collider(const ColliderType &type = ColliderType::collider_none) :
 			type(type) {}
 
 		Collider(const Collider &other) :
@@ -30,16 +31,18 @@ namespace bolt {
 		CircleCollider(const vec3 &center, const f32 &radius) :
 			Collider(ColliderType::collider_circle), center(center), radius(radius) {}
 
-		CircleCollider() = delete;
+		CircleCollider() :
+			CircleCollider({}, 1.f) {}
 
 		~CircleCollider() override = default;
 	};
 
 	struct PlaneCollider : public Collider {
-		vec3 normal{};
+		vec3 normal{0, 1, 0};
 		f32 distance = 0;
 
-		PlaneCollider() = delete;
+		PlaneCollider() :
+			PlaneCollider({0, 1, 0}, 0.f) {}
 
 		PlaneCollider(const vec3 &normal, const f32 &distance) :
 			Collider(ColliderType::collider_plane), normal(normal), distance(distance) {}
@@ -64,23 +67,29 @@ namespace bolt {
 	class CollisionDetection {
 	private:
 		static CollisionPoints testCircleCircle(const Collider *a, const Transform *at,
-												const Collider *b, const Transform *bt){}
+		                                        const Collider *b, const Transform *bt
+			);
 
 		static CollisionPoints testCirclePlane(const Collider *a, const Transform *at,
-											   const Collider *b, const Transform *bt) {}
+		                                       const Collider *b, const Transform *bt
+			);
 
 		using DetectionFunc = CollisionPoints (*)(const Collider *a, const Transform *at,
-												  const Collider *b, const Transform *bt);
+		                                          const Collider *b, const Transform *bt
+			);
 
 		inline static const DetectionFunc test[2][2]{
 			// Circle           Plane
-			{testCircleCircle, testCirclePlane}, // Circle
-			{nullptr, nullptr},					 // Plane
+			{testCircleCircle, testCirclePlane},
+			// Circle
+			{testCirclePlane, nullptr},
+			// Plane
 		};
 
 	public:
 		static CollisionPoints testCollision(const Collider *a, const Transform *at,
-											 const Collider *b, const Transform *bt);
+		                                     const Collider *b, const Transform *bt
+			);
 
 		CollisionDetection() = delete;
 

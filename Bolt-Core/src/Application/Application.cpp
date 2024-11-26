@@ -4,10 +4,7 @@
 #include "../../include/Core/LayerManager.hpp"
 #include "../../include/Core/RenderApi.hpp"
 
-#include "../../include/ECS/EntityManager.hpp"
 #include "../../include/ECS/System.hpp"
-
-#include "../../include/Graphic/Buffer/UniformBuffer.hpp"
 
 #include "../../include/Core/Timestep.hpp"
 
@@ -97,7 +94,6 @@ void bolt::Application::run() {
 	});
 	*/
 	// TEST END
-
 
 	while (!this->shouldClose()) {
 		auto e = Event();

@@ -298,5 +298,8 @@ namespace bolt {
 		glClear(this->m_clearMask);
 	}
 
-	void Window::end() { glfwSwapBuffers(static_cast<GLFWwindow *>(this->m_window)); }
+	void Window::begin() { glfwSwapBuffers(static_cast<GLFWwindow *>(this->m_window)); }
+
+	void Window::end() {}
+
 } // namespace bolt

@@ -58,7 +58,8 @@ namespace bolt {
 	class SceneLayer : public Layer {
 	private:
 	public:
-		SceneLayer() = default;
+		SceneLayer() :
+			Layer("Scene Layer") {}
 
 		virtual ~SceneLayer() override = default;
 

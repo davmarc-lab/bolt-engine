@@ -48,6 +48,8 @@ namespace bolt {
 		virtual void end() {}
 
         inline b8 isAttached() const { return this->m_attached; }
+
+		inline std::string getName() const { return this->m_layerName; }
 	};
 
 	class LayerStack {

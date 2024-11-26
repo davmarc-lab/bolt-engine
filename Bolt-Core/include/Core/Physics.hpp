@@ -6,19 +6,43 @@
 #include "Layer.hpp"
 #include "Timestep.hpp"
 
+#include "Collision.hpp"
+
 #include <set>
 
 namespace bolt {
+	class Solver {
+	public:
+		virtual void solve(const std::vector<Collision> &collisions, const f32 &dt) {}
+
+		Solver() = default;
+
+		virtual ~Solver() {}
+	};
+
+	class PositionSolver : public Solver {
+	public:
+		virtual void solve(const std::vector<Collision> &collisions, const f32 &dt) override;
+
+		PositionSolver() = default;
+
+		virtual ~PositionSolver() override {}
+
+	};
+
 	class PhysicsWorld : public Layer {
 	public:
 		PhysicsWorld() :
-			Layer("Physic World") {}
-
+			Layer("Physic World") {
+		}
+		
 		void addEntity(const u32 &entity);
+
+		void addSolver(const Shared<Solver>& solver);
 
 		inline b8 removeEntity(const u32 &entity) { return this->m_entities.erase(entity); }
 
-		inline u16 Count() const { return this->m_entities.size(); }
+		inline size_t Count() const { return this->m_entities.size(); }
 
 		virtual void onAttach() override;
 
@@ -26,14 +50,15 @@ namespace bolt {
 
 		virtual void onUpdate() override;
 
-		virtual ~PhysicsWorld() {}
+		virtual ~PhysicsWorld() override = default;
 
 	private:
 		void resolveCollisions();
 
 		void step();
 
-		std::set<u32> m_entities;
+		std::set<u32> m_entities{};
+		std::vector<Shared<Solver>> m_solvers{};
 
 		Timestep m_time{};
 		f32 m_accumulator = 0.f;
@@ -44,22 +69,5 @@ namespace bolt {
 
 		vec3 m_gravity = vec3(0, -9.81f, 0);
 	};
-
-	/* struct CollisionPoints {
-		vec3 first{};
-		vec3 second{};
-		vec3 normal{};
-		f32 depth = 0;
-		b8 colliding = false;
-	};
-
-	struct Collision {
-	public:
-		u32 first = 0, second = 0;
-		CollisionPoints points{};
-
-	b8	CollisionPoints testCircleCircle();
-	b8	CollisionPoints testCirclePlane();
-	}; */
 
 } // namespace bolt

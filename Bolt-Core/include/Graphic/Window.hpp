@@ -80,6 +80,8 @@ namespace bolt {
 
 		virtual void onRender() override;
 
+		virtual void begin() override;
+		
 		virtual void end() override;
 	};
 } // namespace bolt
