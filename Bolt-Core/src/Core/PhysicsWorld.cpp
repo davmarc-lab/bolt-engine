@@ -6,7 +6,7 @@
 #include "../../include/Core/Collision.hpp"
 
 namespace bolt {
-	inline const auto em = EntityManager::instance();
+	inline static const auto em = EntityManager::instance();
 	inline f32 density = 1.f;
 
 	void PositionSolver::solve(const std::vector<Collision> &collisions, const f32 &dt) {

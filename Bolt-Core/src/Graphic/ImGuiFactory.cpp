@@ -112,6 +112,16 @@ namespace bolt {
 					if (ImGui::DragFloat3("Position", &pos.x)) {
 						comp->setPosition(pos);
 					}
+
+					auto scale = comp->getScale();
+					if (ImGui::DragFloat3("Scale", &scale.x)) {
+						comp->setScale(scale);
+					}
+
+					auto rot = comp->getRotation();
+					if (ImGui::DragFloat3("Rotation", &rot.x)) {
+						comp->setRotation(rot);
+					}
 				}
 
 				if (physic != nullptr) {
@@ -152,12 +162,21 @@ namespace bolt {
 			this->m_size.x = static_cast<u16>(dim.x);
 			this->m_size.y = static_cast<u16>(dim.y);
 
-			switch (Application::getSceneType()) {
-				case scene::SceneType::SCENE_2D:
-					scene::updateOrtho(0.f, static_cast<f32>(this->m_size.x), 0.f, static_cast<f32>(this->m_size.y));
+			auto proj = Application::getProjection();
+			switch (proj->getType()) {
+				case PROJ_ORTHO: {
+					auto cast = std::static_pointer_cast<InfoOrtho>(proj);
+					cast->setRight(this->m_size.x);
+					cast->setUp(this->m_size.y);
 					break;
-				case scene::SceneType::SCENE_3D:
-					scene::updatePerspective(45.0f, static_cast<f32>(this->m_size.x) / this->m_size.y, 0.1f, 100.f);
+				}
+				case PROJ_PERSP: {
+					auto cast = std::static_pointer_cast<InfoPersp>(proj);
+					cast->setWidth(this->m_size.x);
+					cast->setHeight(this->m_size.y);
+					break;
+				}
+				default:
 					break;
 			}
 			scene::updateTextProj(0.f, this->m_size.x, 0.f, this->m_size.y);
@@ -181,12 +200,21 @@ namespace bolt {
 			this->m_size.x = static_cast<u16>(dim.x);
 			this->m_size.y = static_cast<u16>(dim.y);
 
-			switch (Application::getSceneType()) {
-				case scene::SceneType::SCENE_2D:
-					scene::updateOrtho(0.f, this->m_size.x, 0.f, this->m_size.y);
+			auto proj = Application::getProjection();
+			switch (proj->getType()) {
+				case PROJ_ORTHO: {
+					auto cast = std::static_pointer_cast<InfoOrtho>(proj);
+					cast->setRight(this->m_size.x);
+					cast->setUp(this->m_size.y);
 					break;
-				case scene::SceneType::SCENE_3D:
-					scene::updatePerspective(45.0f, static_cast<f32>(this->m_size.x) / this->m_size.y, 0.1f, 100.f);
+				}
+				case PROJ_PERSP: {
+					auto cast = std::static_pointer_cast<InfoPersp>(proj);
+					cast->setWidth(this->m_size.x);
+					cast->setHeight(this->m_size.y);
+					break;
+				}
+				default:
 					break;
 			}
 			scene::updateTextProj(0.f, this->m_size.x, 0.f, this->m_size.y);

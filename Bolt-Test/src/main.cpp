@@ -11,12 +11,14 @@ int main(int argc, char *argv[]) {
 
 	WindowProperties properties{};
 	properties.maximized = false;
-	properties.vsync = false;
+	properties.vsync = true;
 	properties.backgroundColor = vec4(0.3, 0.3, 0.3, 1);
 	properties.depth = {true, true, GL_LESS};
+	properties.cull = {true, GL_BACK};
+	properties.projection = CreateShared<InfoPersp>(45.f, 1600, 900, 0.1, 100);
 
 	ApplicationSetting settings{};
-	settings.type = scene::SCENE_2D;
+	settings.type = scene::SCENE_3D;
 	settings.name = "Bolt Application";
 	settings.dimension = {1600, 900};
 	settings.properties = properties;
@@ -38,9 +40,12 @@ int main(int argc, char *argv[]) {
 	ub.setup(sizeof(mat4), 0);
 	auto proj = Application::getProjectionMatrix();
 	ub.update(0, sizeof(mat4), value_ptr(proj));
-	EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&proj, &ub](auto &&p) {
+	EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&ub](auto &&p) {
+        auto proj = Application::getProjectionMatrix();
 		ub.update(0, sizeof(mat4), value_ptr(proj));
 	});
+
+    EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 
 	const auto em = EntityManager::instance();
 	em->subscribeEventCallbacks();
@@ -48,45 +53,16 @@ int main(int argc, char *argv[]) {
 	MeshHelper helper{};
 	helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLE_FAN, 0};
 
-	{
-		auto elem = em->createEntity();
-		auto vec = factory::mesh::getCircleVertices({0, 0}, {1, 1}, 50);
-		helper.vertex = std::move(vec.vertices);
-		helper.colors = std::move(vec.colors);
-		helper.position = {150, 600, 0};
-		helper.scale = {20, 20, 0};
-		factory::mesh::instanceMesh(elem, helper);
-		em->addComponent<PhysicComponent>(elem);
-		em->addComponent<CircleCollider>(elem);
-		scene->addEntity(elem);
-	}
-
-	{
-		auto elem = em->createEntity();
-		auto vec = factory::mesh::getCircleVertices({0, 0}, {1, 1}, 50);
-		helper.vertex = std::move(vec.vertices);
-		helper.colors = std::move(vec.colors);
-		helper.position = {150, 650, 0};
-		helper.scale = {20, 20, 0};
-		factory::mesh::instanceMesh(elem, helper);
-		em->addComponent<PhysicComponent>(elem);
-		em->addComponent<CircleCollider>(elem);
-		scene->addEntity(elem);
-	}
-
-	// helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLES, 0};
-	// {
-	// 	auto elem = em->createEntity();
-	// 	helper.vertex = factory::mesh::squareGeometry;
-	// 	helper.colors = factory::mesh::getColorVector(helper.vertex.size(), {1, 0, 0, 1});
-	// 	helper.position = {100, 500, 0};
-	// 	helper.scale = {200, 10, 0};
-	// 	factory::mesh::instanceMesh(elem, helper);
-	// 	auto physic = em->addComponent<PhysicComponent>(elem);
-	// 	physic->isStatic = true;
-	// 	em->addComponent<PlaneCollider>(elem);
-	// 	scene->addEntity(elem);
-	// }
+    auto elem = em->createEntity();
+	auto vec = factory::mesh::getCircleVertices({0, 0}, {1, 1}, 50);
+	helper.vertex = std::move(vec.vertices);
+	helper.colors = std::move(vec.colors);
+	helper.position = {0, 0, 0};
+	helper.scale = {1, 1, 0};
+	factory::mesh::instanceMesh(elem, helper);
+	// em->addComponent<PhysicComponent>(elem);
+	em->addComponent<Collider>(elem);
+	scene->addEntity(elem);
 
 	const auto pw = CreateShared<PhysicsWorld>();
 	ls->addCustomLayer(pw);
@@ -94,21 +70,12 @@ int main(int argc, char *argv[]) {
 	Application::enableImGui();
 	const auto ig = CreateShared<ImGuiLayer>(w);
 	ls->addCustomLayer(ig);
-	
-	ls->addCustomLayer(CreateShared<ImGuiDockSpace>());
-	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
-	ls->addCustomLayer(CreateShared<ImGuiViewPort>());
-	ls->addCustomLayer(CreateShared<ImGuiUtility>());
-	ls->addCustomLayer(CreateShared<ImGuiProperties>());
 
-	// Application::enableImGui();
-	// {
-	// 	auto ig = CreateShared<ImGuiLayer>(w);
-	// 	ls->addCustomLayer(ig);
-	// 	
-	// 	auto info = CreateShared<ImGuiInfo>();
-	// 	ls->addCustomLayer(info);
-	// }
+	// ls->addCustomLayer(CreateShared<ImGuiDockSpace>());
+	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
+	// ls->addCustomLayer(CreateShared<ImGuiViewPort>());
+	// ls->addCustomLayer(CreateShared<ImGuiUtility>());
+	// ls->addCustomLayer(CreateShared<ImGuiProperties>());
 
 	app->run();
 	std::cout << "Application closed\n";

@@ -11,12 +11,21 @@
 #include "../../include/Graphics.hpp"
 
 void bolt::Application::run() {
+	// if (s_settings.properties.projection != PROJ_AUTO) {
+	// setProjectionMatrix(s_settings.properties.projection == PROJ_ORTHO ? :);
+	// }
+
+    if (s_settings.properties.projection->getType() == PROJ_AUTO) {
+        std::cerr << "No Projection Specified.\n";
+        Application::closeApplication();
+    }
+
 	const auto rd = RenderApi::instance();
 	rd->init(config::RenderApiConfig::render_opengl);
 
 	using namespace bmath;
 
-	const auto lm = LayerManager::instance(); 
+	const auto lm = LayerManager::instance();
 	lm->addLayersFromStack();
 	const auto im = InputManager::instance();
 	const auto ed = EventDispatcher::instance();

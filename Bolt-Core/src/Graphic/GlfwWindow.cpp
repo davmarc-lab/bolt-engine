@@ -1,4 +1,5 @@
-﻿#include "../../include/Graphic/Window.hpp"
+﻿#include <memory>
+#include "../../include/Graphic/Window.hpp"
 
 #include "../../include/Core/Utils.hpp"
 
@@ -101,16 +102,26 @@ namespace bolt {
 	static void glfwResizeCallback(GLFWwindow *window, i32 width, i32 height) {
 		glViewport(0, 0, width, height);
 
-		switch (Application::getSceneType()) {
-			case scene::SceneType::SCENE_2D:
-				scene::updateOrtho(0.f, static_cast<f32>(width), 0.f, static_cast<f32>(height));
+		auto proj = Application::getProjection();
+		switch (proj->getType()) {
+			case PROJ_ORTHO: {
+				auto cast = std::static_pointer_cast<InfoOrtho>(proj);
+				cast->setRight(width);
+				cast->setUp(height);
 				break;
-			case scene::SceneType::SCENE_3D:
-				scene::updatePerspective(45.0f, static_cast<f32>(width) / height, 0.1f, 100.f);
+			}
+			case PROJ_PERSP: {
+                auto cast = std::static_pointer_cast<InfoPersp>(proj);
+                cast->setWidth(width);
+                cast->setHeight(height);
+				break;
+			}
+			default:
 				break;
 		}
-		scene::updateTextProj(0.f, width, 0.f, height);
 
+		scene::updateTextProj(0.f, width, 0.f, height);
+        
 		EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 
 		if (width < 0 || height < 0) {
@@ -290,7 +301,10 @@ namespace bolt {
 		// BT_INFO_CORE("No Implementation of Event handling.");
 	}
 
-	void Window::onUpdate() { glfwPollEvents(); }
+	void Window::onUpdate() {
+		glfwPollEvents();
+		glfwSwapBuffers(static_cast<GLFWwindow *>(this->m_window));
+	}
 
 	void Window::onRender() {
 		// Default clear operations.
@@ -298,8 +312,7 @@ namespace bolt {
 		glClear(this->m_clearMask);
 	}
 
-	void Window::begin() { glfwSwapBuffers(static_cast<GLFWwindow *>(this->m_window)); }
+	void Window::begin() { }
 
 	void Window::end() {}
-
 } // namespace bolt
