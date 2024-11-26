@@ -1,8 +1,8 @@
 #pragma once
 
+#include "../../Core/Math.hpp"
 #include "../../Core/Resource.hpp"
 #include "../../Core/Utils.hpp"
-#include "../../Core/Math.hpp"
 
 #include <string>
 
@@ -16,6 +16,18 @@ namespace bolt {
 			SHADER_NONE,
 		};
 	}
+
+	typedef u32 ShaderMask;
+	enum ShaderMask_ : u32 {
+		shader_projection = 1 << 0,
+		shader_view = 1 << 1,
+		shader_materials = 1 << 2,
+		shader_lights = 1 << 3,
+	};
+    using ShaderConfig = ShaderMask_;
+
+	BT_CONSTEXPR ShaderMask textShaderMask = shader_projection;
+	BT_CONSTEXPR ShaderMask defaultShaderMask = shader_projection | shader_view | shader_materials | shader_lights;
 
 	class Shader {
 	protected:
@@ -40,9 +52,11 @@ namespace bolt {
 
 		Shader() = delete;
 
-		Shader(std::string location, std::string name, shader::ShaderType type) : m_type(type) { this->m_resource = CreateUnique<Resource>(location, name); }
+		Shader(std::string location, std::string name, shader::ShaderType type) :
+			m_type(type) { this->m_resource = CreateUnique<Resource>(location, name); }
 
-		Shader(std::string name, shader::ShaderType type) : Shader(res::DEFAULT_LOCATION, name, type) {}
+		Shader(std::string name, shader::ShaderType type) :
+			Shader(res::DEFAULT_LOCATION, name, type) {}
 
 		virtual ~Shader();
 	};
@@ -57,28 +71,32 @@ namespace bolt {
 
 		inline b8 isProgramCreated() const { return this->m_id != 0; }
 
-		void setBool(const std::string& name, b8 value);
-		void setInt(const std::string& name, i32 value);
-		void setFloat(const std::string& name, f32 value);
+		inline ShaderMask getMask() const { return this->m_mask; }
 
-		void setVec2(const std::string& name, const vec2& value);
-		void setVec2(const std::string& name, f32 x, f32 y);
+		void setBool(const std::string &name, b8 value);
+		void setInt(const std::string &name, i32 value);
+		void setFloat(const std::string &name, f32 value);
 
-		void setVec3(const std::string& name, const vec3& value);
-		void setVec3(const std::string& name, f32 x, f32 y, f32 z);
+		void setVec2(const std::string &name, const vec2 &value);
+		void setVec2(const std::string &name, f32 x, f32 y);
 
-		void setVec4(const std::string& name, const vec4& value);
-		void setVec4(const std::string& name, f32 x, f32 y, f32 z, f32 w);
+		void setVec3(const std::string &name, const vec3 &value);
+		void setVec3(const std::string &name, f32 x, f32 y, f32 z);
 
-		void setMat2(const std::string& name, const mat2& mat);
-		void setMat3(const std::string& name, const mat3& mat);
-		void setMat4(const std::string& name, const mat4& mat);
+		void setVec4(const std::string &name, const vec4 &value);
+		void setVec4(const std::string &name, f32 x, f32 y, f32 z, f32 w);
+
+		void setMat2(const std::string &name, const mat2 &mat);
+		void setMat3(const std::string &name, const mat3 &mat);
+		void setMat4(const std::string &name, const mat4 &mat);
 
 		ShaderProgram() = default;
 
-		ShaderProgram(Unique<Shader> vert, Unique<Shader> frag) : m_vert(std::move(vert)), m_frag(std::move(frag)) {}
+		ShaderProgram(Unique<Shader> vert, Unique<Shader> frag) :
+			m_vert(std::move(vert)), m_frag(std::move(frag)) {}
 
-		ShaderProgram(const std::string& vert, const std::string& frag, const std::string& geom = "") {
+		ShaderProgram(const std::string &vert, const std::string &frag, const ShaderMask &mask, const std::string &geom = "") :
+			m_mask(mask) {
 			this->m_vert = CreateUnique<Shader>(vert, shader::SHADER_VERTEX);
 			this->m_frag = CreateUnique<Shader>(frag, shader::SHADER_FRAGMENT);
 			if (!geom.empty())
@@ -89,6 +107,7 @@ namespace bolt {
 
 	private:
 		u32 m_id = 0;
+		ShaderMask m_mask = 0;
 		Unique<Shader> m_vert = nullptr;
 		Unique<Shader> m_frag = nullptr;
 		Unique<Shader> m_geom = nullptr;

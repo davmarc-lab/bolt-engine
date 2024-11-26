@@ -9,7 +9,7 @@ namespace bolt {
 	void Renderer::onAttach() {
 		// create the default shader
     auto vert = Application::getSceneType() == scene::SCENE_3D ? "shader/defaultPerspVertShader.glsl" : "shader/defaultOrthoVertShader.glsl";
-		this->m_shader = CreateUnique<ShaderProgram>(vert, "shader/defaultFragShader.glsl");
+		this->m_shader = CreateUnique<ShaderProgram>(vert, "shader/defaultFragShader.glsl", defaultShaderMask);
 		this->m_shader->createShaderProgram();
 	}
 

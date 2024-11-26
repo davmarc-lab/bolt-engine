@@ -31,6 +31,6 @@ namespace bolt {
 		virtual void drawElementsTriangles(const VertexArray &vao, const size_t &count);
 
     private:
-        Unique<ShaderProgram> m_shader;
+        Unique<ShaderProgram> m_shader = nullptr;
 	};
 } // namespace bolt

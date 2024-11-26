@@ -96,12 +96,12 @@ namespace bolt {
 		~Color() override = default;
 	};
 
-    // Default Black plastic
+	// Default Black plastic
 	struct Material : public Component {
 	public:
-		vec4 ambient{0, 0, 0, 1};
-		vec4 diffuse{.01f, .01f, .01f, 1};
-		vec4 specular{.5f, .5f, .5f, 1};
+		vec3 ambient{0, 0, 0};
+		vec3 diffuse{.01f, .01f, .01f};
+		vec3 specular{.5f, .5f, .5f};
 		f32 shininess = 32.f;
 
 		Material() = default;
@@ -140,7 +140,7 @@ namespace bolt {
 	struct PointLight : public Light {
 	public:
 		vec3 position{};
-        LightConstraint info{};
+		LightConstraint info{};
 
 		PointLight() = default;
 		~PointLight() override = default;
@@ -149,7 +149,7 @@ namespace bolt {
 	struct SpotLight : public Light {
 	public:
 		vec3 position{}, direction{};
-        LightConstraint info{};
+		LightConstraint info{};
 		f32 cutoff = 12.5f, outerCutoff = 17.5f;
 
 		SpotLight() = default;

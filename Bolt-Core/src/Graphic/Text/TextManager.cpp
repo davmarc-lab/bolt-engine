@@ -13,7 +13,7 @@
 
 namespace bolt {
 
-	ShaderProgram textShader = ShaderProgram("shader/textVertShader.glsl", "shader/textFragShader.glsl");
+	ShaderProgram textShader = ShaderProgram("shader/textVertShader.glsl", "shader/textFragShader.glsl", textShaderMask);
 
 	void Text::init() {
 		if (this->m_created)
