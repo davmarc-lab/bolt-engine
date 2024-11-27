@@ -34,7 +34,7 @@ namespace bolt {
 				mesh->vertices = std::move(helper.vertex);
 				mesh->vbo_g.onAttach();
 				mesh->vbo_g.setup(mesh->vertices, 0);
-				mesh->vao.linkAttribFast(0, 3, GL_FLOAT, false, 0, 0);
+				mesh->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, 0);
 
 				if (!helper.colors.empty()) {
 					mesh->colorComponent.colors = std::move(helper.colors);
@@ -45,7 +45,7 @@ namespace bolt {
 				}
 				mesh->colorComponent.vbo_c.onAttach();
 				mesh->colorComponent.vbo_c.setup(mesh->colorComponent.colors, 0);
-				mesh->vao.linkAttribFast(1, 4, GL_FLOAT, false, 0, 0);
+				mesh->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, 0);
 
 				if (!helper.index.empty()) {
 					// init ebo
@@ -56,7 +56,7 @@ namespace bolt {
 					mesh->texCoord = std::move(helper.texCoords);
 					mesh->vbo_t.onAttach();
 					mesh->vbo_t.setup(mesh->texCoord, 0);
-					mesh->vao.linkAttribFast(2, 2, GL_FLOAT, false, 0, 0);
+					mesh->vao.linkAttribFast(SHADER_TEXCOORDS_LOCATION, 2, GL_FLOAT, false, 0, 0);
 				}
 
 				if (!helper.normals.empty()) {
@@ -64,7 +64,7 @@ namespace bolt {
 					norm->normals = std::move(helper.normals);
 					norm->vbo_n.onAttach();
 					norm->vbo_n.setup(norm->normals, 0);
-					mesh->vao.linkAttribFast(3, 3, GL_FLOAT, false, 0, 0);
+					mesh->vao.linkAttribFast(SHADER_NORMAL_LOCATION, 3, GL_FLOAT, false, 0, 0);
 				}
 
 				if (!em->entityHasComponent<Transform>(id)) {
@@ -72,6 +72,9 @@ namespace bolt {
 					t->setPosition(helper.position);
 					t->setScale(helper.scale);
 					t->setRotation(helper.rotation);
+				}
+				if (!em->entityHasComponent<Material>(id)) {
+					const auto t = em->addComponent<Material>(id);
 				}
 
 				// render

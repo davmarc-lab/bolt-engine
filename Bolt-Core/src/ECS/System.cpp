@@ -1,9 +1,56 @@
 #include "../../include/ECS/System.hpp"
+#include <memory>
 
 namespace bolt {
 	inline mat4 base = mat4(1);
 
 	namespace systems {
+		namespace ecs {
+			std::array<ShaderLightBlock, ::bolt::ecs::MAX_LIGHTS> retrieveLightsData() {
+				auto res = std::array<ShaderLightBlock, ::bolt::ecs::MAX_LIGHTS>();
+				size_t index = 0;
+				for (auto l : EntityManager::instance()->getLights()) {
+					switch (l->getLight()->type) {
+						case LIGHT_DIRECTIONAL: {
+							auto cast = std::static_pointer_cast<DirectionalLight>(l->getLight());
+							res[index].direction = cast->direction;
+							break;
+						}
+						case LIGHT_POINT: {
+							auto cast = std::static_pointer_cast<PointLight>(l->getLight());
+							res[index].position = cast->position;
+							res[index].constant = cast->info.constant;
+							res[index].linear = cast->info.linear;
+							res[index].quadratic = cast->info.quadratic;
+							break;
+						}
+						case LIGHT_SPOT: {
+							auto cast = std::static_pointer_cast<SpotLight>(l->getLight());
+							res[index].position = cast->position;
+							res[index].direction = cast->direction;
+							res[index].constant = cast->info.constant;
+							res[index].linear = cast->info.linear;
+							res[index].quadratic = cast->info.quadratic;
+							res[index].cutoff = cast->cutoff;
+							res[index].outerCutoff = cast->outerCutoff;
+							break;
+						}
+						default: {
+							std::cerr << "Invalid Light Type\n";
+							break;
+						}
+					}
+					res[index].type = l->getLight()->type;
+					res[index].color = l->getLight()->color;
+					res[index].intensity = l->getLight()->intensity;
+
+					// increment index
+					index++;
+				}
+				return std::move(res);
+			}
+		} // namespace ecs
+
 		namespace transform {
 			void updateEntityPosition(u32 id, const vec3 &pos) {
 				auto e = EntityManager::instance()->getEntityComponent<Transform>(id);
@@ -92,6 +139,7 @@ namespace bolt {
 
 						// If shader implements lights, send light informations
 						if (mask & ShaderConfig::shader_lights) {
+							s->setInt("lightsCount", EntityManager::instance()->getLightsCount());
 							s->setVec3("viewPos", standardCamera.getCameraPosition());
 							auto mat = EntityManager::instance()->getEntityComponent<Material>(id);
 							if (mat != nullptr) {

@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <array>
 #include "../Application/Application.hpp"
 
 #include "../Core/Math.hpp"
@@ -15,6 +16,10 @@
 
 namespace bolt {
 	namespace systems {
+		namespace ecs {
+			std::array<ShaderLightBlock, ::bolt::ecs::MAX_LIGHTS> retrieveLightsData();
+		} // namespace ecs
+
 		namespace transform {
 			void updateEntityPosition(u32 id, const vec3 &pos);
 

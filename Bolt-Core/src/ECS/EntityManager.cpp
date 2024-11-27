@@ -70,6 +70,23 @@ namespace bolt {
 		return this->m_currentId++;
 	}
 
+	u32 EntityManager::createLight(const LightHelper &helper) {
+		if (this->m_lightId < ecs::MAX_LIGHTS) {
+			this->m_lights.insert(std::make_pair(this->m_lightId, CreateShared<EntityLight>(helper)));
+			return this->m_lightId++;
+		}
+		return 0;
+	}
+
+	std::vector<Shared<EntityLight>> EntityManager::getLights() const {
+		std::vector<Shared<EntityLight>> res{};
+        res.reserve(std::views::values(this->m_lights).size());
+        for (auto v: std::views::values(this->m_lights)) {
+            res.push_back(v);
+        }
+		return res;
+	}
+
 	b8 EntityManager::removeEntity(const u32 &id) {
 		const auto ec_res = static_cast<bool>(this->m_ettComponents.erase(id));
 		const auto e_res = static_cast<bool>(this->m_entities.erase(id));

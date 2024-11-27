@@ -45,12 +45,6 @@ int main(int argc, char *argv[]) {
 	});
     EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 
-    UniformBuffer lights = UniformBuffer("Lights");
-    lights.onAttach();
-    lights.setup(sizeof(ShaderLightBlock), 1);
-    ShaderLightBlock slb{};
-    lights.update(0, sizeof(ShaderLightBlock), &slb);
-
 	const auto em = EntityManager::instance();
 	em->subscribeEventCallbacks();
 
@@ -62,6 +56,7 @@ int main(int argc, char *argv[]) {
 	auto vec = factory::mesh::getCircleVertices({0, 0}, {1, 1}, 50);
 	helper.vertex = std::move(vec.vertices);
 	helper.colors = std::move(vec.colors);
+    helper.normals = std::move(vec.normals);
 	helper.position = {0, 0, 0};
 	helper.scale = {1, 1, 0};
 	factory::mesh::instanceMesh(elem, helper);
@@ -69,14 +64,11 @@ int main(int argc, char *argv[]) {
 	scene->addEntity(elem);
 
     // lights
+    // DEBUG HERE
     LightHelper lh{};
+    lh.direction = vec4(0, 0, -1, 0);
     lh.type = LightType::LIGHT_DIRECTIONAL;
     em->createLight(lh);
-    em->createLight(lh);
-    lh.type = LightType::LIGHT_SPOT;
-    em->createLight(lh);
-
-    em->getLights(0);
 
 	Application::enableImGui();
 	const auto ig = CreateShared<ImGuiLayer>(w);

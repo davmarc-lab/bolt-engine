@@ -1,4 +1,6 @@
 #include "../../include/Application/Application.hpp"
+#include <array>
+#include <cstddef>
 
 #include "../../include/Core/InputManager.hpp"
 #include "../../include/Core/LayerManager.hpp"
@@ -8,17 +10,14 @@
 
 #include "../../include/Core/Timestep.hpp"
 
+#include "../../include/Graphic/Buffer/UniformBuffer.hpp"
 #include "../../include/Graphics.hpp"
 
 void bolt::Application::run() {
-	// if (s_settings.properties.projection != PROJ_AUTO) {
-	// setProjectionMatrix(s_settings.properties.projection == PROJ_ORTHO ? :);
-	// }
-
-    if (s_settings.properties.projection->getType() == PROJ_AUTO) {
-        std::cerr << "No Projection Specified.\n";
-        Application::closeApplication();
-    }
+	if (s_settings.properties.projection->getType() == PROJ_AUTO) {
+		std::cerr << "No Projection Specified.\n";
+		Application::closeApplication();
+	}
 
 	const auto rd = RenderApi::instance();
 	rd->init(config::RenderApiConfig::render_opengl);
@@ -63,6 +62,12 @@ void bolt::Application::run() {
 	});
 
 	Timer::instance()->start();
+
+	UniformBuffer lightsBuffer{SHADER_LIGHT_BLOCK_NAME};
+	lightsBuffer.onAttach();
+	lightsBuffer.setup(sizeof(ShaderLightBlock) * ecs::MAX_LIGHTS, SHADER_LIGHT_BLOCK_BIND);
+	auto lightsData = systems::ecs::retrieveLightsData();
+    lightsBuffer.update(0, sizeof(ShaderLightBlock) * ecs::MAX_LIGHTS, lightsData.data());
 
 	// TEST START
 	/*

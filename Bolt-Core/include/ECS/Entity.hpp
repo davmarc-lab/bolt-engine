@@ -28,12 +28,15 @@ namespace bolt {
 			switch (helper.type) {
 				case LIGHT_DIRECTIONAL: {
                     this->m_light = CreateShared<DirectionalLight>(helper);
+                    break;
 				}
 				case LIGHT_POINT: {
                     this->m_light = CreateShared<PointLight>(helper);
+                    break;
 				}
 				case LIGHT_SPOT: {
                     this->m_light = CreateShared<SpotLight>(helper);
+                    break;
 				}
 				default: {
 					std::cerr << "Invalid Light type.\n";

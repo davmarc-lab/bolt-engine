@@ -99,10 +99,10 @@ namespace bolt {
 	// Default Black plastic
 	struct Material : public Component {
 	public:
-		vec3 ambient{0, 0, 0};
-		vec3 diffuse{.01f, .01f, .01f};
-		vec3 specular{.5f, .5f, .5f};
-		f32 shininess = 32.f;
+		vec3 ambient{0.32, 0.22, 0.027};
+		vec3 diffuse{.78, .56, .11};
+		vec3 specular{.99, .94, .80};
+		f32 shininess = 27.f;
 
 		Material() = default;
 		~Material() override = default;
@@ -149,7 +149,7 @@ namespace bolt {
 		LightConstraint info{};
 
 		PointLight(const LightHelper &helper) :
-			Light(helper), position(helper.position), info(std::move(helper.info)) {}
+			Light(helper), position(helper.position), info(helper.info) {}
 
 		PointLight() = default;
 		~PointLight() override = default;
@@ -162,7 +162,7 @@ namespace bolt {
 		f32 cutoff = 12.5f, outerCutoff = 17.5f;
 
 		SpotLight(const LightHelper &helper) :
-			Light(helper), position(helper.position), direction(helper.direction), info(std::move(helper.info)), cutoff(helper.cutoff), outerCutoff(helper.outerCutoff) {}
+			Light(helper), position(helper.position), direction(helper.direction), info(helper.info), cutoff(helper.cutoff), outerCutoff(helper.outerCutoff) {}
 
 		SpotLight() = default;
 		~SpotLight() override = default;
