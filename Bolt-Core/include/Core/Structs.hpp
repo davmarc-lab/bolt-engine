@@ -65,4 +65,17 @@ namespace bolt {
 		vec3 rotation{};
 		RenderHelper renderInfo{};
 	};
+    
+    struct LightHelper {
+        std::string name = "Light";
+        LightType type;
+        vec3 color{1, 1, 1};
+        f32 intensity = 1;
+        b8 caster = false;
+        vec3 position{};
+        vec3 direction{};
+        LightConstraint info{};
+        f32 cutoff = 12.5f, outerCutoff = 17.5f;
+    };
+    
 } // namespace bolt

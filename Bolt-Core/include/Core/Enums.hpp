@@ -36,5 +36,6 @@ namespace bolt {
 
 	namespace ecs {
 		BT_CONSTEXPR u32 MAX_ENTITIES = 1024;
+		BT_CONSTEXPR u32 MAX_LIGHTS = 32;
 	}
 } // namespace bolt

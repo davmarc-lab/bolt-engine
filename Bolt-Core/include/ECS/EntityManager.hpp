@@ -11,6 +11,7 @@
 #include "Component.hpp"
 #include "Entity.hpp"
 
+#include "../Core/Enums.hpp"
 #include "../Core/Event.hpp"
 #include "../Core/Log.hpp"
 
@@ -22,8 +23,11 @@ namespace bolt {
 
 		b8 m_initEvents = false;
 		u32 m_currentId = 0;
+		u32 m_lightId = 0;
 
 		std::map<u32, Unique<Entity>> m_entities;
+        // it should be a vector
+		std::map<LightType, Shared<EntityLight>> m_lights;
 		std::map<u32, std::vector<Shared<Component>>> m_ettComponents;
 
 		// std::unordered_map<Component, std::vector<u32>> m_compEntities;
@@ -103,6 +107,22 @@ namespace bolt {
 		}
 
 		u32 createEntity();
+
+		inline u32 createLight(const LightHelper &helper) {
+			if (this->m_lightId < ecs::MAX_LIGHTS) {
+				this->m_lights.insert(std::make_pair(helper.type, CreateShared<EntityLight>(helper)));
+				return this->m_lightId++;
+			}
+			return 0;
+		}
+
+		inline Shared<EntityLight> getLights(const u32 &id) const {
+			std::vector<Shared<EntityLight>> res;
+			for (auto v: std::views::values(this->m_lights)) {
+                std::cout << v << "\n";
+            }
+            return nullptr;
+		}
 
 		inline u32 getEntitiesCount() const { return static_cast<u32>(this->m_entities.size()); }
 

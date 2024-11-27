@@ -69,8 +69,14 @@ int main(int argc, char *argv[]) {
 	scene->addEntity(elem);
 
     // lights
-    auto l = em->createEntity();
-    auto light = em->addComponent<SpotLight>(l);
+    LightHelper lh{};
+    lh.type = LightType::LIGHT_DIRECTIONAL;
+    em->createLight(lh);
+    em->createLight(lh);
+    lh.type = LightType::LIGHT_SPOT;
+    em->createLight(lh);
+
+    em->getLights(0);
 
 	Application::enableImGui();
 	const auto ig = CreateShared<ImGuiLayer>(w);
@@ -78,6 +84,7 @@ int main(int argc, char *argv[]) {
 
     auto info = CreateShared<ImGuiInfo>();
     ls->addCustomLayer(info);
+    ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
 
 	app->run();
 	std::cout << "Application closed\n";

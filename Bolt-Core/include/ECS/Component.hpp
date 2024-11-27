@@ -121,9 +121,12 @@ namespace bolt {
 	public:
 		vec3 color{1, 1, 1};
 		f32 intensity{};
-		LightType type = LightType::LIGHT_DIRECTIONAL;
+		LightType type;
 
 		b8 showCaster = true;
+
+		Light(const LightHelper &helper) :
+			type(helper.type), color(helper.color), intensity(helper.intensity) {}
 
 		Light() = default;
 		virtual ~Light() override = default;
@@ -132,6 +135,9 @@ namespace bolt {
 	struct DirectionalLight : public Light {
 	public:
 		vec3 direction{};
+
+		DirectionalLight(const LightHelper &helper) :
+			Light(helper), direction(helper.direction) {}
 
 		DirectionalLight() = default;
 		~DirectionalLight() override = default;
@@ -142,6 +148,9 @@ namespace bolt {
 		vec3 position{};
 		LightConstraint info{};
 
+		PointLight(const LightHelper &helper) :
+			Light(helper), position(helper.position), info(std::move(helper.info)) {}
+
 		PointLight() = default;
 		~PointLight() override = default;
 	};
@@ -151,6 +160,9 @@ namespace bolt {
 		vec3 position{}, direction{};
 		LightConstraint info{};
 		f32 cutoff = 12.5f, outerCutoff = 17.5f;
+
+		SpotLight(const LightHelper &helper) :
+			Light(helper), position(helper.position), direction(helper.direction), info(std::move(helper.info)), cutoff(helper.cutoff), outerCutoff(helper.outerCutoff) {}
 
 		SpotLight() = default;
 		~SpotLight() override = default;
