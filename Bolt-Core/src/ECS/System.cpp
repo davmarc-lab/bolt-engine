@@ -163,7 +163,7 @@ namespace bolt {
 
             void drawLightsCaster() {
                 auto shader = RenderApi::instance()->getRenderer()->getCastersShader();
-                shader->use();
+                // shader->use();
             }
 
 			void drawAllMeshes() {

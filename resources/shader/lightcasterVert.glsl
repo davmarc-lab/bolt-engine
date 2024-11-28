@@ -14,5 +14,5 @@ layout(std140, binding = 0) uniform Matrices {
 
 void main() {
     gl_Position = proj * view * model * vec4(aPos, 1.0f);
-    vs_out.vertColor = aColor;
+    vertColor = aColor;
 }

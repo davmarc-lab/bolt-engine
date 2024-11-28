@@ -7,6 +7,7 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <vector>
 
 #include "Component.hpp"
 #include "Entity.hpp"
@@ -61,6 +62,14 @@ namespace bolt {
 			this->m_ettComponents.at(id).push_back(elem);
 			return elem;
 		}
+
+        template <typename T>
+        inline b8 addComponent(const u32& id, const Shared<T>& comp) {
+            if (this->entityHasComponent<T>(id)) return false;
+
+            this->m_ettComponents.at(id).push_back(comp);
+            return this->entityHasComponent<T>(id);
+        }
 
 		inline b8 isEntityValid(const u32 &id) const {
 			return this->m_entities.contains(id);

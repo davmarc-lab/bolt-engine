@@ -11,9 +11,9 @@ namespace bolt {
 		auto vert = Application::getSceneType() == scene::SCENE_3D ? "shader/defaultPerspVertShader.glsl" : "shader/defaultOrthoVertShader.glsl";
 		this->m_shader = CreateUnique<ShaderProgram>(vert, "shader/defaultFragShader.glsl", defaultShaderMask);
 		this->m_shader->createShaderProgram();
-        
+
         // create light caster shader
-        this->m_casterShader = CreateUnique<ShaderProgram>("shader/lightcasterVert.glsl", "shader/lightcasterFrag.glsl");
+        this->m_casterShader = CreateUnique<ShaderProgram>("shader/lightcasterVert.glsl", "shader/lightcasterFrag.glsl", casterShaderMask);
         this->m_casterShader->createShaderProgram();
 	}
 

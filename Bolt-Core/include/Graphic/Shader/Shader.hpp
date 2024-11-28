@@ -24,9 +24,10 @@ namespace bolt {
 		shader_materials = 1 << 2,
 		shader_lights = 1 << 3,
 	};
-    using ShaderConfig = ShaderMask_;
+	using ShaderConfig = ShaderMask_;
 
 	BT_CONSTEXPR ShaderMask textShaderMask = shader_projection;
+	BT_CONSTEXPR ShaderMask casterShaderMask = shader_projection | shader_view;
 	BT_CONSTEXPR ShaderMask defaultShaderMask = shader_projection | shader_view | shader_materials | shader_lights;
 
 	class Shader {

@@ -78,6 +78,7 @@ OBJECTS := \
 	$(OBJDIR)/Scene.o \
 	$(OBJDIR)/EntityManager.o \
 	$(OBJDIR)/MeshFactory.o \
+	$(OBJDIR)/PrimitiveManager.o \
 	$(OBJDIR)/System.o \
 	$(OBJDIR)/GlElementBuffer.o \
 	$(OBJDIR)/GlFrameBuffer.o \
@@ -189,6 +190,9 @@ $(OBJDIR)/EntityManager.o: src/ECS/EntityManager.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/MeshFactory.o: src/ECS/MeshFactory.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/PrimitiveManager.o: src/ECS/PrimitiveManager.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/System.o: src/ECS/System.cpp

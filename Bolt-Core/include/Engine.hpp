@@ -22,6 +22,7 @@
 #include "ECS/Component.hpp"
 #include "ECS/Entity.hpp"
 #include "ECS/EntityManager.hpp"
+#include "ECS/PrimitivesManager.hpp"
 #include "ECS/System.hpp"
 
 #include "Graphic/Buffer/ElementBuffer.hpp"
