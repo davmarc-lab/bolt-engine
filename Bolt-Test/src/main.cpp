@@ -66,8 +66,10 @@ int main(int argc, char *argv[]) {
     // lights
     // DEBUG HERE
     LightHelper lh{};
-    lh.direction = vec4(0, 0, -1, 0);
-    lh.type = LightType::LIGHT_DIRECTIONAL;
+    lh.color = {1, 0, 0};
+    lh.direction = vec4(0, 0, 0, 0);
+    lh.position = vec4(0, 0, -1, 0);
+    lh.type = LightType::LIGHT_POINT;
     em->createLight(lh);
 
 	Application::enableImGui();

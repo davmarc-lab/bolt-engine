@@ -63,12 +63,6 @@ void bolt::Application::run() {
 
 	Timer::instance()->start();
 
-	UniformBuffer lightsBuffer{SHADER_LIGHT_BLOCK_NAME};
-	lightsBuffer.onAttach();
-	lightsBuffer.setup(sizeof(ShaderLightBlock) * ecs::MAX_LIGHTS, SHADER_LIGHT_BLOCK_BIND);
-	auto lightsData = systems::ecs::retrieveLightsData();
-    lightsBuffer.update(0, sizeof(ShaderLightBlock) * ecs::MAX_LIGHTS, lightsData.data());
-
 	// TEST START
 	/*
 		{

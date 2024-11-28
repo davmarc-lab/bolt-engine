@@ -18,6 +18,8 @@ namespace bolt {
 	namespace systems {
 		namespace ecs {
 			std::array<ShaderLightBlock, ::bolt::ecs::MAX_LIGHTS> retrieveLightsData();
+
+            void sendLightData(const ShaderProgram& shader);
 		} // namespace ecs
 
 		namespace transform {

@@ -122,11 +122,12 @@ namespace bolt {
 		vec3 color{1, 1, 1};
 		f32 intensity{};
 		LightType type;
+        LightVectors vectors;
 
 		b8 showCaster = true;
 
 		Light(const LightHelper &helper) :
-			type(helper.type), color(helper.color), intensity(helper.intensity) {}
+			type(helper.type), vectors(helper.vectors), color(helper.color), intensity(helper.intensity) {}
 
 		Light() = default;
 		virtual ~Light() override = default;

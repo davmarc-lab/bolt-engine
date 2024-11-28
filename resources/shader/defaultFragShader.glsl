@@ -46,10 +46,7 @@ struct Light {
     bool isSmooth;
 };
 
-layout(std140, binding = 1) uniform Lights {
-    Light lights[MAX_LIGHTS];
-};
-
+uniform Light lights[MAX_LIGHTS];
 uniform int lightsCount;
 
 vec3 norm = vec3(0);
@@ -120,7 +117,7 @@ vec3 spotLight(Light light) {
     return (ambient + diffuse + specular);
 }
 
-vec3 result = vec3(1);
+vec3 result = vec3(0);
 
 void main() {
     norm = normalize(fs_out.normal);

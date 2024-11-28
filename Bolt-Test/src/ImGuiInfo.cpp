@@ -22,6 +22,11 @@ void ImGuiInfo::onRender() {
 				break;
 			}
 			case bolt::LIGHT_POINT: {
+                auto cast = std::static_pointer_cast<bolt::PointLight>(l->getLight());
+                auto dir = cast->position;
+                if (ImGui::DragFloat3("Pos", &dir.x)) {
+                    cast->position = dir;
+                }
 				break;
 			}
 			case bolt::LIGHT_SPOT: {

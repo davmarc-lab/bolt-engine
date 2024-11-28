@@ -43,11 +43,52 @@ namespace bolt {
 					res[index].type = l->getLight()->type;
 					res[index].color = l->getLight()->color;
 					res[index].intensity = l->getLight()->intensity;
+					res[index].ambient = l->getLight()->vectors.ambient;
+					res[index].diffuse = l->getLight()->vectors.diffuse;
+					res[index].specular = l->getLight()->vectors.specular;
 
 					// increment index
 					index++;
 				}
 				return std::move(res);
+			}
+			void sendLightData(const ShaderProgram &shader) {
+				const auto lights = retrieveLightsData();
+				shader.use();
+				for (auto index = 0; index < lights.size() && index < EntityManager::instance()->getLightsCount(); index++) {
+					auto l = lights[index];
+					shader.setVec3("lights[" + std::to_string(index) + "].color", l.color);
+					shader.setFloat("lights[" + std::to_string(index) + "].intensity", l.intensity);
+					shader.setInt("lights[" + std::to_string(index) + "].type", l.type);
+					shader.setBool("lights[" + std::to_string(index) + "].isSmooth", l.isSmooth);
+					shader.setVec3("lights[" + std::to_string(index) + "].ambient", l.ambient);
+					shader.setVec3("lights[" + std::to_string(index) + "].diffuse", l.diffuse);
+					shader.setVec3("lights[" + std::to_string(index) + "].specular", l.specular);
+
+					switch (l.type) {
+						case LightType::LIGHT_DIRECTIONAL: {
+							shader.setVec3("lights[" + std::to_string(index) + "].direction", l.direction);
+							break;
+						}
+						case LightType::LIGHT_POINT: {
+							shader.setVec3("lights[" + std::to_string(index) + "].position", l.position);
+							shader.setFloat("lights[" + std::to_string(index) + "].constant", l.constant);
+							shader.setFloat("lights[" + std::to_string(index) + "].linear", l.linear);
+							shader.setFloat("lights[" + std::to_string(index) + "].quadratic", l.quadratic);
+							break;
+						}
+						case LightType::LIGHT_SPOT: {
+							shader.setVec3("lights[" + std::to_string(index) + "].position", l.position);
+							shader.setVec3("lights[" + std::to_string(index) + "].direction", l.direction);
+							shader.setFloat("lights[" + std::to_string(index) + "].constant", l.constant);
+							shader.setFloat("lights[" + std::to_string(index) + "].linear", l.linear);
+							shader.setFloat("lights[" + std::to_string(index) + "].quadratic", l.quadratic);
+							shader.setFloat("lights[" + std::to_string(index) + "].cutOff", l.cutoff);
+							shader.setFloat("lights[" + std::to_string(index) + "].outerCutoff", l.outerCutoff);
+							break;
+						}
+					}
+				}
 			}
 		} // namespace ecs
 
@@ -122,7 +163,7 @@ namespace bolt {
 
 			void drawAllMeshes() {
 				const auto meshes = EntityManager::instance()->getEntitiesFromComponent<Mesh>();
-				const auto lights = EntityManager::instance()->getEntitiesFromComponent<Light>();
+				const auto lights = ::bolt::systems::ecs::retrieveLightsData();
 				for (const auto id : meshes) {
 					const auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(id);
 					const auto model = EntityManager::instance()->getEntityComponent<Transform>(id);
@@ -136,6 +177,8 @@ namespace bolt {
 							s->setMat4("view", standardCamera.getViewMatrix());
 						}
 						s->setMat4("model", model->getModelMatrix());
+
+						::bolt::systems::ecs::sendLightData(*s);
 
 						// If shader implements lights, send light informations
 						if (mask & ShaderConfig::shader_lights) {

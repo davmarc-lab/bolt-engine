@@ -107,51 +107,51 @@ namespace bolt {
 		glUseProgram(this->m_id);
 	}
 
-	void ShaderProgram::setBool(const std::string& name, b8 value) {
+	void ShaderProgram::setBool(const std::string& name, b8 value) const {
 		glUniform1i(glGetUniformLocation(this->getId(), name.c_str()), (int)value);
 	}
 
-	void ShaderProgram::setInt(const std::string& name, i32 value) {
+	void ShaderProgram::setInt(const std::string& name, i32 value) const {
 		glUniform1i(glGetUniformLocation(this->getId(), name.c_str()), value);
 	}
 
-	void ShaderProgram::setFloat(const std::string& name, f32 value) {
+	void ShaderProgram::setFloat(const std::string& name, f32 value) const {
 		glUniform1f(glGetUniformLocation(this->getId(), name.c_str()), value);
 	}
 
-	void ShaderProgram::setVec2(const std::string& name, const vec2& value) {
+	void ShaderProgram::setVec2(const std::string& name, const vec2& value) const {
 		glUniform2fv(glGetUniformLocation(this->getId(), name.c_str()), 1, &value[0]);
 	}
 
-	void ShaderProgram::setVec2(const std::string& name, f32 x, f32 y) {
+	void ShaderProgram::setVec2(const std::string& name, f32 x, f32 y) const {
 		glUniform2f(glGetUniformLocation(this->getId(), name.c_str()), x, y);
 	}
 
-	void ShaderProgram::setVec3(const std::string& name, const vec3& value) {
+	void ShaderProgram::setVec3(const std::string& name, const vec3& value) const {
 		glUniform3fv(glGetUniformLocation(this->getId(), name.c_str()), 1, &value[0]);
 	}
 
-	void ShaderProgram::setVec3(const std::string& name, f32 x, f32 y, f32 z) {
+	void ShaderProgram::setVec3(const std::string& name, f32 x, f32 y, f32 z) const {
 		glUniform3f(glGetUniformLocation(this->getId(), name.c_str()), x, y, z);
 	}
 
-	void ShaderProgram::setVec4(const std::string& name, const vec4& value) {
+	void ShaderProgram::setVec4(const std::string& name, const vec4& value) const {
 		glUniform4fv(glGetUniformLocation(this->getId(), name.c_str()), 1, &value[0]);
 	}
 
-	void ShaderProgram::setVec4(const std::string& name, f32 x, f32 y, f32 z, f32 w) {
+	void ShaderProgram::setVec4(const std::string& name, f32 x, f32 y, f32 z, f32 w) const {
 		glUniform4f(glGetUniformLocation(this->getId(), name.c_str()), x, y, z, w);
 	}
 
-	void ShaderProgram::setMat2(const std::string& name, const mat2& mat) {
+	void ShaderProgram::setMat2(const std::string& name, const mat2& mat) const {
 		glUniformMatrix2fv(glGetUniformLocation(this->getId(), name.c_str()), 1, GL_FALSE, &mat[0][0]);
 	}
 
-	void ShaderProgram::setMat3(const std::string& name, const mat3& mat) {
+	void ShaderProgram::setMat3(const std::string& name, const mat3& mat) const {
 		glUniformMatrix3fv(glGetUniformLocation(this->getId(), name.c_str()), 1, GL_FALSE, &mat[0][0]);
 	}
 
-	void ShaderProgram::setMat4(const std::string& name, const mat4& mat) {
+	void ShaderProgram::setMat4(const std::string& name, const mat4& mat) const {
 		glUniformMatrix4fv(glGetUniformLocation(this->getId(), name.c_str()), 1, GL_FALSE, &mat[0][0]);
 	}
 } // namespace Bolt

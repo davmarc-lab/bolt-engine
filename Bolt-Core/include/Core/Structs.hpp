@@ -16,6 +16,12 @@ namespace bolt {
 		LIGHT_SPOT,
 	};
 
+	struct LightVectors {
+		vec3 ambient{.1f, .1f, .1f};
+		vec3 diffuse{.8f, .8f, .8f};
+		vec3 specular{1, 1, 1};
+	};
+
 	struct LightConstraint {
 		f32 constant = 1.f, linear = .09f, quadratic = .032f;
 	};
@@ -28,9 +34,9 @@ namespace bolt {
 		vec3 position{};
 		vec3 direction{};
 
-		vec3 ambient{};
-		vec3 diffuse{};
-		vec3 specular{};
+		vec3 ambient{.1f, .1f, .1f};
+		vec3 diffuse{.8f, .8f, .8f};
+		vec3 specular{1, 1, 1};
 
 		float constant = 1;
 		float linear = .09f;
@@ -65,17 +71,18 @@ namespace bolt {
 		vec3 rotation{};
 		RenderHelper renderInfo{};
 	};
-    
-    struct LightHelper {
-        std::string name = "Light";
-        LightType type;
-        vec3 color{1, 1, 1};
-        f32 intensity = 1;
-        b8 caster = false;
-        vec3 position{};
-        vec3 direction{};
-        LightConstraint info{};
-        f32 cutoff = 12.5f, outerCutoff = 17.5f;
-    };
-    
+
+	struct LightHelper {
+		std::string name = "Light";
+		LightType type;
+		LightVectors vectors;
+		vec3 color{1, 1, 1};
+		f32 intensity = 1;
+		b8 caster = false;
+		vec3 position{};
+		vec3 direction{};
+		LightConstraint info{};
+		f32 cutoff = 12.5f, outerCutoff = 17.5f;
+	};
+
 } // namespace bolt

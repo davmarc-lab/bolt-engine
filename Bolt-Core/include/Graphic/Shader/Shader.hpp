@@ -73,22 +73,22 @@ namespace bolt {
 
 		inline ShaderMask getMask() const { return this->m_mask; }
 
-		void setBool(const std::string &name, b8 value);
-		void setInt(const std::string &name, i32 value);
-		void setFloat(const std::string &name, f32 value);
+		void setBool(const std::string &name, b8 value) const;
+		void setInt(const std::string &name, i32 value) const;
+		void setFloat(const std::string &name, f32 value) const;
 
-		void setVec2(const std::string &name, const vec2 &value);
-		void setVec2(const std::string &name, f32 x, f32 y);
+		void setVec2(const std::string &name, const vec2 &value) const;
+		void setVec2(const std::string &name, f32 x, f32 y) const;
 
-		void setVec3(const std::string &name, const vec3 &value);
-		void setVec3(const std::string &name, f32 x, f32 y, f32 z);
+		void setVec3(const std::string &name, const vec3 &value) const;
+		void setVec3(const std::string &name, f32 x, f32 y, f32 z) const;
 
-		void setVec4(const std::string &name, const vec4 &value);
-		void setVec4(const std::string &name, f32 x, f32 y, f32 z, f32 w);
+		void setVec4(const std::string &name, const vec4 &value) const;
+		void setVec4(const std::string &name, f32 x, f32 y, f32 z, f32 w) const;
 
-		void setMat2(const std::string &name, const mat2 &mat);
-		void setMat3(const std::string &name, const mat3 &mat);
-		void setMat4(const std::string &name, const mat4 &mat);
+		void setMat2(const std::string &name, const mat2 &mat) const;
+		void setMat3(const std::string &name, const mat3 &mat) const;
+		void setMat4(const std::string &name, const mat4 &mat) const;
 
 		ShaderProgram() = default;
 
