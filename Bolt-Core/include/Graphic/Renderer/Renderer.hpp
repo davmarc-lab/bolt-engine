@@ -16,6 +16,8 @@ namespace bolt {
 
         virtual ShaderProgram* getDefaultShader() const;
 
+        virtual ShaderProgram* getCastersShader() const;
+
 		virtual void drawArrays(const VertexArray &vao, const u32 &mode, const i32 &first, const size_t &count);
 
 		virtual void drawElements(const VertexArray &vao, const u32 &mode, const size_t &count, const u32 &type, const void *indices = nullptr);
@@ -32,5 +34,6 @@ namespace bolt {
 
     private:
         Unique<ShaderProgram> m_shader = nullptr;
+        Unique<ShaderProgram> m_casterShader = nullptr;
 	};
 } // namespace bolt

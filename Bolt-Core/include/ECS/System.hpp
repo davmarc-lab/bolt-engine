@@ -37,6 +37,8 @@ namespace bolt {
 
 			void drawElementIndexed(u32 id);
 
+            void drawLightsCaster();
+
 			void drawAllMeshes();
 		} // namespace render
 	} // namespace systems

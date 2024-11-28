@@ -49,16 +49,15 @@ int main(int argc, char *argv[]) {
 	em->subscribeEventCallbacks();
 
 	MeshHelper helper{};
-	helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLE_FAN, 0};
+	helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLES, 0};
 
     // meshes
     auto elem = em->createEntity();
-	auto vec = factory::mesh::getCircleVertices({0, 0}, {1, 1}, 50);
-	helper.vertex = std::move(vec.vertices);
-	helper.colors = std::move(vec.colors);
-    helper.normals = std::move(vec.normals);
+    helper.vertex = factory::mesh::cubeGeometry;
+	helper.colors = factory::mesh::getColorVector(sizeof(helper.vertex), {1, 0, 0, 1});
+    helper.normals = factory::mesh::cubeNormals;
 	helper.position = {0, 0, 0};
-	helper.scale = {1, 1, 0};
+	helper.scale = {1, 1, 1};
 	factory::mesh::instanceMesh(elem, helper);
 	em->addComponent<Collider>(elem);
 	scene->addEntity(elem);
@@ -70,6 +69,7 @@ int main(int argc, char *argv[]) {
     lh.direction = vec4(0, 0, 0, 0);
     lh.position = vec4(0, 0, -1, 0);
     lh.type = LightType::LIGHT_POINT;
+    lh.caster = true;
     em->createLight(lh);
 
 	Application::enableImGui();

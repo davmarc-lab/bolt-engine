@@ -2,20 +2,26 @@
 
 #include "../../../Bolt-Graphics/include/glad/glad.h"
 
-#include "../../include/Graphic/Buffer/VertexArray.hpp"
 #include "../../include/Application/Application.hpp"
+#include "../../include/Graphic/Buffer/VertexArray.hpp"
 
 namespace bolt {
 	void Renderer::onAttach() {
 		// create the default shader
-    auto vert = Application::getSceneType() == scene::SCENE_3D ? "shader/defaultPerspVertShader.glsl" : "shader/defaultOrthoVertShader.glsl";
+		auto vert = Application::getSceneType() == scene::SCENE_3D ? "shader/defaultPerspVertShader.glsl" : "shader/defaultOrthoVertShader.glsl";
 		this->m_shader = CreateUnique<ShaderProgram>(vert, "shader/defaultFragShader.glsl", defaultShaderMask);
 		this->m_shader->createShaderProgram();
+        
+        // create light caster shader
+        this->m_casterShader = CreateUnique<ShaderProgram>("shader/lightcasterVert.glsl", "shader/lightcasterFrag.glsl");
+        this->m_casterShader->createShaderProgram();
 	}
 
 	void Renderer::onDetach() {}
 
-    ShaderProgram* Renderer::getDefaultShader() const { return this->m_shader.get(); }
+	ShaderProgram *Renderer::getDefaultShader() const { return this->m_shader.get(); }
+
+	ShaderProgram *Renderer::getCastersShader() const { return this->m_casterShader.get(); }
 
 	void Renderer::drawArrays(const VertexArray &vao, const u32 &mode, const i32 &first, const size_t &count) {
 		vao.bind();
