@@ -7,6 +7,9 @@
 #include "Component.hpp"
 
 namespace bolt {
+
+	BT_CONSTEXPR f32 LIGHT_CASTER_DIM = 0.3f;
+	
 	class PrimitiveManager {
 	public:
         u32 addCubePrimitive(const vec3& pos, const vec3& scale, const vec3& rot);

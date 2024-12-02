@@ -11,7 +11,7 @@ void ImGuiInfo::onRender() {
 	ImGui::End();
 
 	ImGui::Begin("Lights");
-	for (auto l : bolt::EntityManager::instance()->getLights()) {
+	for (auto [id, l] : bolt::EntityManager::instance()->getLights()) {
 		switch (l->getLight()->type) {
 			case bolt::LIGHT_DIRECTIONAL: {
                 auto cast = std::static_pointer_cast<bolt::DirectionalLight>(l->getLight());
@@ -23,9 +23,9 @@ void ImGuiInfo::onRender() {
 			}
 			case bolt::LIGHT_POINT: {
                 auto cast = std::static_pointer_cast<bolt::PointLight>(l->getLight());
-                auto dir = cast->position;
-                if (ImGui::DragFloat3("Pos", &dir.x)) {
-                    cast->position = dir;
+                auto pos = cast->position;
+                if (ImGui::DragFloat3("Pos", &pos.x)) {
+                	bolt::systems::transform::updateLightPosition(id, pos);
                 }
 				break;
 			}

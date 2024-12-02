@@ -118,9 +118,11 @@ namespace bolt {
 
 		u32 createLight(const LightHelper &helper);
 
-		std::vector<Shared<EntityLight>> getLights() const;
+		std::map<u32, Shared<EntityLight>> getLights() const;
 
 		inline size_t getLightsCount() const { return std::views::values(this->m_lights).size(); }
+
+		inline Shared<EntityLight> getLightFromId(const u32& id) const { return this->m_lights.at(id); }
 
 		inline u32 getEntitiesCount() const { return static_cast<u32>(this->m_entities.size()); }
 

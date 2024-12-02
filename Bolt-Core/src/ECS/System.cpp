@@ -9,7 +9,7 @@ namespace bolt {
 			std::array<ShaderLightBlock, ::bolt::ecs::MAX_LIGHTS> retrieveLightsData() {
 				auto res = std::array<ShaderLightBlock, ::bolt::ecs::MAX_LIGHTS>();
 				size_t index = 0;
-				for (auto l : EntityManager::instance()->getLights()) {
+				for (auto [id, l] : EntityManager::instance()->getLights()) {
 					switch (l->getLight()->type) {
 						case LIGHT_DIRECTIONAL: {
 							auto cast = std::static_pointer_cast<DirectionalLight>(l->getLight());
@@ -52,6 +52,7 @@ namespace bolt {
 				}
 				return std::move(res);
 			}
+
 			void sendLightData(const ShaderProgram &shader) {
 				const auto lights = retrieveLightsData();
 				shader.use();
@@ -93,17 +94,51 @@ namespace bolt {
 		} // namespace ecs
 
 		namespace transform {
+			void updateLightPosition(const u32 &id, const vec3 &pos) {
+				switch (const auto l = EntityManager::instance()->getLightFromId(id); l->getLight()->type) {
+					case LIGHT_DIRECTIONAL: {
+						break;
+					}
+					case LIGHT_POINT: {
+						auto cast = std::static_pointer_cast<PointLight>(l->getLight());
+						cast->position = pos;
+						if (cast->showCaster) {
+							auto t = EntityManager::instance()->getEntityComponent<Transform>(l->getCasterId());
+							if (t != nullptr) {
+								t->setPosition(pos);
+							}
+						}
+						break;
+					}
+					case LIGHT_SPOT: {
+						auto cast = std::static_pointer_cast<SpotLight>(l->getLight());
+						cast->position = pos;
+						if (cast->showCaster) {
+							auto t = EntityManager::instance()->getEntityComponent<Transform>(l->getCasterId());
+							if (t != nullptr) {
+								t->setPosition(pos);
+							}
+						}
+						break;
+					}
+					default: {
+						std::cerr << "Invalid Light Type\n";
+						break;
+					}
+				}
+			}
+
 			void updateEntityPosition(u32 id, const vec3 &pos) {
-				auto e = EntityManager::instance()->getEntityComponent<Transform>(id);
-				if (e != nullptr) {
-					e->addPosition(pos);
+				auto em = EntityManager::instance()->getEntityComponent<Transform>(id);
+				if (em != nullptr) {
+					em->addPosition(pos);
 				}
 			}
 
 			void updateEntityRotation(u32 id, const vec3 &rot) {
-				auto e = EntityManager::instance()->getEntityComponent<Transform>(id);
-				if (e != nullptr)
-					e->setRotation(rot);
+				auto em = EntityManager::instance()->getEntityComponent<Transform>(id);
+				if (em != nullptr)
+					em->setRotation(rot);
 			}
 
 			void updateModelMatrix(u32 id) {
@@ -161,10 +196,10 @@ namespace bolt {
 				RenderApi::instance()->getRenderer()->drawElementsTriangles(mesh->vao, mesh->indices.size());
 			}
 
-            void drawLightsCaster() {
-                auto shader = RenderApi::instance()->getRenderer()->getCastersShader();
-                // shader->use();
-            }
+			void drawLightsCaster() {
+				auto shader = RenderApi::instance()->getRenderer()->getCastersShader();
+				// shader->use();
+			}
 
 			void drawAllMeshes() {
 				const auto meshes = EntityManager::instance()->getEntitiesFromComponent<Mesh>();
@@ -210,6 +245,6 @@ namespace bolt {
 				}
 			}
 		} // namespace render
-	} // namespace systems
+	}     // namespace systems
 
 } // namespace bolt

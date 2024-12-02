@@ -8,24 +8,17 @@ in vec4 vertColor;
 in VS_OUT {
     vec4 vertColor;
     vec2 texCoord;
-    // vec3 normal;
+    vec3 normal;
 } fs_out;
 
 out vec4 fragColor;
 in vec3 FragPos;
-// uniform vec3 FragPos;
-// TO REMOVE
-uniform vec3 normal;
 
 struct Material {
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
     float shininess;
-};
-
-layout(std140, binding = 1) uniform Lights {
-    int a;
 };
 
 uniform Material material;
@@ -53,6 +46,9 @@ struct Light {
     bool isSmooth;
 };
 
+uniform Light lights[MAX_LIGHTS];
+uniform int lightsCount;
+
 vec3 norm = vec3(0);
 vec3 lightDir = vec3(0);
 float diff = 0.f;
@@ -60,8 +56,9 @@ vec3 viewDir = vec3(0);
 vec3 reflectDir = vec3(0);
 float spec = 0.f;
 
+// type = 0
 vec3 directionalLight(Light light) {
-    vec3 norm = normalize(normal);
+    vec3 norm = normalize(fs_out.normal);
 
     // ambient
     vec3 ambient = light.intensity * light.color * light.ambient * material.ambient;
@@ -80,6 +77,7 @@ vec3 directionalLight(Light light) {
     return (ambient + diffuse + specular);
 }
 
+// type = 1
 vec3 pointLight(Light light) {
     float distance = length(light.position - FragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
@@ -96,6 +94,7 @@ vec3 pointLight(Light light) {
     return (ambient + diffuse + specular);
 }
 
+// type = 2
 vec3 spotLight(Light light) {
     // attenuation
     float distance = length(light.position - FragPos);
@@ -118,7 +117,33 @@ vec3 spotLight(Light light) {
     return (ambient + diffuse + specular);
 }
 
+vec3 result = vec3(0);
+
 void main() {
-    fragColor = fs_out.vertColor;
-    // fragColor = vec4(a, 0, 0, 1);
+    norm = normalize(fs_out.normal);
+    viewDir = normalize(viewPos - FragPos);
+
+    for (int i = 0; i < lightsCount; i++) {
+        lightDir = normalize(lights[i].position - FragPos);
+        diff = max(dot(norm, lightDir), 0.);
+        reflectDir = normalize(lightDir + viewDir);
+        spec = pow(max(dot(norm, reflectDir), 0.0), material.shininess);
+
+        switch (lights[i].type) {
+            case 0: {
+                result += directionalLight(lights[i]);
+                break;
+            }
+            case 1: {
+                result += pointLight(lights[i]);
+                break;
+            }
+            case 2: {
+                result += spotLight(lights[i]);
+                break;
+            }
+        }
+    }
+
+    fragColor = vec4(result, 1);
 }

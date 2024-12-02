@@ -78,13 +78,8 @@ namespace bolt {
 		return 0;
 	}
 
-	std::vector<Shared<EntityLight>> EntityManager::getLights() const {
-		std::vector<Shared<EntityLight>> res{};
-        res.reserve(std::views::values(this->m_lights).size());
-        for (auto v: std::views::values(this->m_lights)) {
-            res.push_back(v);
-        }
-		return res;
+	std::map<u32, Shared<EntityLight>> EntityManager::getLights() const {
+		return this->m_lights;
 	}
 
 	b8 EntityManager::removeEntity(const u32 &id) {

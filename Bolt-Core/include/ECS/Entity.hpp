@@ -2,6 +2,7 @@
 
 #include <string>
 #include "Component.hpp"
+#include "PrimitivesManager.hpp"
 
 namespace bolt {
 	class Entity {
@@ -27,28 +28,34 @@ namespace bolt {
 			Entity(helper.name) {
 			switch (helper.type) {
 				case LIGHT_DIRECTIONAL: {
-                    this->m_light = CreateShared<DirectionalLight>(helper);
-                    break;
+					this->m_light = CreateShared<DirectionalLight>(helper);
+					break;
 				}
 				case LIGHT_POINT: {
-                    this->m_light = CreateShared<PointLight>(helper);
-                    break;
+					this->m_light = CreateShared<PointLight>(helper);
+					break;
 				}
 				case LIGHT_SPOT: {
-                    this->m_light = CreateShared<SpotLight>(helper);
-                    break;
+					this->m_light = CreateShared<SpotLight>(helper);
+					break;
 				}
 				default: {
 					std::cerr << "Invalid Light type.\n";
 					break;
 				}
 			}
+			if (helper.caster) {
+				this->m_caster = PrimitiveManager::instance()->addCubePrimitive(helper.position, vec3(LIGHT_CASTER_DIM), vec3(0));
+			}
 		}
 
+		u32 getCasterId() const { return this->m_caster; }
+		
 		EntityLight() = delete;
 		~EntityLight() override = default;
 
 	private:
 		Shared<Light> m_light{};
+		u32 m_caster{};
 	};
 } // namespace bolt

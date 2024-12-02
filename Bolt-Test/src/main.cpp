@@ -5,6 +5,10 @@
 
 using namespace bolt;
 
+struct FakeCamera {
+	f32 left = 0, right = 0, up = 0, bot = 0;
+} cam;
+
 int main(int argc, char *argv[]) {
 	std::cout << "Application started\n";
 
@@ -14,10 +18,10 @@ int main(int argc, char *argv[]) {
 	properties.backgroundColor = vec4(0.3, 0.3, 0.3, 1);
 	properties.depth = {true, true, GL_LESS};
 	properties.cull = {true, GL_BACK};
-	properties.projection = CreateShared<InfoPersp>(45.f, 1600, 900, 0.1, 100);
+	properties.projection = CreateShared<InfoOrtho>(0, 1600.f, 0, 900.f);
 
 	ApplicationSetting settings{};
-	settings.type = scene::SCENE_3D;
+	settings.type = scene::SCENE_2D;
 	settings.name = "Bolt Application";
 	settings.dimension = {1600, 900};
 	settings.properties = properties;
@@ -56,19 +60,26 @@ int main(int argc, char *argv[]) {
 	helper.vertex = factory::mesh::cubeGeometry;
 	helper.colors = factory::mesh::getColorVector(sizeof(helper.vertex), {1, 0, 0, 1});
 	helper.normals = factory::mesh::cubeNormals;
-	helper.position = {0, 0, 0};
-	helper.scale = {1, 1, 1};
+	helper.position = {200, 200, 0};
+	helper.scale = {100, 100, 1};
 	factory::mesh::instanceMesh(elem, helper);
 	em->addComponent<Collider>(elem);
 	scene->addEntity(elem);
+
+	const auto im = InputManager::instance();
+	EventDispatcher::instance()->subscribe(events::loop::LoopInput, [&im, &properties](...) {
+		if (im->isKeyPressed(GLFW_KEY_W)) {
+			cam.up += 10;
+			std::static_pointer_cast<InfoOrtho>(properties.projection)->setUp(cam.up);
+		}
+	});
 
 	// lights
 	// DEBUG HERE
 	LightHelper lh{};
 	lh.color = {1, 0, 0};
-	lh.direction = vec4(0, 0, 0, 0);
-	lh.position = vec4(0, 0, -1, 0);
-	lh.type = LightType::LIGHT_POINT;
+	lh.direction = vec4(0, 0, -1, 0);
+	lh.type = LightType::LIGHT_DIRECTIONAL;
 	lh.caster = true;
 	em->createLight(lh);
 
@@ -80,11 +91,6 @@ int main(int argc, char *argv[]) {
 	ls->addCustomLayer(info);
 	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
 
-	{
-		auto id = PrimitiveManager::instance()->addCubePrimitive(vec3(0), vec3(0), vec3(0));
-		auto c = em->getEntityComponent<Mesh>(id);
-		std::cout << (c == nullptr) << "\n";
-	}
 	app->run();
 	std::cout << "Application closed\n";
 }

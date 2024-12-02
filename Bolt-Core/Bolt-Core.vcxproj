@@ -108,6 +108,7 @@
     <ClInclude Include="include\Core\Structs.hpp" />
     <ClInclude Include="include\Core\Timestep.hpp" />
     <ClInclude Include="include\Core\Utils.hpp" />
+    <ClInclude Include="include\ECS\PrimitivesManager.hpp" />
     <ClInclude Include="include\Graphics.hpp" />
     <ClInclude Include="include\Graphic\Buffer\UniformBuffer.hpp" />
     <ClInclude Include="include\Graphic\Camera\Camera.hpp" />
@@ -144,6 +145,8 @@
     <ClCompile Include="src\Core\Resource.cpp" />
     <ClCompile Include="src\Core\Scene.cpp" />
     <ClCompile Include="src\ECS\EntityManager.cpp" />
+    <ClCompile Include="src\ECS\PrimitiveManager.cpp" />
+    <ClCompile Include="src\ECS\System.cpp" />
     <ClCompile Include="src\Graphic\Buffer\GlElementBuffer.cpp" />
     <ClCompile Include="src\Graphic\Buffer\GlFrameBuffer.cpp" />
     <ClCompile Include="src\Graphic\Buffer\GlRenderBuffer.cpp" />
@@ -171,6 +174,17 @@
     <ProjectReference Include="..\Bolt-Vendor\Bolt-Vendor.vcxproj">
       <Project>{42c3df11-ae82-4801-a793-bb8050fb0dd9}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\fonts\arial.ttf" />
+    <Content Include="resources\shader\defaultFragShader.glsl" />
+    <Content Include="resources\shader\defaultOrthoVertShader.glsl" />
+    <Content Include="resources\shader\defaultPerspVertShader.glsl" />
+    <Content Include="resources\shader\geometryShader.glsl" />
+    <Content Include="resources\shader\lightcasterFrag.glsl" />
+    <Content Include="resources\shader\lightcasterVert.glsl" />
+    <Content Include="resources\shader\textFragShader.glsl" />
+    <Content Include="resources\shader\textVertShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

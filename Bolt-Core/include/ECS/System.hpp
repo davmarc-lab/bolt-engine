@@ -23,6 +23,8 @@ namespace bolt {
 		} // namespace ecs
 
 		namespace transform {
+			void updateLightPosition(const u32& id, const vec3& pos);
+			
 			void updateEntityPosition(u32 id, const vec3 &pos);
 
 			void updateEntityRotation(u32 id, const vec3 &rot);

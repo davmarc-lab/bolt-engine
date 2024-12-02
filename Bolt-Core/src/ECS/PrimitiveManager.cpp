@@ -48,7 +48,10 @@ namespace bolt {
 
         Shared<Mesh> comp = CreateShared<Mesh>(this->m_cube);
         em->addComponent<Mesh>(id, comp);
-
+		auto t = em->addComponent<Transform>(id);
+		t->setPosition(pos);
+		t->setScale(scale);
+		t->setRotation(rot);
         return id;
     }
 
