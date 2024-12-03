@@ -14,11 +14,6 @@
 #include "../../include/Graphics.hpp"
 
 void bolt::Application::run() {
-	if (s_settings.properties.projection->getType() == PROJ_AUTO) {
-		std::cerr << "No Projection Specified.\n";
-		Application::closeApplication();
-	}
-
 	const auto rd = RenderApi::instance();
 	rd->init(config::RenderApiConfig::render_opengl);
 

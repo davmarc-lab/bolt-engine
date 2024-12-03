@@ -10,6 +10,10 @@ namespace bolt {
 		T x, y;
 	};
 
+	struct Axis {
+		vec3 x{1, 0, 0}, y{0, 1, 0}, z{0, 0, 1};
+	};
+
 	enum LightType {
 		LIGHT_DIRECTIONAL,
 		LIGHT_POINT,
@@ -83,6 +87,54 @@ namespace bolt {
 		vec3 direction{};
 		LightConstraint info{};
 		f32 cutoff = 12.5f, outerCutoff = 17.5f;
+	};
+
+	namespace camera {
+		inline const f32 YAW = -90.f;
+		inline const f32 PITCH = 0.f;
+		inline const f32 SPEED = 0.2f;
+		inline const f32 SENSITIVITY = 0.02f;
+		inline const f32 ZOOM = 45.f;
+		inline const vec3 POSITION = vec3(0, 0, 3);
+		// f32 tbSpeed = 20.f;
+
+		struct CameraVectors {
+			vec3 cameraPos = POSITION;
+			vec3 cameraFront = vec3(0, 0, -1);
+			vec3 cameraUp = vec3(0, 1, 0);
+			vec3 cameraRight = vec3(1, 0, 0);
+			vec3 cameraDirection = vec3(0);
+			vec3 cameraTarget = vec3(0);
+		};
+
+		struct CameraInfo {
+			f32 speed = SPEED;
+			f32 sensitivity = SENSITIVITY;
+			f32 zoom = ZOOM;
+			// f32 tbSpeed = speed;
+		};
+
+		struct CameraRotation {
+			f32 yaw = YAW;
+			f32 pitch = PITCH;
+		};
+	}; // namespace camera
+
+	enum ProjectionType {
+        PROJ_NONE,
+		PROJ_ORTHO,
+		PROJ_PERSP
+	};
+
+	struct CameraHelper {
+		ProjectionType projectionType = ProjectionType::PROJ_NONE;
+		// Ortho info
+		f32 left = 0, right = 0, top = 0, bottom = 0;
+		// Persp info
+		f32 fov = 45.f, width = 0, height = 0;
+		// Camera info
+		vec3 pos{};
+		vec3 target{};
 	};
 
 } // namespace bolt

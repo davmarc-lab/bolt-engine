@@ -1,4 +1,5 @@
 #include "../../../include/Graphic/Camera/Camera.hpp"
+#include "../../../include/Core/Event.hpp"
 
 namespace bolt {
 	void Camera::updateCameraVectors() {
@@ -8,10 +9,13 @@ namespace bolt {
 		));
 		this->vectors.cameraRight = normalize(cross(this->vectors.cameraFront, this->worldUp));
 		this->vectors.cameraUp = normalize(cross(this->vectors.cameraRight, this->vectors.cameraFront));
+		this->m_view = lookAt(this->vectors.cameraPos, this->vectors.cameraPos + this->vectors.cameraFront, this->vectors.cameraUp);
+        this->m_viewProj = this->m_proj * this->m_view;
+        EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 	}
 
-	mat4 Camera::getViewMatrix() {
-		return lookAt(this->vectors.cameraPos, this->vectors.cameraPos + this->vectors.cameraFront, this->vectors.cameraUp);
+	mat4 Camera::getViewProjMatrix() {
+        return this->m_viewProj;
 	}
 
 	void Camera::moveCamera(vec3 pos) {

@@ -2,39 +2,9 @@
 
 #include "../../Core/Utils.hpp"
 #include "../../Core/Math.hpp"
+#include "../../Core/Structs.hpp"
 
 namespace bolt {
-	namespace camera {
-		inline const f32 YAW = -90.f;
-		inline const f32 PITCH = 0.f;
-		inline const f32 SPEED = 0.2f;
-		inline const f32 SENSITIVITY = 0.02f;
-		inline const f32 ZOOM = 45.f;
-		inline const vec3 POSITION = vec3(0, 0, 3);
-		// f32 tbSpeed = 20.f;
-
-		struct CameraVectors {
-			vec3 cameraPos = POSITION;
-			vec3 cameraFront = vec3(0, 0, -1);
-			vec3 cameraUp = vec3(0, 1, 0);
-			vec3 cameraRight = vec3(1, 0, 0);
-			vec3 cameraDirection = vec3(0);
-			vec3 cameraTarget = vec3(0);
-		};
-
-		struct CameraInfo {
-			f32 speed = SPEED;
-			f32 sensitivity = SENSITIVITY;
-			f32 zoom = ZOOM;
-			//f32 tbSpeed = speed;
-		};
-
-		struct CameraRotation {
-			f32 yaw = YAW;
-			f32 pitch = PITCH;
-		};
-	};
-
 	class Camera {
 	private:
 		vec3 worldUp = vec3(0, 1, 0);
@@ -42,10 +12,26 @@ namespace bolt {
 		camera::CameraInfo info;
 		camera::CameraRotation rotation;
 
+        mat4 m_view = mat4(0);
+        mat4 m_proj = mat4(0);
+        mat4 m_viewProj = mat4(0);
+
 		void updateCameraVectors();
 
 	public:
-		mat4 getViewMatrix();
+		mat4 getViewProjMatrix();
+
+        // Updates the Proj * View results BUT it assumes that the scene is 2D.
+        inline void updateOrthoProjection(const f32& left, const f32& right, const f32& bot, const f32& top) {
+            this->m_proj = glm::ortho(left, right, bot, top);
+            this->m_view = mat4(1);
+            this->m_viewProj = this->m_proj * this->m_view;
+        }
+
+        inline void updatePerspProjection(const f32& fov, const f32& width, const f32& height, const f32& near, const f32& far) {
+            this->m_proj = perspective(fov, width / height, near, far);
+            this->updateCameraVectors();
+        }
 
 		void moveCamera(vec3 position);
 

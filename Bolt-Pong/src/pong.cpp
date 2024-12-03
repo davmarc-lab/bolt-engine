@@ -202,14 +202,15 @@ int main(int argc, char *argv[]) {
 		}
 	}); */
 
-	UniformBuffer ub = UniformBuffer("Matrices");
-	ub.onAttach();
-	ub.setup(sizeof(mat4), 0);
-	auto proj = Application::getProjectionMatrix();
-	ub.update(0, sizeof(mat4), value_ptr(proj));
-	EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&proj, &ub](auto &&p) {
-		ub.update(0, sizeof(mat4), value_ptr(proj));
-	});
+    // CAMERA PROBLEMS
+	// UniformBuffer ub = UniformBuffer("Matrices");
+	// ub.onAttach();
+	// ub.setup(sizeof(mat4), 0);
+	// auto proj = Application::getProjectionMatrix();
+	// ub.update(0, sizeof(mat4), value_ptr(proj));
+	// EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&proj, &ub](auto &&p) {
+	// 	ub.update(0, sizeof(mat4), value_ptr(proj));
+	// });
 
 	app->run();
 }

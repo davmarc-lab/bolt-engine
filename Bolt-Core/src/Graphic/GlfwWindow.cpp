@@ -102,24 +102,6 @@ namespace bolt {
 	static void glfwResizeCallback(GLFWwindow *window, i32 width, i32 height) {
 		glViewport(0, 0, width, height);
 
-		auto proj = Application::getProjection();
-		switch (proj->getType()) {
-			case PROJ_ORTHO: {
-				auto cast = std::static_pointer_cast<InfoOrtho>(proj);
-				cast->setRight(width);
-				cast->setUp(height);
-				break;
-			}
-			case PROJ_PERSP: {
-                auto cast = std::static_pointer_cast<InfoPersp>(proj);
-                cast->setWidth(width);
-                cast->setHeight(height);
-				break;
-			}
-			default:
-				break;
-		}
-
 		scene::updateTextProj(0.f, width, 0.f, height);
         
 		EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <utility>
 #include "../../Bolt-Core/include/Engine.hpp"
 #include "../../Bolt-Core/include/Graphics.hpp"
@@ -16,9 +17,6 @@ int main(int argc, char *argv[]) {
 	properties.maximized = false;
 	properties.vsync = true;
 	properties.backgroundColor = vec4(0.3, 0.3, 0.3, 1);
-	properties.depth = {true, true, GL_LESS};
-	properties.cull = {true, GL_BACK};
-	properties.projection = CreateShared<InfoOrtho>(0, 1600.f, 0, 900.f);
 
 	ApplicationSetting settings{};
 	settings.type = scene::SCENE_2D;
@@ -38,14 +36,15 @@ int main(int argc, char *argv[]) {
 	const auto scene = Scene::instance();
 	ls->addCustomLayer(CreateShared<SceneLayer>());
 
+    standardCamera.updateOrthoProjection(0, 1600, 0, 900);
 	UniformBuffer ub = UniformBuffer("Matrices");
 	ub.onAttach();
 	ub.setup(sizeof(mat4), 0);
-	auto proj = Application::getProjectionMatrix();
-	ub.update(0, sizeof(mat4), value_ptr(proj));
+	auto VP = standardCamera.getViewProjMatrix();
+	ub.update(0, sizeof(mat4), value_ptr(VP));
 	EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&ub](auto &&p) {
-		auto proj = Application::getProjectionMatrix();
-		ub.update(0, sizeof(mat4), value_ptr(proj));
+		auto VP = standardCamera.getViewProjMatrix();
+		ub.update(0, sizeof(mat4), value_ptr(VP));
 	});
 	EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 
@@ -61,21 +60,12 @@ int main(int argc, char *argv[]) {
 	helper.colors = factory::mesh::getColorVector(sizeof(helper.vertex), {1, 0, 0, 1});
 	helper.normals = factory::mesh::cubeNormals;
 	helper.position = {200, 200, 0};
-	helper.scale = {100, 100, 1};
+	helper.scale = {100, 100, 0};
 	factory::mesh::instanceMesh(elem, helper);
 	em->addComponent<Collider>(elem);
 	scene->addEntity(elem);
 
-	const auto im = InputManager::instance();
-	EventDispatcher::instance()->subscribe(events::loop::LoopInput, [&im, &properties](...) {
-		if (im->isKeyPressed(GLFW_KEY_W)) {
-			cam.up += 10;
-			std::static_pointer_cast<InfoOrtho>(properties.projection)->setUp(cam.up);
-		}
-	});
-
 	// lights
-	// DEBUG HERE
 	LightHelper lh{};
 	lh.color = {1, 0, 0};
 	lh.direction = vec4(0, 0, -1, 0);

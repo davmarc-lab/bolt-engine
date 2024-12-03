@@ -11,6 +11,15 @@ endif
 .PHONY: clean prebuild prelink
 
 ifeq ($(config),debug)
+  ifeq ($(origin CC), default)
+    CC = gcc
+  endif
+  ifeq ($(origin CXX), default)
+    CXX = g++
+  endif
+  ifeq ($(origin AR), default)
+    AR = ar
+  endif
   RESCOMP = windres
   TARGETDIR = ../bin/linux-x86_64/Debug/Bolt-Core
   TARGET = $(TARGETDIR)/libBolt-Core.a
@@ -38,6 +47,15 @@ all: prebuild prelink $(TARGET)
 endif
 
 ifeq ($(config),release)
+  ifeq ($(origin CC), default)
+    CC = gcc
+  endif
+  ifeq ($(origin CXX), default)
+    CXX = g++
+  endif
+  ifeq ($(origin AR), default)
+    AR = ar
+  endif
   RESCOMP = windres
   TARGETDIR = ../bin/linux-x86_64/Release/Bolt-Core
   TARGET = $(TARGETDIR)/libBolt-Core.a
@@ -87,6 +105,7 @@ OBJECTS := \
 	$(OBJDIR)/GlVertexArray.o \
 	$(OBJDIR)/GlVertexBuffer.o \
 	$(OBJDIR)/Camera.o \
+	$(OBJDIR)/NormalCamera.o \
 	$(OBJDIR)/GlRenderer.o \
 	$(OBJDIR)/GlfwWindow.o \
 	$(OBJDIR)/ImGuiDebug.o \
@@ -141,7 +160,7 @@ endif
 prebuild:
 	$(PREBUILDCMDS)
 
-prelink:
+prelink: $(OBJECTS)
 	$(PRELINKCMDS)
 
 ifneq (,$(PCH))
@@ -217,6 +236,9 @@ $(OBJDIR)/GlVertexBuffer.o: src/Graphic/Buffer/GlVertexBuffer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Camera.o: src/Graphic/Camera/Camera.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/NormalCamera.o: src/Graphic/Camera/NormalCamera.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlRenderer.o: src/Graphic/GlRenderer.cpp

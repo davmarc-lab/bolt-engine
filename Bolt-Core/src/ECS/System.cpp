@@ -173,9 +173,6 @@ namespace bolt {
 				const auto shader = EntityManager::instance()->getEntityComponent<ShaderComponent>(id)->shader.get();
 
 				shader->use();
-				if (Application::getSceneType() == scene::SCENE_3D) {
-					shader->setMat4("view", standardCamera.getViewMatrix());
-				}
 				shader->setMat4("model", model->getModelMatrix());
 
 				RenderApi::instance()->getRenderer()->drawArraysTriangles(vao, mesh->vertices.size());
@@ -188,9 +185,6 @@ namespace bolt {
 				const auto shader = EntityManager::instance()->getEntityComponent<ShaderComponent>(id)->shader.get();
 
 				shader->use();
-				if (Application::getSceneType() == scene::SCENE_3D) {
-					shader->setMat4("view", standardCamera.getViewMatrix());
-				}
 				shader->setMat4("model", model->getModelMatrix());
 
 				RenderApi::instance()->getRenderer()->drawElementsTriangles(mesh->vao, mesh->indices.size());
@@ -213,9 +207,6 @@ namespace bolt {
 						const auto s = RenderApi::instance()->getRenderer()->getDefaultShader();
 						const auto mask = s->getMask();
 						s->use();
-						if (Application::getSceneType() == scene::SCENE_3D && mask & ShaderConfig::shader_view) {
-							s->setMat4("view", standardCamera.getViewMatrix());
-						}
 						s->setMat4("model", model->getModelMatrix());
 
 						// If shader implements lights, send light informations
@@ -235,9 +226,6 @@ namespace bolt {
 					} else {
 						const auto mask = shader->shader->getMask();
 						shader->shader->use();
-						if (Application::getSceneType() == scene::SCENE_3D) {
-							shader->shader->setMat4("view", standardCamera.getViewMatrix());
-						}
 						shader->shader->setMat4("model", model->getModelMatrix());
 					}
 

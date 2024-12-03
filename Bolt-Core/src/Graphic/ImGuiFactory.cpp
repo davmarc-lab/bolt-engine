@@ -7,6 +7,8 @@
 #include "../../include/Graphic/ImGuiLayer.hpp"
 #include "../../include/Graphic/Texture/Texture.hpp"
 
+#include "../../include/Graphic/Camera/Camera.hpp"
+
 #include <iostream>
 
 namespace bolt {
@@ -162,22 +164,15 @@ namespace bolt {
 			this->m_size.x = static_cast<u16>(dim.x);
 			this->m_size.y = static_cast<u16>(dim.y);
 
-			auto proj = Application::getProjection();
-			switch (proj->getType()) {
-				case PROJ_ORTHO: {
-					auto cast = std::static_pointer_cast<InfoOrtho>(proj);
-					cast->setRight(this->m_size.x);
-					cast->setUp(this->m_size.y);
+			switch (Application::getSceneType()) {
+				case scene::SCENE_2D: {
+					standardCamera.updateOrthoProjection(0, this->m_size.x, 0, this->m_size.y);
 					break;
 				}
-				case PROJ_PERSP: {
-					auto cast = std::static_pointer_cast<InfoPersp>(proj);
-					cast->setWidth(this->m_size.x);
-					cast->setHeight(this->m_size.y);
+				case scene::SCENE_3D: {
+					standardCamera.updatePerspProjection(standardCamera.getCameraZoom(), this->m_size.x, this->m_size.y, 0.1f, 100.f);
 					break;
 				}
-				default:
-					break;
 			}
 			scene::updateTextProj(0.f, this->m_size.x, 0.f, this->m_size.y);
 
@@ -200,22 +195,15 @@ namespace bolt {
 			this->m_size.x = static_cast<u16>(dim.x);
 			this->m_size.y = static_cast<u16>(dim.y);
 
-			auto proj = Application::getProjection();
-			switch (proj->getType()) {
-				case PROJ_ORTHO: {
-					auto cast = std::static_pointer_cast<InfoOrtho>(proj);
-					cast->setRight(this->m_size.x);
-					cast->setUp(this->m_size.y);
+			switch (Application::getSceneType()) {
+				case scene::SCENE_2D: {
+					standardCamera.updateOrthoProjection(0, this->m_size.x, 0, this->m_size.y);
 					break;
 				}
-				case PROJ_PERSP: {
-					auto cast = std::static_pointer_cast<InfoPersp>(proj);
-					cast->setWidth(this->m_size.x);
-					cast->setHeight(this->m_size.y);
+				case scene::SCENE_3D: {
+					standardCamera.updatePerspProjection(standardCamera.getCameraZoom(), this->m_size.x, this->m_size.y, 0.1f, 100.f);
 					break;
 				}
-				default:
-					break;
 			}
 			scene::updateTextProj(0.f, this->m_size.x, 0.f, this->m_size.y);
 
