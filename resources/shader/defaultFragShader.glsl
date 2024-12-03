@@ -3,7 +3,6 @@
 #define MAX_LIGHTS 32
 
 in vec2 texCoord;
-in vec4 vertColor;
 
 in VS_OUT {
     vec4 vertColor;
@@ -120,30 +119,35 @@ vec3 spotLight(Light light) {
 vec3 result = vec3(0);
 
 void main() {
-    norm = normalize(fs_out.normal);
-    viewDir = normalize(viewPos - FragPos);
+    if (lightsCount > 0) {
+        norm = normalize(fs_out.normal);
+        viewDir = normalize(viewPos - FragPos);
 
-    for (int i = 0; i < lightsCount; i++) {
-        lightDir = normalize(lights[i].position - FragPos);
-        diff = max(dot(norm, lightDir), 0.);
-        reflectDir = normalize(lightDir + viewDir);
-        spec = pow(max(dot(norm, reflectDir), 0.0), material.shininess);
+        for (int i = 0; i < lightsCount; i++) {
+            lightDir = normalize(lights[i].position - FragPos);
+            diff = max(dot(norm, lightDir), 0.);
+            reflectDir = normalize(lightDir + viewDir);
+            spec = pow(max(dot(norm, reflectDir), 0.0), material.shininess);
 
-        switch (lights[i].type) {
-            case 0: {
-                result += directionalLight(lights[i]);
-                break;
-            }
-            case 1: {
-                result += pointLight(lights[i]);
-                break;
-            }
-            case 2: {
-                result += spotLight(lights[i]);
-                break;
+            switch (lights[i].type) {
+                case 0: {
+                    result += directionalLight(lights[i]);
+                    break;
+                }
+                case 1: {
+                    result += pointLight(lights[i]);
+                    break;
+                }
+                case 2: {
+                    result += spotLight(lights[i]);
+                    break;
+                }
             }
         }
+        fragColor = vec4(result, 1);
+    } else {
+        fragColor = fs_out.vertColor;
     }
 
-    fragColor = vec4(result, 1);
 }
+
