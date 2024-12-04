@@ -42,7 +42,7 @@ namespace bolt {
 		// create sphere
 	}
 
-    u32 PrimitiveManager::addCubePrimitive(const vec3& pos, const vec3& scale, const vec3& rot) {
+    u32 PrimitiveManager::addCubePrimitive(const vec3& pos, const vec3& scale, const vec3& rot, const vec4& color) {
         auto em = EntityManager::instance();
         auto id = em->createEntity();
 
@@ -52,6 +52,9 @@ namespace bolt {
 		t->setPosition(pos);
 		t->setScale(scale);
 		t->setRotation(rot);
+
+		std::cout << "This doesn't update the color\n";
+		comp->colorComponent.colors = factory::mesh::getColorVector(comp->vertices.size(), color);
         return id;
     }
 

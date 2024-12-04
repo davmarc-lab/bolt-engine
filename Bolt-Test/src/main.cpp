@@ -17,9 +17,11 @@ int main(int argc, char *argv[]) {
 	properties.maximized = false;
 	properties.vsync = true;
 	properties.backgroundColor = vec4(0.3, 0.3, 0.3, 1);
+	properties.depth = {true, true, GL_LESS};
+	properties.cull = {true, GL_BACK};
 
 	ApplicationSetting settings{};
-	settings.type = scene::SCENE_2D;
+	settings.type = scene::SCENE_3D;
 	settings.name = "Bolt Application";
 	settings.dimension = {1600, 900};
 	settings.properties = properties;
@@ -36,7 +38,7 @@ int main(int argc, char *argv[]) {
 	const auto scene = Scene::instance();
 	ls->addCustomLayer(CreateShared<SceneLayer>());
 
-    standardCamera.updateOrthoProjection(0, 1600, 0, 900);
+    standardCamera.updatePerspProjection(standardCamera.getCameraZoom(), 1600, 900, 0.1f, 100.f);
 	UniformBuffer ub = UniformBuffer("Matrices");
 	ub.onAttach();
 	ub.setup(sizeof(mat4), 0);
@@ -55,23 +57,30 @@ int main(int argc, char *argv[]) {
 	helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLES, 0};
 
 	// meshes
-	auto elem = em->createEntity();
-	helper.vertex = factory::mesh::cubeGeometry;
-	helper.colors = factory::mesh::getColorVector(sizeof(helper.vertex), {1, 0, 0, 1});
-	helper.normals = factory::mesh::cubeNormals;
-	helper.position = {200, 200, 0};
-	helper.scale = {100, 100, 0};
-	factory::mesh::instanceMesh(elem, helper);
-	em->addComponent<Collider>(elem);
-	scene->addEntity(elem);
+	// auto elem = em->createEntity();
+	// helper.vertex = factory::mesh::cubeGeometry;
+	// helper.colors = factory::mesh::getColorVector(sizeof(helper.vertex), {1, 0, 0, 1});
+	// helper.normals = factory::mesh::cubeNormals;
+	// helper.position = {0, 0, -1};
+	// helper.scale = {1, 1, 1};
+	// factory::mesh::instanceMesh(elem, helper);
+	// em->addComponent<Collider>(elem);
+	// scene->addEntity(elem);
 
 	// lights
-	LightHelper lh{};
-	lh.color = {1, 0, 0};
-	lh.direction = vec4(0, 0, -1, 0);
-	lh.type = LightType::LIGHT_DIRECTIONAL;
-	lh.caster = true;
-	em->createLight(lh);
+	// LightHelper lh{};
+	// lh.color = {1, 0, 0};
+	// lh.direction = vec4(0, 0, -1, 0);
+	// lh.type = LightType::LIGHT_DIRECTIONAL;
+	// lh.caster = true;
+	// em->createLight(lh);
+
+	const auto pm = PrimitiveManager::instance();
+	auto cube = pm->addCubePrimitive({0, 0, 0}, {1, 1, 1}, {}, {1, 0, 0, 1});
+	{
+		auto mesh = em->getEntityComponent<Mesh>(cube);
+		// mesh->colorComponent.colors = factory::mesh::getColorVector(mesh->colorComponent.colors.size(), {1, 0, 0, 1});
+	}
 
 	Application::enableImGui();
 	const auto ig = CreateShared<ImGuiLayer>(w);

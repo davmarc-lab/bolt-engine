@@ -12,7 +12,7 @@ namespace bolt {
 	
 	class PrimitiveManager {
 	public:
-        u32 addCubePrimitive(const vec3& pos, const vec3& scale, const vec3& rot);
+        u32 addCubePrimitive(const vec3& pos, const vec3& scale, const vec3& rot, const vec4& color);
 
 		PrimitiveManager(PrimitiveManager &other) = delete;
 

@@ -117,6 +117,10 @@
   <ItemGroup>
     <ClInclude Include="include\ImGuiInfo.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\shader\defaultFragShader.glsl" />
+    <Content Include="resources\shader\defaultPerspVertShader.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
