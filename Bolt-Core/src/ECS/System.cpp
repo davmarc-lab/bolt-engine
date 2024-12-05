@@ -190,11 +190,6 @@ namespace bolt {
 				RenderApi::instance()->getRenderer()->drawElementsTriangles(mesh->vao, mesh->indices.size());
 			}
 
-			void drawLightsCaster() {
-				auto shader = RenderApi::instance()->getRenderer()->getCastersShader();
-				// shader->use();
-			}
-
 			void drawAllMeshes() {
 				const auto meshes = EntityManager::instance()->getEntitiesFromComponent<Mesh>();
 				const auto lights = ::bolt::systems::ecs::retrieveLightsData();
@@ -205,13 +200,13 @@ namespace bolt {
 					if (shader == nullptr) {
 						// use default shader
 						const auto s = RenderApi::instance()->getRenderer()->getDefaultShader();
+                        BT_ASSERT(s != nullptr);
 						const auto mask = s->getMask();
 						s->use();
 						s->setMat4("model", model->getModelMatrix());
 
 						// If shader implements lights, send light informations
 						if (mask & ShaderConfig::shader_lights) {
-							drawLightsCaster();
 							systems::ecs::sendLightData(*s);
 							s->setInt("lightsCount", EntityManager::instance()->getLightsCount());
 							s->setVec3("viewPos", standardCamera.getCameraPosition());
@@ -231,8 +226,9 @@ namespace bolt {
 
 					mesh->render.call();
 				}
+				RenderApi::instance()->getRenderer()->drawIndexed();
 			}
 		} // namespace render
-	}     // namespace systems
+	} // namespace systems
 
 } // namespace bolt

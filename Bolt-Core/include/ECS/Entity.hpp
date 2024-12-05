@@ -45,7 +45,7 @@ namespace bolt {
 				}
 			}
 			if (helper.caster) {
-				this->m_caster = PrimitiveManager::instance()->addCubePrimitive(helper.position, vec3(LIGHT_CASTER_DIM), vec3(0), vec4(helper.color, 1));
+				this->m_caster = PrimitiveManager::addCubePrimitive(helper.position, vec3(LIGHT_CASTER_DIM), vec3(0), vec4(helper.color, 1));
 			}
 		}
 

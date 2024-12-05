@@ -11,7 +11,7 @@ struct FakeCamera {
 } cam;
 
 int main(int argc, char *argv[]) {
-	std::cout << "Application started\n";
+	std::cout << "Application started\n\n";
 
 	WindowProperties properties{};
 	properties.maximized = false;
@@ -35,10 +35,13 @@ int main(int argc, char *argv[]) {
 	w->onAttach();
 	ls->addCustomLayer(w);
 
+	const auto rd = RenderApi::instance();
+	rd->init(config::RenderApiConfig::render_opengl);
+
 	const auto scene = Scene::instance();
 	ls->addCustomLayer(CreateShared<SceneLayer>());
 
-    standardCamera.updatePerspProjection(standardCamera.getCameraZoom(), 1600, 900, 0.1f, 100.f);
+	standardCamera.updatePerspProjection(standardCamera.getCameraZoom(), 1600, 900, 0.1f, 100.f);
 	UniformBuffer ub = UniformBuffer("Matrices");
 	ub.onAttach();
 	ub.setup(sizeof(mat4), 0);
@@ -68,19 +71,19 @@ int main(int argc, char *argv[]) {
 	// scene->addEntity(elem);
 
 	// lights
-	// LightHelper lh{};
-	// lh.color = {1, 0, 0};
-	// lh.direction = vec4(0, 0, -1, 0);
-	// lh.type = LightType::LIGHT_DIRECTIONAL;
-	// lh.caster = true;
-	// em->createLight(lh);
+	LightHelper lh{};
+	lh.color = {1, 0, 0};
+	lh.position = {1, 1, 1};
+	lh.type = LightType::LIGHT_POINT;
+	lh.caster = true;
+	em->createLight(lh);
 
-	const auto pm = PrimitiveManager::instance();
-	auto cube = pm->addCubePrimitive({0, 0, 0}, {1, 1, 1}, {}, {1, 0, 0, 1});
-	{
-		auto mesh = em->getEntityComponent<Mesh>(cube);
-		// mesh->colorComponent.colors = factory::mesh::getColorVector(mesh->colorComponent.colors.size(), {1, 0, 0, 1});
-	}
+	// PrimitiveManager::init();
+	// auto cube = PrimitiveManager::addCubePrimitive({0, 0, 0}, {1, 1, 1}, {}, {1, 0, 0, 1});
+	// {
+	// 	auto mesh = em->getEntityComponent<Mesh>(cube);
+	// 	// mesh->colorComponent.colors = factory::mesh::getColorVector(mesh->colorComponent.colors.size(), {1, 0, 0, 1});
+	// }
 
 	Application::enableImGui();
 	const auto ig = CreateShared<ImGuiLayer>(w);
@@ -91,5 +94,5 @@ int main(int argc, char *argv[]) {
 	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
 
 	app->run();
-	std::cout << "Application closed\n";
+	std::cout << "\nApplication closed\n";
 }

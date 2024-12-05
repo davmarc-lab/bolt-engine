@@ -79,7 +79,7 @@ namespace bolt {
 	struct LightHelper {
 		std::string name = "Light";
 		LightType type;
-		LightVectors vectors;
+		LightVectors vectors{};
 		vec3 color{1, 1, 1};
 		f32 intensity = 1;
 		b8 caster = false;

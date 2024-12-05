@@ -12,7 +12,7 @@ namespace bolt {
 	
 	class PrimitiveManager {
 	public:
-        u32 addCubePrimitive(const vec3& pos, const vec3& scale, const vec3& rot, const vec4& color);
+        static u32 addCubePrimitive(const vec3& pos, const vec3& scale, const vec3& rot, const vec4& color);
 
 		PrimitiveManager(PrimitiveManager &other) = delete;
 
@@ -24,14 +24,12 @@ namespace bolt {
 		 *
 		 * @return `PrimitiveManager` unique object.
 		 */
-		inline static Shared<PrimitiveManager> instance() {
+		inline static void init() {
 			std::lock_guard<std::mutex> lock(s_mutex);
 			if (s_pointer == nullptr) {
 				Shared<PrimitiveManager> copy(new PrimitiveManager());
 				copy.swap(s_pointer);
 			}
-
-			return s_pointer;
 		}
 
 	private:
@@ -40,12 +38,12 @@ namespace bolt {
 
 		PrimitiveManager();
 
-		Mesh m_square;
-		Mesh m_triangle;
-		Mesh m_circle;
-		Mesh m_cube;
-		Mesh m_cone;
-		Mesh m_sphere;
+		inline static Mesh s_square{};
+		inline static Mesh s_triangle{};
+		inline static Mesh s_circle{};
+		inline static Mesh s_cube{};
+		inline static Mesh s_cone{};
+		inline static Mesh s_sphere{};
 	};
 
 } // namespace bolt

@@ -73,6 +73,9 @@ namespace bolt {
 	u32 EntityManager::createLight(const LightHelper &helper) {
 		if (this->m_lightId < ecs::MAX_LIGHTS) {
 			this->m_lights.insert(std::make_pair(this->m_lightId, CreateShared<EntityLight>(helper)));
+            if (helper.type != LightType::LIGHT_DIRECTIONAL) {
+                RenderApi::instance()->getRenderer()->drawCube(helper.position, {0.3, 0.3, 0.3}, {}, vec4(helper.color, 1));
+            }
 			return this->m_lightId++;
 		}
 		return 0;
