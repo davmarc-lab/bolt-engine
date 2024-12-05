@@ -1,7 +1,7 @@
 ﻿#include "../../../include/Graphic/Buffer/VertexBuffer.hpp"
 
-#include "../../../../Bolt-Graphics/include/glad/glad.h"
 #include <iostream>
+#include "../../../../Bolt-Graphics/include/glad/glad.h"
 
 namespace bolt {
 	void VertexBuffer::onAttach() {
@@ -46,6 +46,11 @@ namespace bolt {
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vec4), vertices.data(), usage == 0 ? GL_STATIC_DRAW : usage);
 	}
 
+	void VertexBuffer::setup(const std::vector<mat4> &vertices, const u32 &usage) {
+		this->bind();
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(mat4), vertices.data(), usage == 0 ? GL_STATIC_DRAW : usage);
+	}
+
 	template <typename T>
 	void VertexBuffer::setupSubData(const T *vertices, const i64 &size, const i64 &offset) {
 		this->bind();
@@ -57,4 +62,4 @@ namespace bolt {
 		this->bind();
 		glBufferSubData(GL_ARRAY_BUFFER, offset, vertices.size() * sizeof(T), vertices.data());
 	}
-}
+} // namespace bolt

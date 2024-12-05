@@ -11,8 +11,10 @@
 #define SHADER_TEXCOORDS_LOCATION 2
 #define SHADER_NORMAL_LOCATION 3
 // instanced rendering
-#define SHADER_POS_OFFSET_LOCATION 4
-#define SHADER_COLOR_OFFSET_LOCATION 5
+
+// this is a mat4 so it sends 4 vec4 values, next available location = 8
+#define SHADER_MODEL_OFFSET_LOCATION 4
+#define SHADER_COLOR_OFFSET_LOCATION 8
 
 #define SHADER_LIGHT_BLOCK_NAME "Lights"
 #define SHADER_LIGHT_BLOCK_BIND 1

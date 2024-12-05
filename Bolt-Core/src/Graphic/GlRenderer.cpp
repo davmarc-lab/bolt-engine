@@ -6,6 +6,10 @@
 #include "../../include/Application/Application.hpp"
 #include "../../include/Graphic/Buffer/VertexArray.hpp"
 
+#include "../../include/Graphic/Camera/Camera.hpp"
+
+#include "../../include/ECS/System.hpp"
+
 #include "../../include/Platform/MeshVertices.hpp"
 
 namespace bolt {
@@ -43,7 +47,7 @@ namespace bolt {
 		this->m_cube.normals.vbo_n.setup(factory::mesh::cubeNormals, 0);
 		this->m_cube.vao.linkAttribFast(SHADER_NORMAL_LOCATION, 3, GL_FLOAT, false, 0, 0);
 
-		this->m_cube.vbo_po.onAttach();
+		this->m_cube.vbo_mi.onAttach();
 		this->m_cube.vbo_co.onAttach();
 	}
 
@@ -61,16 +65,25 @@ namespace bolt {
 
 	void Renderer::drawCube(const mat4 &transform, const vec4 &color) {
 		this->m_tracker.cubes++;
-		this->m_cube.posOffset.push_back(vec3(transform[3]));
-		BT_ASSERT(this->m_cube.posOffset.size() == this->m_tracker.cubes);
+		this->m_cube.modelInstance.push_back(transform);
+		BT_ASSERT(this->m_cube.modelInstance.size() == this->m_tracker.cubes);
 
 		this->m_cube.colorOffset.push_back(color);
-		BT_ASSERT(this->m_cube.colorOffset.size() == this->m_cube.posOffset.size());
+		BT_ASSERT(this->m_cube.colorOffset.size() == this->m_cube.modelInstance.size());
 
+		// sends the information in the buffer reserved for model matrices
 		this->m_cube.vao.bind();
-		this->m_cube.vbo_po.setup(this->m_cube.posOffset, 0);
-		this->m_cube.vao.linkAttribFast(SHADER_POS_OFFSET_LOCATION, 3, GL_FLOAT, false, 0, 0);
-		glVertexAttribDivisor(SHADER_POS_OFFSET_LOCATION, 1);
+		this->m_cube.vbo_mi.setup(this->m_cube.modelInstance, 0);
+		// a mat4 in shaders uses four vec4, so we need to link 4 sequential locations
+		this->m_cube.vao.linkAttribFast(SHADER_MODEL_OFFSET_LOCATION, 4, GL_FLOAT, false, 4 * sizeof(vec4), 0);
+		this->m_cube.vao.linkAttribFast(SHADER_MODEL_OFFSET_LOCATION + 1, 4, GL_FLOAT, false, 4 * sizeof(vec4), (void *)(1 * sizeof(vec4)));
+		this->m_cube.vao.linkAttribFast(SHADER_MODEL_OFFSET_LOCATION + 2, 4, GL_FLOAT, false, 4 * sizeof(vec4), (void *)(2 * sizeof(vec4)));
+		this->m_cube.vao.linkAttribFast(SHADER_MODEL_OFFSET_LOCATION + 3, 4, GL_FLOAT, false, 4 * sizeof(vec4), (void *)(3 * sizeof(vec4)));
+		glVertexAttribDivisor(SHADER_MODEL_OFFSET_LOCATION, 1);
+		glVertexAttribDivisor(SHADER_MODEL_OFFSET_LOCATION + 1, 1);
+		glVertexAttribDivisor(SHADER_MODEL_OFFSET_LOCATION + 2, 1);
+		glVertexAttribDivisor(SHADER_MODEL_OFFSET_LOCATION + 3, 1);
+
 		this->m_cube.vbo_co.setup(this->m_cube.colorOffset, 0);
 		this->m_cube.vao.linkAttribFast(SHADER_COLOR_OFFSET_LOCATION, 4, GL_FLOAT, false, 0, 0);
 		glVertexAttribDivisor(SHADER_COLOR_OFFSET_LOCATION, 1);
@@ -106,9 +119,20 @@ namespace bolt {
 		this->drawElements(vao, GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 
+    // I don't like this
 	void Renderer::drawIndexed() {
 		if (this->m_tracker.cubes) {
 			this->m_instancedShader->use();
+			if (EntityManager::instance()->getLightsCount()) {
+				systems::ecs::sendLightData(*this->m_instancedShader.get());
+				this->m_instancedShader->setInt("lightsCount", EntityManager::instance()->getLightsCount());
+				this->m_instancedShader->setVec3("viewPos", standardCamera.getCameraPosition());
+                Material mat{};
+				this->m_instancedShader->setVec3("material.ambient", mat.ambient);
+				this->m_instancedShader->setVec3("material.diffuse", mat.diffuse);
+				this->m_instancedShader->setVec3("material.specular", mat.specular);
+				this->m_instancedShader->setFloat("material.shininess", mat.shininess);
+			}
 			this->m_cube.vao.bind();
 			glDrawArraysInstanced(GL_TRIANGLES, 0, factory::mesh::cubeGeometry.size(), this->m_tracker.cubes);
 		}

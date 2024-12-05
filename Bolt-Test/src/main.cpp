@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
 	// lights
 	LightHelper lh{};
 	lh.color = {1, 0, 0};
-	lh.position = {1, 1, 1};
+	lh.position = {0, 1, 0};
 	lh.type = LightType::LIGHT_POINT;
 	lh.caster = true;
 	em->createLight(lh);
@@ -92,6 +92,15 @@ int main(int argc, char *argv[]) {
 	auto info = CreateShared<ImGuiInfo>();
 	ls->addCustomLayer(info);
 	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
+
+    rd->getRenderer()->drawCube({0, 0, -4}, {3, 3, 0}, {}, {0, 1, 1, 1});
+
+    // need benchmark
+	// for (int i = 0; i < 32; i++) {
+	// 	for (int j = 0; j < 18; j++) {
+	// 		rd->getRenderer()->drawCube({(i * .3) + .25, (j * .3) + 0.25, 0}, {.1, .1, .1}, {}, {0, 0, 1, 1});
+	// 	}
+	// }
 
 	app->run();
 	std::cout << "\nApplication closed\n";

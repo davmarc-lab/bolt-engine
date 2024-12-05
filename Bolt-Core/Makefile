@@ -105,7 +105,6 @@ OBJECTS := \
 	$(OBJDIR)/GlVertexArray.o \
 	$(OBJDIR)/GlVertexBuffer.o \
 	$(OBJDIR)/Camera.o \
-	$(OBJDIR)/NormalCamera.o \
 	$(OBJDIR)/GlRenderer.o \
 	$(OBJDIR)/GlfwWindow.o \
 	$(OBJDIR)/ImGuiDebug.o \
@@ -236,9 +235,6 @@ $(OBJDIR)/GlVertexBuffer.o: src/Graphic/Buffer/GlVertexBuffer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Camera.o: src/Graphic/Camera/Camera.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/NormalCamera.o: src/Graphic/Camera/NormalCamera.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlRenderer.o: src/Graphic/GlRenderer.cpp

@@ -47,6 +47,8 @@ namespace bolt {
 		
 		virtual void setup(const std::vector<vec3> &vertices, const u32 &usage);
 
+		virtual void setup(const std::vector<mat4> &vertices, const u32 &usage);
+
 		/**
 		 * @brief Sets up the data for the buffer.
 		 * @tparam T You might want this to some numeric, vector, etc type for good result,

@@ -190,6 +190,10 @@ namespace bolt {
 				RenderApi::instance()->getRenderer()->drawElementsTriangles(mesh->vao, mesh->indices.size());
 			}
 
+			void drawAllInstanced() {
+				RenderApi::instance()->getRenderer()->drawIndexed();
+			}
+
 			void drawAllMeshes() {
 				const auto meshes = EntityManager::instance()->getEntitiesFromComponent<Mesh>();
 				const auto lights = ::bolt::systems::ecs::retrieveLightsData();
@@ -200,7 +204,7 @@ namespace bolt {
 					if (shader == nullptr) {
 						// use default shader
 						const auto s = RenderApi::instance()->getRenderer()->getDefaultShader();
-                        BT_ASSERT(s != nullptr);
+						BT_ASSERT(s != nullptr);
 						const auto mask = s->getMask();
 						s->use();
 						s->setMat4("model", model->getModelMatrix());
@@ -208,6 +212,7 @@ namespace bolt {
 						// If shader implements lights, send light informations
 						if (mask & ShaderConfig::shader_lights) {
 							systems::ecs::sendLightData(*s);
+							std::cout << EntityManager::instance()->getLightsCount() << "\n";
 							s->setInt("lightsCount", EntityManager::instance()->getLightsCount());
 							s->setVec3("viewPos", standardCamera.getCameraPosition());
 							auto mat = EntityManager::instance()->getEntityComponent<Material>(id);
@@ -226,7 +231,9 @@ namespace bolt {
 
 					mesh->render.call();
 				}
-				RenderApi::instance()->getRenderer()->drawIndexed();
+
+				// draw all instanced primitives
+				drawAllInstanced();
 			}
 		} // namespace render
 	} // namespace systems

@@ -10,8 +10,8 @@ namespace bolt {
 		VertexBuffer vbo_g;
 		VertexBuffer vbo_t;
 		NormalsComponent normals;
-		VertexBuffer vbo_po;
-        std::vector<vec3> posOffset{};
+        VertexBuffer vbo_mi;
+        std::vector<mat4> modelInstance{};
 		VertexBuffer vbo_co;
         std::vector<vec4> colorOffset{};
 	};

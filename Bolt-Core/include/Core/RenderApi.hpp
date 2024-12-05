@@ -38,14 +38,14 @@ namespace bolt {
 		}
 
 		inline void init(const RenderApiConfig &config = config::render_unknonw) {
-			// different renderer types
-			if (config & config::render_opengl)
-				this->m_render = CreateShared<Renderer>();
-
 			// already initialized - skip operations
 			if (this->m_attached) {
 				return;
 			}
+
+			// different renderer types
+			if (config & config::render_opengl)
+				this->m_render = CreateShared<Renderer>();
 
 			if (this->m_render == nullptr) {
 				// BT_CRITICAL_CORE("No renderer attached, closing the application.");
