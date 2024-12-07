@@ -10,6 +10,8 @@ struct FakeCamera {
 	f32 left = 0, right = 0, up = 0, bot = 0;
 } cam;
 
+f32 vel = 0.001;
+
 int main(int argc, char *argv[]) {
 	std::cout << "Application started\n\n";
 
@@ -76,7 +78,7 @@ int main(int argc, char *argv[]) {
 	lh.position = {0, 1, 0};
 	lh.type = LightType::LIGHT_POINT;
 	lh.caster = true;
-	em->createLight(lh);
+	// em->createLight(lh);
 
 	// PrimitiveManager::init();
 	// auto cube = PrimitiveManager::addCubePrimitive({0, 0, 0}, {1, 1, 1}, {}, {1, 0, 0, 1});
@@ -93,14 +95,29 @@ int main(int argc, char *argv[]) {
 	ls->addCustomLayer(info);
 	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
 
-    rd->getRenderer()->drawCube({0, 0, -4}, {3, 3, 0}, {}, {0, 1, 1, 1});
+	// rd->getRenderer()->drawCube({0, 0, -4}, {3, 3, 0}, {}, {0, 1, 1, 1});
 
-    // need benchmark
-	// for (int i = 0; i < 32; i++) {
-	// 	for (int j = 0; j < 18; j++) {
-	// 		rd->getRenderer()->drawCube({(i * .3) + .25, (j * .3) + 0.25, 0}, {.1, .1, .1}, {}, {0, 0, 1, 1});
-	// 	}
-	// }
+	// STRESS TEST
+	// EventDispatcher::instance()->subscribe(events::loop::LoopUpdate, [&rd](auto p) {
+	// 	rd->getRenderer()->drawCube({vel, 0, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+	// 	rd->getRenderer()->drawCube({vel, 0.2, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+	// 	rd->getRenderer()->drawCube({vel, 0.4, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+	// 	rd->getRenderer()->drawCube({vel, 0.6, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+	// 	rd->getRenderer()->drawCube({vel, 0.8, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+	// 	rd->getRenderer()->drawCube({vel, 1, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+	// 	rd->getRenderer()->drawCube({vel, 1.2, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+	// 	rd->getRenderer()->drawCube({vel, 1.4, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+	// 	rd->getRenderer()->drawCube({vel, 1.6, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+	// 	rd->getRenderer()->drawCube({vel, 1.8, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+	// 	rd->getRenderer()->drawCube({vel, 2, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+	// 	vel += 0.001f;
+	// });
+
+	for (int i = 0; i < 32; i++) {
+		for (int j = 0; j < 18; j++) {
+			rd->getRenderer()->drawCube({(i * .3) + .25, (j * .3) + 0.25, 0}, {.1, .1, .1}, {}, {0, 0, 1, 1});
+		}
+	}
 
 	app->run();
 	std::cout << "\nApplication closed\n";

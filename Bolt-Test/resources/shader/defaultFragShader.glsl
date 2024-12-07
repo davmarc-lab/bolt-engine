@@ -3,7 +3,6 @@
 #define MAX_LIGHTS 32
 
 in vec2 texCoord;
-in vec4 vertColor;
 
 in VS_OUT {
     vec4 vertColor;
@@ -144,10 +143,11 @@ void main() {
                     break;
                 }
             }
-        } 
+        }
         fragColor = vec4(result, 1);
     } else {
         fragColor = fs_out.vertColor;
     }
 
 }
+

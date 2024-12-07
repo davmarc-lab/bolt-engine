@@ -13,6 +13,7 @@ out VS_OUT {
 
 out vec3 FragPos;
 
+uniform mat4 view;
 uniform mat4 model;
 
 layout(std140, binding = 0) uniform Matrices {

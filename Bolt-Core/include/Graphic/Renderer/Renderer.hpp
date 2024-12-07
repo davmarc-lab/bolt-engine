@@ -10,15 +10,21 @@ namespace bolt {
 		VertexBuffer vbo_g;
 		VertexBuffer vbo_t;
 		NormalsComponent normals;
-        VertexBuffer vbo_mi;
-        std::vector<mat4> modelInstance{};
+		VertexBuffer vbo_mi;
+		std::vector<mat4> modelInstance{};
 		VertexBuffer vbo_co;
-        std::vector<vec4> colorOffset{};
+		std::vector<vec4> colorOffset{};
 	};
 
-    struct Tracker {
-        u32 cubes = 0;
-    };
+	struct Tracker {
+		u32 drawCalls = 0;
+		u32 triangles = 0;
+		u32 squares = 0;
+		u32 circles = 0;
+		u32 cones = 0;
+		u32 cubes = 0;
+		u32 spheres = 0;
+	};
 
 	class Renderer {
 	public:
@@ -33,6 +39,12 @@ namespace bolt {
 		virtual Shared<ShaderProgram> getDefaultShader() const;
 
 		virtual ShaderProgram *getCastersShader() const;
+
+		inline u32 getTrackerTotal() const {
+			return this->m_tracker.triangles + this->m_tracker.squares + this->m_tracker.circles + this->m_tracker.cones + this->m_tracker.cubes + this->m_tracker.spheres;
+		}
+
+		inline u32 getRenderCallCount() const { return this->m_tracker.drawCalls; }
 
 		virtual void drawCube(const vec3 &pos, const vec3 &scale, const vec3 &rot, const vec4 &color);
 
@@ -53,14 +65,14 @@ namespace bolt {
 
 		virtual void drawElementsTriangles(const VertexArray &vao, const size_t &count);
 
-        virtual void drawIndexed();
+		virtual void drawIndexed();
 
 	private:
 		Shared<ShaderProgram> m_shader = nullptr;
 		Unique<ShaderProgram> m_casterShader = nullptr;
 		Unique<ShaderProgram> m_instancedShader = nullptr;
-        
-        Tracker m_tracker{};
-        Primitive m_cube{};
+
+		Tracker m_tracker{};
+		Primitive m_cube{};
 	};
 } // namespace bolt

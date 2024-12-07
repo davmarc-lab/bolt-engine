@@ -49,6 +49,10 @@ namespace bolt {
 
 		this->m_cube.vbo_mi.onAttach();
 		this->m_cube.vbo_co.onAttach();
+
+		EventDispatcher::instance()->subscribe(events::loop::LoopBeforeRender, [this](auto p) {
+			this->m_tracker.drawCalls = 0;
+		});
 	}
 
 	void Renderer::onDetach() {}
@@ -92,11 +96,13 @@ namespace bolt {
 	void Renderer::drawArrays(const VertexArray &vao, const u32 &mode, const i32 &first, const size_t &count) {
 		vao.bind();
 		glDrawArrays(mode, first, static_cast<i32>(count));
+		this->m_tracker.drawCalls++;
 	}
 
 	void Renderer::drawElements(const VertexArray &vao, const u32 &mode, const size_t &count, const u32 &type, const void *indices) {
 		vao.bind();
 		glDrawElements(mode, static_cast<i32>(count), type, indices);
+		this->m_tracker.drawCalls++;
 	}
 
 	void Renderer::drawArraysLines(const VertexArray &vao, const size_t &count, const i32 &first) {
@@ -119,7 +125,7 @@ namespace bolt {
 		this->drawElements(vao, GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 
-    // I don't like this
+	// I don't like this
 	void Renderer::drawIndexed() {
 		if (this->m_tracker.cubes) {
 			this->m_instancedShader->use();
@@ -127,7 +133,7 @@ namespace bolt {
 				systems::ecs::sendLightData(*this->m_instancedShader.get());
 				this->m_instancedShader->setInt("lightsCount", EntityManager::instance()->getLightsCount());
 				this->m_instancedShader->setVec3("viewPos", standardCamera.getCameraPosition());
-                Material mat{};
+				Material mat{};
 				this->m_instancedShader->setVec3("material.ambient", mat.ambient);
 				this->m_instancedShader->setVec3("material.diffuse", mat.diffuse);
 				this->m_instancedShader->setVec3("material.specular", mat.specular);
@@ -135,6 +141,7 @@ namespace bolt {
 			}
 			this->m_cube.vao.bind();
 			glDrawArraysInstanced(GL_TRIANGLES, 0, factory::mesh::cubeGeometry.size(), this->m_tracker.cubes);
+			this->m_tracker.drawCalls++;
 		}
 	}
 } // namespace bolt

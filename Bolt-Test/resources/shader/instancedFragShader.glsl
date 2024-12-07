@@ -2,8 +2,6 @@
 
 #define MAX_LIGHTS 32
 
-in vec2 texCoord;
-
 in VS_OUT {
     vec4 vertColor;
     vec2 texCoord;
@@ -150,4 +148,5 @@ void main() {
     }
 
 }
+
 

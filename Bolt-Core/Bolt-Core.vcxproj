@@ -181,6 +181,8 @@
     <Content Include="resources\shader\defaultOrthoVertShader.glsl" />
     <Content Include="resources\shader\defaultPerspVertShader.glsl" />
     <Content Include="resources\shader\geometryShader.glsl" />
+    <Content Include="resources\shader\instancedFragShader.glsl" />
+    <Content Include="resources\shader\instancedVertShader.glsl" />
     <Content Include="resources\shader\lightcasterFrag.glsl" />
     <Content Include="resources\shader\lightcasterVert.glsl" />
     <Content Include="resources\shader\textFragShader.glsl" />
