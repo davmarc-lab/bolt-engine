@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "../../Bolt-Core/include/Engine.hpp"
+
 #include <string>
 
 struct InfoEntity {
@@ -13,7 +15,8 @@ struct InfoMesh {
 	std::vector<u32> index{};
 	std::vector<bolt::vec4> colors{};
 	std::vector<bolt::vec3> normals{};
-	std::vector<bolt::vec3> texCoords{};
+	std::vector<bolt::vec2> texCoords{};
+    bolt::RenderHelper render{};
 };
 
 class MeshParser {
@@ -27,6 +30,7 @@ public:
 	inline static const std::string FILE_MESH_COLOR = "colors";
 	inline static const std::string FILE_MESH_NORM = "normals";  // TODO
 	inline static const std::string FILE_MESH_TEX = "texCoords"; // TODO
+    inline static const std::string FILE_RENDER = "render";
 
 	static void readMeshFromFile(const std::string &path);
 
@@ -38,5 +42,4 @@ private:
 	static InfoEntity parseEntityInfo(const std::string &content);
 
 	static InfoMesh unpackBuffer(const std::vector<std::string>& buffer);
-
 };

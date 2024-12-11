@@ -52,7 +52,7 @@ namespace bolt {
 
 		inline void addEntity(u32 entity) { this->m_entities.push_back(entity); }
 
-		inline void destroy() { this->m_entities.clear(); }
+		inline void clear() { this->m_entities.clear(); }
 	};
 
 	class SceneLayer : public Layer {
@@ -66,7 +66,7 @@ namespace bolt {
 		virtual void onAttach() override;
 
 		inline virtual void onDetach() override {
-			Scene::instance()->destroy();
+			Scene::instance()->clear();
 		}
 
 		virtual void onRender() override;

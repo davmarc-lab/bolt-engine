@@ -11,9 +11,10 @@ out VS_OUT {
     vec3 normal;
 } vs_out;
 
-uniform mat4 model;
-
 out vec3 FragPos;
+
+uniform mat4 view;
+uniform mat4 model;
 
 layout(std140, binding = 0) uniform Matrices {
     mat4 proj;

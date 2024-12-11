@@ -1,5 +1,7 @@
 $0
 pos 1000 400 0 scale 200 200 0 rot 0 0 0
+render
+	0 4 0
 vertex
 6
 	-1 -1 1
@@ -16,13 +18,11 @@ colors
 	1 0 0 1
 	1 0 0 1
 	1 0 0 1
-indices
-2
-	2
-	3
 
 $1
 pos 400 400 0 scale 200 200 0 rot 0 0 0
+render
+	0 4 0
 vertex
 6
 	-1 -1 1

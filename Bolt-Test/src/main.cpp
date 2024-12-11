@@ -71,7 +71,6 @@ int main(int argc, char *argv[]) {
 	helper.colors = factory::mesh::getColorVector(helper.vertex.size(), {1, 0, 0, 1});
 	helper.position = {1000, 400, 0};
 	helper.scale = {200, 200, 0};
-	
 	{
 		auto id = em->createEntity();
 		factory::mesh::instanceMesh(id, helper);
@@ -80,16 +79,16 @@ int main(int argc, char *argv[]) {
 		shader->shader->createShaderProgram();
 		scene->addEntity(id);
 	}
-
-	helper.name = "Eye";
-	helper.position = {400, 400, 0};
-	helper.colors = factory::mesh::getColorVector(helper.vertex.size(), {0, 1, 0, 1});
-	auto id = em->createEntity();
-	factory::mesh::instanceMesh(id, helper);
-	auto shader = em->addComponent<ShaderComponent>(id);
-	shader->shader = CreateUnique<ShaderProgram>("shader/vertexShader.glsl", "shader/fragmentShader.glsl", 0);
-	shader->shader->createShaderProgram();
-	scene->addEntity(id);
+	//
+	// helper.name = "Eye";
+	// helper.position = {400, 400, 0};
+	// helper.colors = factory::mesh::getColorVector(helper.vertex.size(), {0, 1, 0, 1});
+	// auto id = em->createEntity();
+	// factory::mesh::instanceMesh(id, helper);
+	// auto shader = em->addComponent<ShaderComponent>(id);
+	// shader->shader = CreateUnique<ShaderProgram>("shader/vertexShader.glsl", "shader/fragmentShader.glsl", 0);
+	// shader->shader->createShaderProgram();
+	// scene->addEntity(id);
 
 	Application::enableImGui();
 	const auto ig = CreateShared<ImGuiLayer>(w);
@@ -100,11 +99,15 @@ int main(int argc, char *argv[]) {
 	ls->addCustomLayer(CreateShared<ImGuiConfig>());
 
 	EventDispatcher::instance()->subscribe(ReadMeshDataFromFile, [](auto p) {
-		MeshParser::readMeshFromFile("config.txt");
+        for (auto id : Scene::instance()->getEntities()) {
+            EntityManager::instance()->removeEntity(id);
+        }
+        Scene::instance()->clear();
+		MeshParser::readMeshFromFile("resources/mesh/config.txt");
 	});
 	
 	EventDispatcher::instance()->subscribe(SaveMeshDataFromFile, [](auto p) {
-		MeshParser::saveMeshToFile();
+		MeshParser::saveMeshToFile("resources/mesh/config.txt");
 	});
 
 	/*

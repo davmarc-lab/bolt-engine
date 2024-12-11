@@ -3,6 +3,7 @@
 #include "../../../../Bolt-Graphics/include/glad/glad.h"
 
 #include <cassert>
+#include <exception>
 #include <iostream>
 
 namespace bolt {
@@ -48,6 +49,7 @@ namespace bolt {
 				std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << strType << "\n"
 						  << log
 						  << "\n-- -------------------------------------------------- --\n";
+				throw std::exception();
 			}
 		}
 	}
@@ -62,6 +64,7 @@ namespace bolt {
 			std::cout << "ERROR::SHADER_PROGRAM_LINKING_ERROR of type: " << "PROGRAM" << "\n"
 					  << log
 					  << "\n-- -------------------------------------------------- --\n";
+			throw std::exception();
 		}
 	}
 

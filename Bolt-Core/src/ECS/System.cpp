@@ -195,7 +195,7 @@ namespace bolt {
 			}
 
 			void drawAllMeshes() {
-				const auto meshes = EntityManager::instance()->getEntitiesFromComponent<Mesh>();
+				const auto meshes = Scene::instance()->getEntities();
 				const auto lights = ::bolt::systems::ecs::retrieveLightsData();
 				for (const auto id : meshes) {
 					const auto mesh = EntityManager::instance()->getEntityComponent<Mesh>(id);

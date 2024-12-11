@@ -81,6 +81,7 @@ namespace bolt {
 				}
 
 				// render
+                mesh->render.info = helper.renderInfo;
 				auto vao = mesh->vao;
 				auto mode = helper.renderInfo.mode;
 				// TODO: missing error handling if parameters are not set of RenderHelper

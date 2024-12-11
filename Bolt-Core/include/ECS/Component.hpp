@@ -122,7 +122,7 @@ namespace bolt {
 		vec3 color{1, 1, 1};
 		f32 intensity{};
 		LightType type;
-        LightVectors vectors;
+		LightVectors vectors;
 
 		b8 showCaster = true;
 
@@ -172,6 +172,7 @@ namespace bolt {
 	struct RenderComponent : public Component {
 	public:
 		std::function<void()> draw;
+		RenderHelper info{};
 
 		void setCall(std::function<void()> &&func) { this->draw = std::move(func); }
 
