@@ -20,7 +20,7 @@ void ImGuiFilePicker::render() {
 				std::string word;
 				std::istringstream stream(filePathName);
 				bool start_writing = false, add_sep = true;
-				string res = "./";
+				std::string res = "./";
 
 				while (std::getline(stream, word, '\\')) {
 					std::istringstream subStream(word);
@@ -37,7 +37,7 @@ void ImGuiFilePicker::render() {
 				if (!res.empty()) {
 					res.pop_back();
 				}
-				filePathName = string(res);
+				filePathName = std::string(res);
 			}
 #endif
 			// this->obj_observer->changeTexture(filePathName);

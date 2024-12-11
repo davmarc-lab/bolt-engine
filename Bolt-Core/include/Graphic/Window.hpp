@@ -27,6 +27,8 @@ namespace bolt {
 		// callbacks
 		std::function<void(void *, int, int, int, int)> m_keycallback = nullptr;
 
+		void updateUserPointer();
+
 	public:
 		Window(const ApplicationSetting &settings) :
 			Layer("Glfw Window"), m_windowTitle(std::move(settings.name)) {
@@ -65,9 +67,11 @@ namespace bolt {
 
 		inline void setClearColor(const vec4 &color) { this->m_clearColor = color; }
 
-		inline void setKeyboardCallback(std::function<void(void *context, int key, int code, int action, int mod)> &&func);
+		void setKeyboardCallback(std::function<void(void *, int, int, int, int)> &&func);
 
-		inline void execKeyboardCallback(void* context, int key, int code, int action, int mod);
+		b8 isKeyboardCallbackDefined() const { return this->m_keycallback != nullptr; }
+
+		void execKeyboardCallback(void* context, int key, int code, int action, int mod);
 
 		// --- Layer ---
 		virtual void onAttach() override;

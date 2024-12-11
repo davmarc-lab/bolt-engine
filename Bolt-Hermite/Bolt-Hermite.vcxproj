@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{6afe9b92-9208-443a-b03d-8414e78708fe}</ProjectGuid>
+    <RootNamespace>BoltHermite</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)bin\int\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)bin\int\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;BT_WINDOWS;BT_ENABLE_DEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)Bolt-Graphics\include\;$(SolutionDir)Bolt-Vendor\include\glfw\include\;$(SolutionDir)Bolt-imgui\include\;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)-$(Platform)\lib\;$(SolutionDir)Bolt-Vendor\include\glfw\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;Bolt-Graphics.lib;Bolt-imgui.lib;Bolt-Core.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;BT_WINDOWS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)Bolt-Graphics\include\;$(SolutionDir)Bolt-Vendor\include\glfw\include\;$(SolutionDir)Bolt-imgui\include\;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)-$(Platform)\lib\;$(SolutionDir)Bolt-Vendor\include\glfw\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;Bolt-Graphics.lib;Bolt-imgui.lib;Bolt-Core.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\HermiteFactory.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\herm.cpp" />
+    <ClCompile Include="src\HermiteFactory.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\shader\defaultFragShader.glsl" />
+    <Content Include="resources\shader\defaultOrthoVertShader.glsl" />
+    <Content Include="resources\shader\defaultPerspVertShader.glsl" />
+    <Content Include="resources\shader\fragmentShader.glsl" />
+    <Content Include="resources\shader\geometryShader.glsl" />
+    <Content Include="resources\shader\instancedFragShader.glsl" />
+    <Content Include="resources\shader\instancedVertShader.glsl" />
+    <Content Include="resources\shader\lightcasterFrag.glsl" />
+    <Content Include="resources\shader\lightcasterVert.glsl" />
+    <Content Include="resources\shader\textFragShader.glsl" />
+    <Content Include="resources\shader\textVertShader.glsl" />
+    <Content Include="resources\shader\vertexShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bolt-Core\Bolt-Core.vcxproj">
+      <Project>{a2d78893-c3fe-423f-8bea-a49533cc13bd}</Project>
+      <Name>Bolt-Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bolt-Graphics\Bolt-Graphics.vcxproj">
+      <Project>{684f5994-f682-4390-b3c8-c5002f7f07b9}</Project>
+      <Name>Bolt-Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bolt-imgui\Bolt-imgui.vcxproj">
+      <Project>{54a4abb9-e7af-4824-88e8-9fd4e0551993}</Project>
+      <Name>Bolt-imgui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bolt-Vendor\Bolt-Vendor.vcxproj">
+      <Project>{42c3df11-ae82-4801-a793-bb8050fb0dd9}</Project>
+      <Name>Bolt-Vendor</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

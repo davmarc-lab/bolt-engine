@@ -95,7 +95,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)-$(Platform)\lib\;$(SolutionDir)Bolt-Vendor\include\glfw\lib\</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>glfw3.lib;Bolt-Graphics.lib;Bolt-imgui.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;Bolt-Graphics.lib;Bolt-imgui.lib;Bolt-Core.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -181,6 +181,7 @@
       <AdditionalIncludeDirectories>C:\Users\David\Desktop\bolt-engine\Bolt-Graphics\include\;C:\Users\David\Desktop\bolt-engine\Bolt-Vendor\include\glfw\include\;C:\Users\David\Desktop\bolt-engine\Bolt-imgui\include\;C:\Users\David\Desktop\bolt-engine\Bolt-Core\include\;</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="src\ImGuiFilePicker.cpp" />
     <ClCompile Include="src\ImGuiInfo.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MeshParser.cpp" />
@@ -192,13 +193,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ImGuiConfig.hpp" />
+    <ClInclude Include="include\ImGuiFilePicker.hpp" />
     <ClInclude Include="include\ImGuiInfo.hpp" />
     <ClInclude Include="include\MeshParser.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="resources\shader\defaultFragShader.glsl" />
+    <Content Include="resources\shader\defaultOrthoVertShader.glsl" />
     <Content Include="resources\shader\defaultPerspVertShader.glsl" />
     <Content Include="resources\shader\fragmentShader.glsl" />
+    <Content Include="resources\shader\geometryShader.glsl" />
+    <Content Include="resources\shader\instancedFragShader.glsl" />
+    <Content Include="resources\shader\instancedVertShader.glsl" />
+    <Content Include="resources\shader\lightcasterFrag.glsl" />
+    <Content Include="resources\shader\lightcasterVert.glsl" />
+    <Content Include="resources\shader\textFragShader.glsl" />
+    <Content Include="resources\shader\textVertShader.glsl" />
     <Content Include="resources\shader\vertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

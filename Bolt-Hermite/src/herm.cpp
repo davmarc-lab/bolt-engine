@@ -11,18 +11,22 @@ using namespace bolt;
 #define WIDTH 900
 #define HEIGHT 900
 
-std::vector<vec3> linePoints{
+std::vector<vec3> axisPoints{
 	{0, -1, 0},
 	{0, 1, 0},
 	{-1, 0, 0},
 	{1, 0, 0},
 };
-std::vector<vec4> lineColors{
+std::vector<vec4> axisColors{
 	{0, 0, 0, 1},
 	{0, 0, 0, 1},
 	{0, 0, 0, 1},
 	{0, 0, 0, 1},
 };
+
+std::vector<vec3> pointsPos{};
+std::vector<vec4> pointsCol{};
+vec4 pointColor = {0, 0, 0, 1};
 
 int main(int argc, char *argv[]) {
 	std::cout << "Application started\n";
@@ -50,7 +54,7 @@ int main(int argc, char *argv[]) {
 	const auto scene = Scene::instance();
 	ls->addCustomLayer(CreateShared<SceneLayer>());
 
-	standardCamera.updateOrthoProjection(0, WIDTH, 0, HEIGHT);
+	standardCamera.updateOrthoProjection(-1, 1, -1, 1);
 	UniformBuffer ub = UniformBuffer("Matrices");
 	ub.onAttach();
 	ub.setup(sizeof(mat4), 0);
@@ -67,39 +71,102 @@ int main(int argc, char *argv[]) {
 
 	{
 		auto axis = em->createEntity();
-		auto m = em->addComponent<Mesh>(axis);
-		m->vertices = linePoints;
-		m->colorComponent.colors = lineColors;
+		auto mesh = em->addComponent<Mesh>(axis);
+		mesh->vertices = axisPoints;
+		mesh->colorComponent.colors = axisColors;
 
-		m->vao.onAttach();
-		m->vao.bind();
-		m->vbo_g.onAttach();
-		m->vbo_g.setup(m->vertices, 0);
-		m->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
+		mesh->vao.onAttach();
+		mesh->vao.bind();
+		mesh->vbo_g.onAttach();
+		mesh->vbo_g.setup(mesh->vertices, 0);
+		mesh->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
 
-		m->colorComponent.vbo_c.onAttach();
-		m->colorComponent.vbo_c.setup(m->colorComponent.colors, 0);
-		m->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
+		mesh->colorComponent.vbo_c.onAttach();
+		mesh->colorComponent.vbo_c.setup(mesh->colorComponent.colors, 0);
+		mesh->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
 
 		auto shader = em->addComponent<ShaderComponent>(axis);
 		shader->shader = CreateUnique<ShaderProgram>("shader/vertexShader.glsl", "shader/fragmentShader.glsl", 0);
 		shader->shader->createShaderProgram();
 
 		auto t = em->addComponent<Transform>(axis);
-        t->setPosition({WIDTH / 2, HEIGHT / 2, 0});
-        t->setScale({WIDTH / 2, HEIGHT / 2, 0});
 
 		auto render = em->addComponent<RenderComponent>(axis);
 
-		auto vao = m->vao;
-		m->render.setCall([&vao]() {
-			vao.bind();
+		auto vao = mesh->vao;
+		mesh->render.setCall([&vao]() {
 			glLineWidth(1.f);
-			glDrawArrays(GL_LINES, 0, linePoints.size());
+			RenderApi::instance()->getRenderer()->drawArrays(vao, GL_LINES, 0, axisPoints.size());
 		});
-		m->instanced = true;
+		mesh->instanced = true;
 		scene->addEntity(axis);
 	}
+
+	{
+		auto points = em->createEntity();
+		auto mesh = em->addComponent<Mesh>(points);
+		mesh->vertices = pointsPos;
+		mesh->colorComponent.colors = pointsCol;
+
+		mesh->vao.onAttach();
+		mesh->vao.bind();
+		mesh->vbo_g.onAttach();
+		mesh->vbo_g.setup(mesh->vertices, 0);
+		mesh->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
+
+		mesh->colorComponent.vbo_c.onAttach();
+		mesh->colorComponent.vbo_c.setup(mesh->colorComponent.colors, 0);
+		mesh->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
+
+		auto shader = em->addComponent<ShaderComponent>(points);
+		// maybe change into another shader but I think is expensive
+		shader->shader = CreateUnique<ShaderProgram>("shader/vertexShader.glsl", "shader/fragmentShader.glsl", 0);
+		shader->shader->createShaderProgram();
+
+		// default vals -> pos = {0, 0, 0}, scale = {1, 1, 1}, rot = {0, 0, 0}
+		auto t = em->addComponent<Transform>(points);
+
+		auto render = em->addComponent<RenderComponent>(points);
+
+		auto vao = mesh->vao;
+		mesh->render.setCall([&vao]() {
+			glPointSize(4.f);
+			glLineWidth(2.f);
+			RenderApi::instance()->getRenderer()->drawArrays(vao, GL_POINTS, 0, pointsPos.size());
+			// if (pointsPos.size() > 2) {
+			// 	auto herm = 0;
+			// } else {
+			// RenderApi::instance()->getRenderer()->drawArrays(vao, GL_LINE_STRIP, 0, pointsPos.size());
+			// }
+		});
+		mesh->instanced = true;
+		scene->addEntity(points);
+
+		w->setKeyboardCallback([&mesh](auto window, auto key, auto code, auto action, auto mod) {
+			if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+				f64 x, y;
+				glfwGetCursorPos((GLFWwindow *)window, &x, &y);
+				y = bolt::abs(y - HEIGHT);
+
+				// work but maybe could be better with projection???? (MAYBE NOT)
+				x = x / (WIDTH / 2) - 1;
+				y = y / (HEIGHT / 2) - 1;
+
+				mesh->vertices.emplace_back(x, y, 0);
+				mesh->colorComponent.colors.push_back(pointColor);
+				// update vbo
+				mesh->vao.bind();
+				mesh->vbo_g.setup(mesh->vertices, 0);
+				mesh->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
+				mesh->colorComponent.vbo_c.setup(mesh->colorComponent.colors, 0);
+				mesh->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
+			}
+		});
+	}
+
+	Application::enableImGui();
+	const auto ig = CreateShared<ImGuiLayer>(w);
+	ls->addCustomLayer(ig);
 
 	// Start application
 	app->run();

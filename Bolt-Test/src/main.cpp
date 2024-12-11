@@ -47,12 +47,6 @@ int main(int argc, char *argv[]) {
 	w->onAttach();
 	ls->addCustomLayer(w);
 
-	// auto func = [](auto window, auto key, auto code, auto action, auto mod) {
-	// 	std::cout << "Hello\n";
-	// };
-	//
-	// w->setKeyboardCallback(func);
-
 	const auto rd = RenderApi::instance();
 	rd->init(config::RenderApiConfig::render_opengl);
 
@@ -104,8 +98,8 @@ int main(int argc, char *argv[]) {
 	const auto ig = CreateShared<ImGuiLayer>(w);
 	ls->addCustomLayer(ig);
 
-	ls->addCustomLayer(CreateShared<ImGuiInfo>());
 	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
+	ls->addCustomLayer(CreateShared<ImGuiInfo>());
 	ls->addCustomLayer(CreateShared<ImGuiConfig>());
 
 	auto saveFilePicker = ImGuiFilePicker(".txt", [](auto file) {

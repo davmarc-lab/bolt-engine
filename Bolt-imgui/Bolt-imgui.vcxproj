@@ -105,15 +105,30 @@
     <ClCompile Include="include\imgui\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="include\imgui\misc\fonts\binary_to_compressed_c.cpp" />
     <ClCompile Include="include\imgui\misc\freetype\imgui_freetype.cpp" />
+    <ClCompile Include="src\GraphEditor.cpp" />
+    <ClCompile Include="src\ImCurveEdit.cpp" />
+    <ClCompile Include="src\ImGradient.cpp" />
     <ClCompile Include="src\imgui.cpp" />
+    <ClCompile Include="src\ImGuiFileDialog.cpp" />
+    <ClCompile Include="src\ImGuizmo.cpp" />
     <ClCompile Include="src\imgui_demo.cpp" />
     <ClCompile Include="src\imgui_draw.cpp" />
     <ClCompile Include="src\imgui_impl_glfw.cpp" />
     <ClCompile Include="src\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\imgui_tables.cpp" />
     <ClCompile Include="src\imgui_widgets.cpp" />
+    <ClCompile Include="src\ImSequencer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\dirent\dirent.h" />
+    <ClInclude Include="include\ImGuiFileDialog.h" />
+    <ClInclude Include="include\ImGuiFileDialogConfig.h" />
+    <ClInclude Include="include\ImGuizmo\GraphEditor.h" />
+    <ClInclude Include="include\ImGuizmo\ImCurveEdit.h" />
+    <ClInclude Include="include\ImGuizmo\ImGradient.h" />
+    <ClInclude Include="include\ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="include\ImGuizmo\ImSequencer.h" />
+    <ClInclude Include="include\ImGuizmo\ImZoomSlider.h" />
     <ClInclude Include="include\imgui\imconfig.h" />
     <ClInclude Include="include\imgui\imgui.h" />
     <ClInclude Include="include\imgui\imgui_impl_glfw.h" />
@@ -126,6 +141,15 @@
     <ClInclude Include="include\imgui\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="include\imgui\misc\freetype\imgui_freetype.h" />
     <ClInclude Include="include\imgui\misc\single_file\imgui_single_file.h" />
+    <ClInclude Include="include\stb\stb_image.h" />
+    <ClInclude Include="include\stb\stb_image_resize2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="include\dirent\ChangeLog" />
+    <Content Include="include\dirent\LICENSE" />
+    <Content Include="include\dirent\README.md" />
+    <Content Include="include\stb\LICENSE" />
+    <Content Include="include\stb\README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

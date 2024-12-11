@@ -26,7 +26,7 @@ namespace bolt {
 
 	static u16 s_windowCount = 0;
 
-#ifdef BT_ENABLE_DEBUG
+	#ifdef BT_ENABLE_DEBUG
 	const char *getErrorSource(const GLenum &source) {
 		switch (source) {
 			case GL_DEBUG_SOURCE_API:
@@ -93,7 +93,7 @@ namespace bolt {
 			}
 		}
 	}
-#endif
+	#endif
 
 	static void glfwErrorCallback(i32 code, const char *description) {
 		/* BT_ERROR_CORE("GLFW error ({0} -> {1})", code, description); */
@@ -115,11 +115,11 @@ namespace bolt {
 	}
 
 	static void glfwKeyboardCallback(GLFWwindow *window, int key, int code, int action, int mod) {
-		// auto pt = glfwGetWindowUserPointer(window);
-		// if (pt != nullptr) {
-		// 	auto cast = static_cast<Window *>(pt);
-		// 	cast->execKeyboardCallback(window, key, code, action, mod);
-		// }
+		auto pt = glfwGetWindowUserPointer(window);
+		if (pt != nullptr) {
+			auto cast = static_cast<Window *>(pt);
+			cast->execKeyboardCallback(window, key, code, action, mod);
+		}
 		if (key == GLFW_KEY_ESCAPE) {
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
 			EventDispatcher::instance()->post(events::window::WindowCloseEvent);
@@ -163,13 +163,19 @@ namespace bolt {
 		}
 	}
 
-	void Window::setKeyboardCallback(std::function<void(void *context, int key, int code, int action, int mod)> &&func) {
-		this->setKeyboardCallback(std::move(func));
+	void Window::setKeyboardCallback(std::function<void(void *, int, int, int, int)> &&func) {
+		this->m_keycallback = std::move(func);
+		this->updateUserPointer();
 	}
 
 	void Window::execKeyboardCallback(void *context, int key, int code, int action, int mod) {
 		this->m_keycallback(context, key, code, action, mod);
 	}
+
+	void Window::updateUserPointer() {
+		glfwSetWindowUserPointer(static_cast<GLFWwindow *>(this->m_window), this);
+	}
+
 
 	void Window::onAttach() {
 		// Init GLFW window
@@ -179,19 +185,19 @@ namespace bolt {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-#ifdef __APPLE__
+		#ifdef __APPLE__
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
+		#endif
 
 		// Error callback function must use the logger
 		glfwSetErrorCallback(glfwErrorCallback);
 
 		/* BT_INFO_CORE("Creating Window \"{0}\"", this->m_windowTitle); */
 
-#ifdef BT_ENABLE_DEBUG
+		#ifdef BT_ENABLE_DEBUG
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-/* BT_INFO_CORE("Debug activated"); */
-#endif
+		/* BT_INFO_CORE("Debug activated"); */
+		#endif
 
 		// Creating window
 		this->m_window = glfwCreateWindow(this->getWidth(), this->getHeight(), this->m_windowTitle.c_str(), NULL, NULL);
@@ -204,7 +210,7 @@ namespace bolt {
 		glfwMakeContextCurrent(static_cast<GLFWwindow *>(this->m_window));
 
 		// set user pointer for callbacks
-		glfwSetWindowUserPointer((GLFWwindow *)this->m_window, this);
+		this->updateUserPointer();
 
 		int width, height, channels;
 		unsigned char *pixels = stbi_load("../assets/icons/Engine-little.png", &width, &height, &channels, 4);
@@ -225,7 +231,7 @@ namespace bolt {
 			exit(EXIT_FAILURE);
 		}
 
-#ifdef BT_ENABLE_DEBUG
+		#ifdef BT_ENABLE_DEBUG
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
 		{
@@ -240,7 +246,7 @@ namespace bolt {
 				/* BT_INFO_CORE("GLFW Debugger Initialized."); */
 			}
 		}
-#endif
+		#endif
 
 		// Enabling vsync
 		this->setVsync(this->m_vsync);
@@ -292,8 +298,7 @@ namespace bolt {
 		glfwDestroyWindow(static_cast<GLFWwindow *>(this->m_window));
 		s_windowCount--;
 
-		if (s_windowCount == 0) {
-		}
+		if (s_windowCount == 0) {}
 	}
 
 	void Window::onEvent(const Event &e) {
