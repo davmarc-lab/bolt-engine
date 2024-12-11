@@ -86,6 +86,7 @@ OBJECTS := \
 	$(OBJDIR)/GraphEditor.o \
 	$(OBJDIR)/ImCurveEdit.o \
 	$(OBJDIR)/ImGradient.o \
+	$(OBJDIR)/ImGuiFileDialog.o \
 	$(OBJDIR)/ImGuizmo.o \
 	$(OBJDIR)/ImSequencer.o \
 	$(OBJDIR)/imgui.o \
@@ -160,6 +161,9 @@ $(OBJDIR)/ImCurveEdit.o: src/ImCurveEdit.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ImGradient.o: src/ImGradient.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/ImGuiFileDialog.o: src/ImGuiFileDialog.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ImGuizmo.o: src/ImGuizmo.cpp

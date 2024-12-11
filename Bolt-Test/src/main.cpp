@@ -1,12 +1,13 @@
 #include "../../Bolt-Core/include/Engine.hpp"
 #include "../../Bolt-Core/include/Graphics.hpp"
 
-#include "../include/MeshParser.hpp"
-#include "../include/ImGuiInfo.hpp"
 #include "../include/ImGuiConfig.hpp"
+#include "../include/ImGuiFilePicker.hpp"
+#include "../include/ImGuiInfo.hpp"
+#include "../include/MeshParser.hpp"
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 using namespace bolt;
 
@@ -98,21 +99,35 @@ int main(int argc, char *argv[]) {
 	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
 	ls->addCustomLayer(CreateShared<ImGuiConfig>());
 
-	EventDispatcher::instance()->subscribe(ReadMeshDataFromFile, [](auto p) {
-        for (auto id : Scene::instance()->getEntities()) {
-            EntityManager::instance()->removeEntity(id);
-        }
-        Scene::instance()->clear();
-		MeshParser::readMeshFromFile("resources/mesh/config.txt");
+	auto saveFilePicker = ImGuiFilePicker([](auto file) {
+		MeshParser::saveMeshToFile(file);
 	});
-	
-	EventDispatcher::instance()->subscribe(SaveMeshDataFromFile, [](auto p) {
-		MeshParser::saveMeshToFile("resources/mesh/config.txt");
+	auto loadFilePicker = ImGuiFilePicker([](auto file) {
+		for (auto id : Scene::instance()->getEntities()) {
+			EntityManager::instance()->removeEntity(id);
+		}
+		Scene::instance()->clear();
+		MeshParser::loadMeshFromFile(file);
+	});
+
+	EventDispatcher::instance()->subscribe(events::loop::LoopRender, [&saveFilePicker, &loadFilePicker](auto p) {
+		if (saveFilePicker.isOpened())
+			saveFilePicker.render();
+		if (loadFilePicker.isOpened())
+			loadFilePicker.render();
+	});
+
+	EventDispatcher::instance()->subscribe(SaveMeshDataFromFile, [&saveFilePicker](auto p) {
+		saveFilePicker.open();
+	});
+
+	EventDispatcher::instance()->subscribe(ReadMeshDataFromFile, [&loadFilePicker](auto p) {
+		loadFilePicker.open();
 	});
 
 	/*
 		rd->getRenderer()->drawCube({0, 0, -4}, {3, 3, 0}, {}, {0, 1, 1, 1});
-	
+
 		// STRESS TEST
 		EventDispatcher::instance()->subscribe(events::loop::LoopUpdate, [&rd](auto p) {
 			rd->getRenderer()->drawCube({vel, 0, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
@@ -128,7 +143,7 @@ int main(int argc, char *argv[]) {
 			rd->getRenderer()->drawCube({vel, 2, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
 			vel += 0.001f;
 		});
-	
+
 		for (int i = 0; i < 32; i++) {
 			for (int j = 0; j < 18; j++) {
 				rd->getRenderer()->drawCube({(i * .3) + .25, (j * .3) + 0.25, 0}, {.1, .1, .1}, {}, {0, 0, 1, 1});

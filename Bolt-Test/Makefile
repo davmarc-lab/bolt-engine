@@ -84,6 +84,7 @@ endif
 
 OBJECTS := \
 	$(OBJDIR)/ImGuiConfig.o \
+	$(OBJDIR)/ImGuiFilePicker.o \
 	$(OBJDIR)/ImGuiInfo.o \
 	$(OBJDIR)/MeshParser.o \
 	$(OBJDIR)/main.o \
@@ -146,6 +147,9 @@ $(OBJECTS): | $(OBJDIR)
 endif
 
 $(OBJDIR)/ImGuiConfig.o: src/ImGuiConfig.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/ImGuiFilePicker.o: src/ImGuiFilePicker.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ImGuiInfo.o: src/ImGuiInfo.cpp

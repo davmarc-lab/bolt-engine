@@ -109,7 +109,7 @@ enum State {
 	READ_MESH,
 };
 
-void MeshParser::readMeshFromFile(const std::string &path) {
+void MeshParser::loadMeshFromFile(const std::string &path) {
     // clear the current scene
     // CLEAR THE ECS TOO
     bolt::Scene::instance()->clear();

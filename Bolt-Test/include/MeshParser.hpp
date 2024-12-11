@@ -32,7 +32,7 @@ public:
 	inline static const std::string FILE_MESH_TEX = "texCoords"; // TODO
     inline static const std::string FILE_RENDER = "render";
 
-	static void readMeshFromFile(const std::string &path);
+	static void loadMeshFromFile(const std::string &path);
 
 	static void saveMeshToFile(const std::string &path = "config.txt");
 

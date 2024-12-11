@@ -110,6 +110,7 @@ void bolt::Application::run() {
 
 		// Before rendering operations
 		lm->execute([](const Shared<Layer> &l) { l->begin(); });
+        ed->post(events::loop::LoopRender);
 		lm->execute([](const Shared<Layer> &l) { l->onRender(); });
 
 		lm->execute([](const Shared<Layer> &l) { l->end(); });
