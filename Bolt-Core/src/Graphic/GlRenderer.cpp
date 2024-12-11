@@ -61,14 +61,15 @@ namespace bolt {
 
 	ShaderProgram *Renderer::getCastersShader() const { return this->m_casterShader.get(); }
 
-	void Renderer::drawCube(const vec3 &pos, const vec3 &scale, const vec3 &rotation, const vec4 &color) {
+	void Renderer::drawCube(const vec3 &pos, const vec3 &scale, const vec3 &rotation, const vec4 &color, const b8 &lights) {
 		auto base = mat4(1);
 		auto model = translate(base, pos) * glm::scale(base, scale);
-		this->drawCube(model, color);
+		this->drawCube(model, color, lights);
 	}
 
-	void Renderer::drawCube(const mat4 &transform, const vec4 &color) {
+	void Renderer::drawCube(const mat4 &transform, const vec4 &color, const b8 &lights) {
 		this->m_tracker.cubes++;
+		this->m_cube.skipLights = !lights;
 		this->m_cube.modelInstance.push_back(transform);
 		BT_ASSERT(this->m_cube.modelInstance.size() == this->m_tracker.cubes);
 

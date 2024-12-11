@@ -14,6 +14,7 @@ namespace bolt {
 		std::vector<mat4> modelInstance{};
 		VertexBuffer vbo_co;
 		std::vector<vec4> colorOffset{};
+		b8 skipLights = false;
 	};
 
 	struct Tracker {
@@ -46,9 +47,9 @@ namespace bolt {
 
 		inline u32 getRenderCallCount() const { return this->m_tracker.drawCalls; }
 
-		virtual void drawCube(const vec3 &pos, const vec3 &scale, const vec3 &rot, const vec4 &color);
+		virtual void drawCube(const vec3 &pos, const vec3 &scale, const vec3 &rot, const vec4 &color, const b8& lights = true);
 
-		virtual void drawCube(const mat4 &transform, const vec4 &color);
+		virtual void drawCube(const mat4 &transform, const vec4 &color, const b8& lights = true);
 
 		// GPU Draw calls
 		virtual void drawArrays(const VertexArray &vao, const u32 &mode, const i32 &first, const size_t &count);

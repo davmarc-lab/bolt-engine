@@ -65,6 +65,7 @@ namespace bolt {
 	};
 
 	struct MeshHelper {
+		std::string name{};
 		std::vector<vec3> vertex{};
 		std::vector<u32> index{};
 		std::vector<vec4> colors{};

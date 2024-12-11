@@ -1,10 +1,17 @@
-#include <iostream>
-#include <utility>
 #include "../../Bolt-Core/include/Engine.hpp"
 #include "../../Bolt-Core/include/Graphics.hpp"
+
+#include "../include/MeshParser.hpp"
 #include "../include/ImGuiInfo.hpp"
+#include "../include/ImGuiConfig.hpp"
+
+#include <iostream>
+#include <fstream>
 
 using namespace bolt;
+
+#define WIDTH 1600
+#define HEIGHT 900
 
 struct FakeCamera {
 	f32 left = 0, right = 0, up = 0, bot = 0;
@@ -20,12 +27,11 @@ int main(int argc, char *argv[]) {
 	properties.vsync = true;
 	properties.backgroundColor = vec4(0.3, 0.3, 0.3, 1);
 	properties.depth = {true, true, GL_LESS};
-	properties.cull = {true, GL_BACK};
 
 	ApplicationSetting settings{};
-	settings.type = scene::SCENE_3D;
+	settings.type = scene::SCENE_2D;
 	settings.name = "Bolt Application";
-	settings.dimension = {1600, 900};
+	settings.dimension = {WIDTH, HEIGHT};
 	settings.properties = properties;
 	settings.defaultCameraMovement = true;
 
@@ -43,7 +49,7 @@ int main(int argc, char *argv[]) {
 	const auto scene = Scene::instance();
 	ls->addCustomLayer(CreateShared<SceneLayer>());
 
-	standardCamera.updatePerspProjection(standardCamera.getCameraZoom(), 1600, 900, 0.1f, 100.f);
+	standardCamera.updateOrthoProjection(0, WIDTH, 0, HEIGHT);
 	UniformBuffer ub = UniformBuffer("Matrices");
 	ub.onAttach();
 	ub.setup(sizeof(mat4), 0);
@@ -59,65 +65,73 @@ int main(int argc, char *argv[]) {
 	em->subscribeEventCallbacks();
 
 	MeshHelper helper{};
+	helper.name = "Base";
 	helper.renderInfo = {RenderType::render_arrays, GL_TRIANGLES, 0};
+	helper.vertex = factory::mesh::squareGeometry;
+	helper.colors = factory::mesh::getColorVector(helper.vertex.size(), {1, 0, 0, 1});
+	helper.position = {1000, 400, 0};
+	helper.scale = {200, 200, 0};
+	
+	{
+		auto id = em->createEntity();
+		factory::mesh::instanceMesh(id, helper);
+		auto shader = em->addComponent<ShaderComponent>(id);
+		shader->shader = CreateUnique<ShaderProgram>("shader/vertexShader.glsl", "shader/fragmentShader.glsl", 0);
+		shader->shader->createShaderProgram();
+		scene->addEntity(id);
+	}
 
-	// meshes
-	// auto elem = em->createEntity();
-	// helper.vertex = factory::mesh::cubeGeometry;
-	// helper.colors = factory::mesh::getColorVector(sizeof(helper.vertex), {1, 0, 0, 1});
-	// helper.normals = factory::mesh::cubeNormals;
-	// helper.position = {0, 0, -1};
-	// helper.scale = {1, 1, 1};
-	// factory::mesh::instanceMesh(elem, helper);
-	// em->addComponent<Collider>(elem);
-	// scene->addEntity(elem);
-
-	// lights
-	LightHelper lh{};
-	lh.color = {1, 0, 0};
-	lh.position = {0, 1, 0};
-	lh.type = LightType::LIGHT_POINT;
-	lh.caster = true;
-	// em->createLight(lh);
-
-	// PrimitiveManager::init();
-	// auto cube = PrimitiveManager::addCubePrimitive({0, 0, 0}, {1, 1, 1}, {}, {1, 0, 0, 1});
-	// {
-	// 	auto mesh = em->getEntityComponent<Mesh>(cube);
-	// 	// mesh->colorComponent.colors = factory::mesh::getColorVector(mesh->colorComponent.colors.size(), {1, 0, 0, 1});
-	// }
+	helper.name = "Eye";
+	helper.position = {400, 400, 0};
+	helper.colors = factory::mesh::getColorVector(helper.vertex.size(), {0, 1, 0, 1});
+	auto id = em->createEntity();
+	factory::mesh::instanceMesh(id, helper);
+	auto shader = em->addComponent<ShaderComponent>(id);
+	shader->shader = CreateUnique<ShaderProgram>("shader/vertexShader.glsl", "shader/fragmentShader.glsl", 0);
+	shader->shader->createShaderProgram();
+	scene->addEntity(id);
 
 	Application::enableImGui();
 	const auto ig = CreateShared<ImGuiLayer>(w);
 	ls->addCustomLayer(ig);
 
-	auto info = CreateShared<ImGuiInfo>();
-	ls->addCustomLayer(info);
+	ls->addCustomLayer(CreateShared<ImGuiInfo>());
 	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
+	ls->addCustomLayer(CreateShared<ImGuiConfig>());
 
-	// rd->getRenderer()->drawCube({0, 0, -4}, {3, 3, 0}, {}, {0, 1, 1, 1});
+	EventDispatcher::instance()->subscribe(ReadMeshDataFromFile, [](auto p) {
+		MeshParser::readMeshFromFile("config.txt");
+	});
+	
+	EventDispatcher::instance()->subscribe(SaveMeshDataFromFile, [](auto p) {
+		MeshParser::saveMeshToFile();
+	});
 
-	// STRESS TEST
-	// EventDispatcher::instance()->subscribe(events::loop::LoopUpdate, [&rd](auto p) {
-	// 	rd->getRenderer()->drawCube({vel, 0, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
-	// 	rd->getRenderer()->drawCube({vel, 0.2, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
-	// 	rd->getRenderer()->drawCube({vel, 0.4, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
-	// 	rd->getRenderer()->drawCube({vel, 0.6, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
-	// 	rd->getRenderer()->drawCube({vel, 0.8, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
-	// 	rd->getRenderer()->drawCube({vel, 1, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
-	// 	rd->getRenderer()->drawCube({vel, 1.2, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
-	// 	rd->getRenderer()->drawCube({vel, 1.4, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
-	// 	rd->getRenderer()->drawCube({vel, 1.6, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
-	// 	rd->getRenderer()->drawCube({vel, 1.8, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
-	// 	rd->getRenderer()->drawCube({vel, 2, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
-	// 	vel += 0.001f;
-	// });
-
-	for (int i = 0; i < 32; i++) {
-		for (int j = 0; j < 18; j++) {
-			rd->getRenderer()->drawCube({(i * .3) + .25, (j * .3) + 0.25, 0}, {.1, .1, .1}, {}, {0, 0, 1, 1});
+	/*
+		rd->getRenderer()->drawCube({0, 0, -4}, {3, 3, 0}, {}, {0, 1, 1, 1});
+	
+		// STRESS TEST
+		EventDispatcher::instance()->subscribe(events::loop::LoopUpdate, [&rd](auto p) {
+			rd->getRenderer()->drawCube({vel, 0, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+			rd->getRenderer()->drawCube({vel, 0.2, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+			rd->getRenderer()->drawCube({vel, 0.4, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+			rd->getRenderer()->drawCube({vel, 0.6, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+			rd->getRenderer()->drawCube({vel, 0.8, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+			rd->getRenderer()->drawCube({vel, 1, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+			rd->getRenderer()->drawCube({vel, 1.2, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+			rd->getRenderer()->drawCube({vel, 1.4, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+			rd->getRenderer()->drawCube({vel, 1.6, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+			rd->getRenderer()->drawCube({vel, 1.8, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+			rd->getRenderer()->drawCube({vel, 2, -2}, {.1, .1, .1}, {}, {1, 0, 0, 1});
+			vel += 0.001f;
+		});
+	
+		for (int i = 0; i < 32; i++) {
+			for (int j = 0; j < 18; j++) {
+				rd->getRenderer()->drawCube({(i * .3) + .25, (j * .3) + 0.25, 0}, {.1, .1, .1}, {}, {0, 0, 1, 1});
+			}
 		}
-	}
+	*/
 
 	app->run();
 	std::cout << "\nApplication closed\n";

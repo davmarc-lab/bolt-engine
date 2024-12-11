@@ -22,6 +22,9 @@ namespace bolt {
 				}
 
 				const auto em = EntityManager::instance();
+
+				if (!helper.name.empty()) em->setEntityName(id, helper.name);
+				
 				Shared<Mesh> mesh;
 				if (!em->entityHasComponent<Mesh>(id))
 					mesh = em->addComponent<Mesh>(id);

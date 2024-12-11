@@ -70,11 +70,15 @@ namespace bolt {
 		return this->m_currentId++;
 	}
 
+	void EntityManager::setEntityName(const u32& id, const std::string& name) const {
+		this->m_entities.at(id)->setName(name);
+	}
+
 	u32 EntityManager::createLight(const LightHelper &helper) {
 		if (this->m_lightId < ecs::MAX_LIGHTS) {
 			this->m_lights.insert(std::make_pair(this->m_lightId, CreateShared<EntityLight>(helper)));
             if (helper.type != LightType::LIGHT_DIRECTIONAL) {
-                RenderApi::instance()->getRenderer()->drawCube(helper.position, {0.3, 0.3, 0.3}, {}, vec4(helper.color, 1));
+                RenderApi::instance()->getRenderer()->drawCube(helper.position, {0.3, 0.3, 0.3}, {}, vec4(helper.color, 1), false);
             }
 			return this->m_lightId++;
 		}

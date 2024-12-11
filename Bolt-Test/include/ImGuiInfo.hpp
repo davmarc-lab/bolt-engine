@@ -4,9 +4,8 @@
 
 class ImGuiInfo : public bolt::Layer {
 public:
-
 	virtual void onRender() override;
-	
+
 	ImGuiInfo() :
 		bolt::Layer("Demo UI") {}
 

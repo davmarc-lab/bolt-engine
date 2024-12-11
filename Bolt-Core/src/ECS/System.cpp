@@ -212,7 +212,6 @@ namespace bolt {
 						// If shader implements lights, send light informations
 						if (mask & ShaderConfig::shader_lights) {
 							systems::ecs::sendLightData(*s);
-							std::cout << EntityManager::instance()->getLightsCount() << "\n";
 							s->setInt("lightsCount", EntityManager::instance()->getLightsCount());
 							s->setVec3("viewPos", standardCamera.getCameraPosition());
 							auto mat = EntityManager::instance()->getEntityComponent<Material>(id);

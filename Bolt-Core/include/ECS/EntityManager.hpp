@@ -115,6 +115,8 @@ namespace bolt {
 		}
 
 		u32 createEntity();
+		
+		void setEntityName(const u32& id, const std::string& name) const;
 
 		u32 createLight(const LightHelper &helper);
 
