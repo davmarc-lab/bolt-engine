@@ -5,7 +5,7 @@
 void ImGuiFilePicker::render() {
 	IGFD::FileDialogConfig config;
 	config.path = "./resources/mesh/";
-	ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".*", config);
+	ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", this->m_extension.c_str(), config);
 
 	if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
 		if (ImGuiFileDialog::Instance()->IsOk()) {

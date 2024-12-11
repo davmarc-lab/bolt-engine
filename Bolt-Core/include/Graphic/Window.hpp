@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <functional>
 #include "../Application/Application.hpp"
 #include "../Core/Structs.hpp"
 #include "../Core/Utils.hpp"
@@ -21,7 +22,10 @@ namespace bolt {
 
 		void *m_window = nullptr;
 		std::string m_windowTitle = "Glfw Window";
-        u32 m_clearMask = 0;
+		u32 m_clearMask = 0;
+
+		// callbacks
+		std::function<void(void *, int, int, int, int)> m_keycallback = nullptr;
 
 	public:
 		Window(const ApplicationSetting &settings) :
@@ -33,7 +37,7 @@ namespace bolt {
 
 			this->m_settings = settings;
 
-            scene::updateTextProj(0.f, this->m_size.x, 0.f, this->m_size.y);
+			scene::updateTextProj(0.f, this->m_size.x, 0.f, this->m_size.y);
 			EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 		}
 
@@ -61,6 +65,10 @@ namespace bolt {
 
 		inline void setClearColor(const vec4 &color) { this->m_clearColor = color; }
 
+		inline void setKeyboardCallback(std::function<void(void *context, int key, int code, int action, int mod)> &&func);
+
+		inline void execKeyboardCallback(void* context, int key, int code, int action, int mod);
+
 		// --- Layer ---
 		virtual void onAttach() override;
 
@@ -73,7 +81,7 @@ namespace bolt {
 		virtual void onRender() override;
 
 		virtual void begin() override;
-		
+
 		virtual void end() override;
 	};
 } // namespace bolt

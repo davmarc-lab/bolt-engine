@@ -20,6 +20,9 @@ struct FakeCamera {
 
 f32 vel = 0.001;
 
+void keyboardCallback(void *window, int key, int code, int action, int mod) {
+}
+
 int main(int argc, char *argv[]) {
 	std::cout << "Application started\n\n";
 
@@ -43,6 +46,12 @@ int main(int argc, char *argv[]) {
 	// it needs to be attached due to UniforBuffer usage
 	w->onAttach();
 	ls->addCustomLayer(w);
+
+	// auto func = [](auto window, auto key, auto code, auto action, auto mod) {
+	// 	std::cout << "Hello\n";
+	// };
+	//
+	// w->setKeyboardCallback(func);
 
 	const auto rd = RenderApi::instance();
 	rd->init(config::RenderApiConfig::render_opengl);
@@ -99,10 +108,10 @@ int main(int argc, char *argv[]) {
 	ls->addCustomLayer(CreateShared<ImGuiEntityTree>());
 	ls->addCustomLayer(CreateShared<ImGuiConfig>());
 
-	auto saveFilePicker = ImGuiFilePicker([](auto file) {
+	auto saveFilePicker = ImGuiFilePicker(".txt", [](auto file) {
 		MeshParser::saveMeshToFile(file);
 	});
-	auto loadFilePicker = ImGuiFilePicker([](auto file) {
+	auto loadFilePicker = ImGuiFilePicker(".txt", [](auto file) {
 		for (auto id : Scene::instance()->getEntities()) {
 			EntityManager::instance()->removeEntity(id);
 		}

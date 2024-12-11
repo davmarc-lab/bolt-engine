@@ -1,4 +1,5 @@
-﻿#include <memory>
+﻿#include <functional>
+#include <memory>
 #include "../../include/Graphic/Window.hpp"
 
 #include "../../include/Core/Utils.hpp"
@@ -103,7 +104,7 @@ namespace bolt {
 		glViewport(0, 0, width, height);
 
 		scene::updateTextProj(0.f, width, 0.f, height);
-        
+
 		EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 
 		if (width < 0 || height < 0) {
@@ -114,6 +115,11 @@ namespace bolt {
 	}
 
 	static void glfwKeyboardCallback(GLFWwindow *window, int key, int code, int action, int mod) {
+		// auto pt = glfwGetWindowUserPointer(window);
+		// if (pt != nullptr) {
+		// 	auto cast = static_cast<Window *>(pt);
+		// 	cast->execKeyboardCallback(window, key, code, action, mod);
+		// }
 		if (key == GLFW_KEY_ESCAPE) {
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
 			EventDispatcher::instance()->post(events::window::WindowCloseEvent);
@@ -157,6 +163,14 @@ namespace bolt {
 		}
 	}
 
+	void Window::setKeyboardCallback(std::function<void(void *context, int key, int code, int action, int mod)> &&func) {
+		this->setKeyboardCallback(std::move(func));
+	}
+
+	void Window::execKeyboardCallback(void *context, int key, int code, int action, int mod) {
+		this->m_keycallback(context, key, code, action, mod);
+	}
+
 	void Window::onAttach() {
 		// Init GLFW window
 		/* BT_INFO_CORE("Initializing GLFW context"); */
@@ -188,6 +202,9 @@ namespace bolt {
 		}
 
 		glfwMakeContextCurrent(static_cast<GLFWwindow *>(this->m_window));
+
+		// set user pointer for callbacks
+		glfwSetWindowUserPointer((GLFWwindow *)this->m_window, this);
 
 		int width, height, channels;
 		unsigned char *pixels = stbi_load("../assets/icons/Engine-little.png", &width, &height, &channels, 4);
@@ -294,7 +311,7 @@ namespace bolt {
 		glClear(this->m_clearMask);
 	}
 
-	void Window::begin() { }
+	void Window::begin() {}
 
 	void Window::end() {}
 } // namespace bolt

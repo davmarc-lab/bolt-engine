@@ -21,5 +21,8 @@ include "Bolt-Core/BuildCore.lua"
 group "Bolt-Test"
     include "Bolt-Test/BuildTest.lua"
 
+group "Bolt-Hermite"
+    include "Bolt-Hermite/BuildHermite.lua"
+
 group "Bolt-Pong"
     include "Bolt-Pong/BuildPong.lua"
