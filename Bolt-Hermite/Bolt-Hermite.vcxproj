@@ -93,8 +93,10 @@
   <ItemGroup>
     <ClCompile Include="src\herm.cpp" />
     <ClCompile Include="src\HermiteFactory.cpp" />
+    <ClCompile Include="src\ImGuiHerm.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="include\ImGuiHerm.hpp" />
     <Content Include="resources\shader\defaultFragShader.glsl" />
     <Content Include="resources\shader\defaultOrthoVertShader.glsl" />
     <Content Include="resources\shader\defaultPerspVertShader.glsl" />
@@ -125,6 +127,9 @@
       <Project>{42c3df11-ae82-4801-a793-bb8050fb0dd9}</Project>
       <Name>Bolt-Vendor</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="resources\hermite\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

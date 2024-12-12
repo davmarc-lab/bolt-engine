@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "../../Bolt-Core/include/Engine.hpp"
 #include "../../Bolt-Core/include/Graphics.hpp"
 
@@ -6,10 +8,14 @@
 #include <GL/gl.h>
 #include <iostream>
 
+#include "../include/ImGuiHerm.hpp"
+
 using namespace bolt;
 
 #define WIDTH 900
 #define HEIGHT 900
+
+BT_AUTOCONST UpdateHermite = Event("Update Hermite Curve");
 
 std::vector<vec3> axisPoints{
 	{0, -1, 0},
@@ -25,6 +31,7 @@ std::vector<vec4> axisColors{
 };
 
 vec4 pointColor = {0, 0, 0, 1};
+vec4 curveColor = {1, 0, 0, 1};
 
 int main(int argc, char *argv[]) {
 	std::cout << "Application started\n";
@@ -52,6 +59,7 @@ int main(int argc, char *argv[]) {
 	const auto scene = Scene::instance();
 	ls->addCustomLayer(CreateShared<SceneLayer>());
 
+	// prepare camera info
 	standardCamera.updateOrthoProjection(-1, 1, -1, 1);
 	UniformBuffer ub = UniformBuffer("Matrices");
 	ub.onAttach();
@@ -65,8 +73,8 @@ int main(int argc, char *argv[]) {
 	EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 
 	const auto em = EntityManager::instance();
-	em->subscribeEventCallbacks();
 
+	// axis creation
 	{
 		auto axis = em->createEntity();
 		auto mesh = em->addComponent<Mesh>(axis);
@@ -100,105 +108,161 @@ int main(int argc, char *argv[]) {
 		scene->addEntity(axis);
 	}
 
+	// points and lines logic
+	auto controlPoints = em->createEntity();
+	auto curve = em->createEntity();
 	{
-		auto points = em->createEntity();
-		auto mesh = em->addComponent<Mesh>(points);
+		auto points = em->addComponent<Mesh>(controlPoints);
 
-		mesh->vao.onAttach();
-		mesh->vao.bind();
-		mesh->vbo_g.onAttach();
-		mesh->vbo_g.setup(mesh->vertices, 0);
-		mesh->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
+		points->vao.onAttach();
+		points->vao.bind();
+		points->vbo_g.onAttach();
+		points->vbo_g.setup(points->vertices, 0);
+		points->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
 
-		mesh->colorComponent.vbo_c.onAttach();
-		mesh->colorComponent.vbo_c.setup(mesh->colorComponent.colors, 0);
-		mesh->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
+		points->colorComponent.vbo_c.onAttach();
+		points->colorComponent.vbo_c.setup(points->colorComponent.colors, 0);
+		points->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
 
-		auto shader = em->addComponent<ShaderComponent>(points);
+		auto shader = em->addComponent<ShaderComponent>(controlPoints);
 		// maybe change into another shader but I think is expensive
 		shader->shader = CreateUnique<ShaderProgram>("shader/vertexShader.glsl", "shader/fragmentShader.glsl", 0);
 		shader->shader->createShaderProgram();
 
 		// default vals -> pos = {0, 0, 0}, scale = {1, 1, 1}, rot = {0, 0, 0}
-		auto t = em->addComponent<Transform>(points);
+		auto t = em->addComponent<Transform>(controlPoints);
 
-		mesh->render.setCall([&mesh]() {
+		points->render.setCall([&points]() {
 			glLineWidth(2.f);
 			glPointSize(4.f);
-			RenderApi::instance()->getRenderer()->drawArrays(mesh->vao, GL_POINTS, 0, mesh->vertices.size());
-			RenderApi::instance()->getRenderer()->drawArrays(mesh->vao, GL_LINE_STRIP, 0, mesh->vertices.size());
+			RenderApi::instance()->getRenderer()->drawArrays(points->vao, GL_POINTS, 0, points->vertices.size());
+			RenderApi::instance()->getRenderer()->drawArrays(points->vao, GL_LINE_STRIP, 0, points->vertices.size());
 		});
-		mesh->instanced = true;
-		scene->addEntity(points);
+		points->instanced = true;
+		scene->addEntity(controlPoints);
 
-		auto lines = em->createEntity();
-		auto ml = em->addComponent<Mesh>(lines);
-		auto foo = em->addComponent<Transform>(lines);
+		auto herm = em->addComponent<Mesh>(curve);
+		auto foo = em->addComponent<Transform>(curve);
 
-		ml->vertices = mesh->vertices;
-		ml->colorComponent.colors = mesh->colorComponent.colors;
+		herm->vertices = points->vertices;
+		herm->colorComponent.colors = points->colorComponent.colors;
 
-		ml->vao.onAttach();
-		ml->vao.bind();
-		ml->vbo_g.onAttach();
-		ml->vbo_g.setup(ml->vertices, 0);
-		ml->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
+		herm->vao.onAttach();
+		herm->vao.bind();
+		herm->vbo_g.onAttach();
+		herm->vbo_g.setup(herm->vertices, 0);
+		herm->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
 
-		ml->colorComponent.vbo_c.onAttach();
-		ml->colorComponent.vbo_c.setup(ml->colorComponent.colors, 0);
-		ml->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
+		herm->colorComponent.vbo_c.onAttach();
+		herm->colorComponent.vbo_c.setup(herm->colorComponent.colors, 0);
+		herm->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
 
-		auto s = em->addComponent<ShaderComponent>(points);
+		auto s = em->addComponent<ShaderComponent>(controlPoints);
 		// maybe change into another shader but I think is expensive
 		s->shader = CreateUnique<ShaderProgram>("shader/vertexShader.glsl", "shader/fragmentShader.glsl", 0);
 		s->shader->createShaderProgram();
 
-		ml->render.setCall([&ml]() {
+		herm->render.setCall([&herm]() {
 			glLineWidth(2.f);
-			RenderApi::instance()->getRenderer()->drawArrays(ml->vao, GL_LINE_STRIP, 0, ml->vertices.size());
+			RenderApi::instance()->getRenderer()->drawArrays(herm->vao, GL_LINE_STRIP, 0, herm->vertices.size());
 		});
 
-		ml->instanced = true;
-		scene->addEntity(lines);
+		herm->instanced = true;
+		scene->addEntity(curve);
 
-		w->setMousebuttonCallback([&mesh, &ml](auto window, auto button, auto action, auto mods) {
+		// custom events initialization
+		EventDispatcher::instance()->subscribe(UpdateHermite, [&points, &herm](auto p) {
+			// update control points
+			points->vao.bind();
+			points->vbo_g.setup(points->vertices, 0);
+			points->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
+			points->colorComponent.vbo_c.setup(points->colorComponent.colors, 0);
+			points->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
+
+			// update curve
+			if (points->vertices.size() > 2) {
+				Curve c{};
+				c.CP = points->vertices;
+				c.colCP = points->colorComponent.colors;
+				buildHermite(curveColor, curveColor, &c);
+				herm->vertices = c.vertex;
+				herm->colorComponent.colors = c.colors;
+			} else {
+				herm->vertices = points->vertices;
+				herm->colorComponent.colors = points->colorComponent.colors;
+			}
+
+			herm->vao.bind();
+			herm->vbo_g.setup(herm->vertices, 0);
+			herm->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
+			herm->colorComponent.vbo_c.setup(herm->colorComponent.colors, 0);
+			herm->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
+		});
+
+		EventDispatcher::instance()->subscribe(HermClearPoints, [&points, &herm](auto p) {
+			points->vertices.clear();
+			points->colorComponent.colors.clear();
+			herm->vertices.clear();
+			herm->colorComponent.colors.clear();
+
+			// clear buffers
+			points->vao.bind();
+			points->vbo_g.setup(points->vertices, 0);
+			points->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
+			points->colorComponent.vbo_c.setup(points->colorComponent.colors, 0);
+			points->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
+
+			herm->vao.bind();
+			herm->vbo_g.setup(herm->vertices, 0);
+			herm->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
+			herm->colorComponent.vbo_c.setup(herm->colorComponent.colors, 0);
+			herm->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
+		});
+
+		EventDispatcher::instance()->subscribe(HermCloseMesh, [&points, &herm](auto p) {
+			// close only with at least 3 vertices
+			if (points->vertices.size() > 2) {
+				if (points->vertices[0] != points->vertices[points->vertices.size() - 1]) {
+					points->vertices.push_back(points->vertices[0]);
+					points->colorComponent.colors.push_back(points->colorComponent.colors[0]);
+
+					EventDispatcher::instance()->post(UpdateHermite);
+				}
+			}
+		});
+
+		EventDispatcher::instance()->subscribe(HermSaveMesh, [&points](auto p) {
+			// write to file (defaultFile)
+			std::ofstream file(defaultFile);
+			for (auto v : points->vertices) {
+				file << v.x << " " << v.y << " " << v.z << "\n";
+			}
+			file.close();
+		});
+
+		EventDispatcher::instance()->subscribe(HermOpenMesh, [&points](auto p) {
+			// read from file (defaultFile) and load
+			Shared<Curve> fromFile = readDataFromFile(defaultFile);
+			points->vertices = fromFile->CP;
+			points->colorComponent.colors = factory::mesh::getColorVector(points->vertices.size(), pointColor);
+
+			EventDispatcher::instance()->post(UpdateHermite);
+		});
+
+		w->setMousebuttonCallback([&points](auto window, auto button, auto action, auto mods) {
 			if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
 				f64 x, y;
-				glfwGetCursorPos((GLFWwindow *)window, &x, &y);
+				glfwGetCursorPos(static_cast<GLFWwindow *>(window), &x, &y);
 				y = bolt::abs(y - HEIGHT);
 
-				// work but maybe could be better with projection???? (MAYBE NOT)
+				// calc position int mesh local space
 				x = x / (WIDTH / 2) - 1;
 				y = y / (HEIGHT / 2) - 1;
 
-				// update points
-				mesh->vertices.emplace_back(x, y, 0);
-				mesh->colorComponent.colors.push_back(pointColor);
+				points->vertices.emplace_back(x, y, 0);
+				points->colorComponent.colors.push_back(pointColor);
 
-				mesh->vao.bind();
-				mesh->vbo_g.setup(mesh->vertices, 0);
-				mesh->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
-				mesh->colorComponent.vbo_c.setup(mesh->colorComponent.colors, 0);
-				mesh->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
-
-				// update HERMITE curve
-				if (mesh->vertices.size() > 2) {
-					Curve c{};
-					c.CP = mesh->vertices;
-					c.colCP = mesh->colorComponent.colors;
-					buildHermite({1, 0, 0, 1}, {1, 0, 0, 1}, &c);
-					ml->vertices = c.vertex;
-					ml->colorComponent.colors = c.colors;
-				} else {
-					ml->vertices = mesh->vertices;
-					ml->colorComponent.colors = mesh->colorComponent.colors;
-				}
-
-				ml->vao.bind();
-				ml->vbo_g.setup(ml->vertices, 0);
-				ml->vao.linkAttribFast(SHADER_VERTEX_LOCATION, 3, GL_FLOAT, false, 0, (void *)0);
-				ml->colorComponent.vbo_c.setup(ml->colorComponent.colors, 0);
-				ml->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
+				EventDispatcher::instance()->post(UpdateHermite);
 			}
 		});
 	}
@@ -206,6 +270,9 @@ int main(int argc, char *argv[]) {
 	Application::enableImGui();
 	const auto ig = CreateShared<ImGuiLayer>(w);
 	ls->addCustomLayer(ig);
+
+	const auto he = CreateShared<ImGuiHerm>(w, controlPoints);
+	ls->addCustomLayer(he);
 
 	// Start application
 	app->run();
