@@ -33,6 +33,8 @@ std::vector<vec4> axisColors{
 vec4 pointColor = {0, 0, 0, 1};
 vec4 curveColor = {1, 0, 0, 1};
 
+i32 currentPointIndex = -1;
+
 int main(int argc, char *argv[]) {
 	std::cout << "Application started\n";
 
@@ -198,7 +200,6 @@ int main(int argc, char *argv[]) {
 			herm->colorComponent.vbo_c.setup(herm->colorComponent.colors, 0);
 			herm->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
 		});
-
 		EventDispatcher::instance()->subscribe(HermClearPoints, [&points, &herm](auto p) {
 			points->vertices.clear();
 			points->colorComponent.colors.clear();
@@ -218,8 +219,7 @@ int main(int argc, char *argv[]) {
 			herm->colorComponent.vbo_c.setup(herm->colorComponent.colors, 0);
 			herm->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
 		});
-
-		EventDispatcher::instance()->subscribe(HermCloseMesh, [&points, &herm](auto p) {
+		EventDispatcher::instance()->subscribe(HermCloseMesh, [&points](auto p) {
 			// close only with at least 3 vertices
 			if (points->vertices.size() > 2) {
 				if (points->vertices[0] != points->vertices[points->vertices.size() - 1]) {
@@ -230,7 +230,12 @@ int main(int argc, char *argv[]) {
 				}
 			}
 		});
-
+		EventDispatcher::instance()->subscribe(HermMergeFirstLast, [&points](auto p) {
+			if (points->vertices.size() > 3) {
+				points->vertices[points->vertices.size() - 1] = points->vertices[0];
+				EventDispatcher::instance()->post(UpdateHermite);
+			}
+		});
 		EventDispatcher::instance()->subscribe(HermSaveMesh, [&points](auto p) {
 			// write to file (defaultFile)
 			std::ofstream file(defaultFile);
@@ -239,7 +244,6 @@ int main(int argc, char *argv[]) {
 			}
 			file.close();
 		});
-
 		EventDispatcher::instance()->subscribe(HermOpenMesh, [&points](auto p) {
 			// read from file (defaultFile) and load
 			Shared<Curve> fromFile = readDataFromFile(defaultFile);
@@ -247,23 +251,6 @@ int main(int argc, char *argv[]) {
 			points->colorComponent.colors = factory::mesh::getColorVector(points->vertices.size(), pointColor);
 
 			EventDispatcher::instance()->post(UpdateHermite);
-		});
-
-		w->setMousebuttonCallback([&points](auto window, auto button, auto action, auto mods) {
-			if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
-				f64 x, y;
-				glfwGetCursorPos(static_cast<GLFWwindow *>(window), &x, &y);
-				y = bolt::abs(y - HEIGHT);
-
-				// calc position int mesh local space
-				x = x / (WIDTH / 2) - 1;
-				y = y / (HEIGHT / 2) - 1;
-
-				points->vertices.emplace_back(x, y, 0);
-				points->colorComponent.colors.push_back(pointColor);
-
-				EventDispatcher::instance()->post(UpdateHermite);
-			}
 		});
 	}
 
@@ -274,6 +261,78 @@ int main(int argc, char *argv[]) {
 	const auto he = CreateShared<ImGuiHerm>(w, controlPoints);
 	ls->addCustomLayer(he);
 
+	auto points = em->getEntityComponent<Mesh>(controlPoints);
+	// set the mouse buttons callback
+	w->setMousebuttonCallback([&points, &he](auto window, auto button, auto action, auto mods) {
+		// calc mouse pos
+		f64 x, y;
+		glfwGetCursorPos(static_cast<GLFWwindow *>(window), &x, &y);
+		y = bolt::abs(y - HEIGHT);
+		// calc position int mesh local space
+		x = x / (WIDTH / 2) - 1;
+		y = y / (HEIGHT / 2) - 1;
+		vec3 pos{x, y, 0};
+		// selection tolerance
+		vec3 tol{0.01f};
+
+		switch (he->getMouseMode()) {
+			case INSERT: {
+				if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
+					points->vertices.emplace_back(x, y, 0);
+					points->colorComponent.colors.push_back(pointColor);
+
+					EventDispatcher::instance()->post(UpdateHermite);
+				}
+				break;
+			}
+			case MOVE: {
+				if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
+					auto res = std::find_if(points->vertices.begin(), points->vertices.end(), [&pos, &tol](auto v) {
+						auto diff = glm::abs(pos - v);
+						return diff.x < tol.x && diff.y < tol.y;
+					});
+					if (res != points->vertices.end()) {
+						currentPointIndex = res - points->vertices.begin();
+					} else {
+						currentPointIndex = -1;
+					}
+				}
+				if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
+					if (currentPointIndex >= 0 && currentPointIndex < static_cast<i32>(points->vertices.size())) {
+						points->vertices.at(currentPointIndex) = {x, y, 0};
+						// merge the first and the last points
+						if (currentPointIndex == 0 || currentPointIndex == static_cast<i32>(points->vertices.size()) - 1) {
+							EventDispatcher::instance()->post(HermMergeFirstLast);
+						}
+						EventDispatcher::instance()->post(UpdateHermite);
+						currentPointIndex = -1;
+					}
+				}
+				break;
+			}
+			case REMOVE: {
+				if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
+					auto res = std::find_if(points->vertices.begin(), points->vertices.end(), [&pos, &tol](auto v) {
+						auto diff = glm::abs(pos - v);
+						return diff.x < tol.x && diff.y < tol.y;
+					});
+					if (res != points->vertices.end()) {
+						auto index = res - points->vertices.begin();
+						auto oldSize = static_cast<i32>(points->vertices.size());
+						// remove the current point
+						points->vertices.erase(res);
+						if (index == 0 || index == oldSize - 1) {
+							// merge the points
+							EventDispatcher::instance()->post(HermMergeFirstLast);
+						}
+						EventDispatcher::instance()->post(UpdateHermite);
+					}
+				}
+				break;
+			}
+		}
+	});
+	
 	// Start application
 	app->run();
 

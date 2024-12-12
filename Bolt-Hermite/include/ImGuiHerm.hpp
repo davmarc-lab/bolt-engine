@@ -9,6 +9,7 @@ enum MouseMode {
 };
 
 BT_AUTOCONST HermCloseMesh = bolt::Event("Close Herm Mesh");
+BT_AUTOCONST HermMergeFirstLast = bolt::Event("Merge First Last Points");
 BT_AUTOCONST HermClearPoints = bolt::Event("Clear Mesh Points");
 BT_AUTOCONST HermSaveMesh = bolt::Event("Save Herm Mesh");
 BT_AUTOCONST HermOpenMesh = bolt::Event("Open Herm Mesh");

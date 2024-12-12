@@ -19,6 +19,10 @@ void ImGuiHerm::onRender() {
 	if (ImGui::Button("Close Mesh")) {
 		bolt::EventDispatcher::instance()->post(HermCloseMesh);
 	}
+	ImGui::SameLine();
+	if (ImGui::Button("Merge First/Last")) {
+		bolt::EventDispatcher::instance()->post(HermMergeFirstLast);
+	}
 
 	if (ImGui::Button("Clear Points")) {
 		bolt::EventDispatcher::instance()->post(HermClearPoints);
