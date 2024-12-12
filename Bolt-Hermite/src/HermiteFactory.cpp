@@ -74,9 +74,13 @@ void buildHermite(vec4 color_top, vec4 color_bot, Curve *curve) {
 	Poligonale.CP = curve->CP;
 	Poligonale.colCP = curve->colCP;
 
+	for (int i = 0; i < curve->CP.size(); i++) {
+		Derivata.CP.emplace_back(0, 0, 0);
+	}
+
 	if (curve->CP.size() > 1) {
 		t = new f32[curve->CP.size()];
-		float step = 1. / (f32)(curve->CP.size() - 1);
+		float step = 1.f / (f32)(curve->CP.size() - 1);
 
 		for (int i = 0; i < curve->CP.size(); i++) {
 			t[i] = (f32)i * step;

@@ -138,6 +138,14 @@ namespace bolt {
 		}
 	}
 
+	static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+		auto pt = glfwGetWindowUserPointer(window);
+		if (pt != nullptr) {
+			auto cast = static_cast<Window*>(pt);
+			cast->execMouseButtonCallback(window, button, action, mods);
+		}
+	}
+
 	static void glfwMouseMovementCallback(GLFWwindow *window, double x, double y) {
 		if (mouse.firstMouse) {
 			mouse.lastX = x;
@@ -164,18 +172,30 @@ namespace bolt {
 	}
 
 	void Window::setKeyboardCallback(std::function<void(void *, int, int, int, int)> &&func) {
-		this->m_keycallback = std::move(func);
+		this->m_keyCallback = std::move(func);
 		this->updateUserPointer();
 	}
 
-	void Window::execKeyboardCallback(void *context, int key, int code, int action, int mod) {
-		this->m_keycallback(context, key, code, action, mod);
+	void Window::execKeyboardCallback(void *context, int key, int code, int action, int mods) {
+		if (this->m_keyCallback != nullptr)
+			this->m_keyCallback(context, key, code, action, mods);
 	}
+
+	void Window::setMousebuttonCallback(std::function<void(void *, int, int, int)> func) {
+		this->m_mouseButtonCallback = std::move(func);
+		this->updateUserPointer();
+	}
+
+
+	void Window::execMouseButtonCallback(void *context, int button, int action, int mods) {
+		if (this->m_mouseButtonCallback != nullptr)
+			this->m_mouseButtonCallback(context, button, action, mods);
+	}
+
 
 	void Window::updateUserPointer() {
 		glfwSetWindowUserPointer(static_cast<GLFWwindow *>(this->m_window), this);
 	}
-
 
 	void Window::onAttach() {
 		// Init GLFW window
@@ -253,8 +273,9 @@ namespace bolt {
 
 		// Callbacks time
 		glfwSetFramebufferSizeCallback(static_cast<GLFWwindow *>(this->m_window), glfwResizeCallback);
-
 		glfwSetKeyCallback(static_cast<GLFWwindow *>(this->m_window), glfwKeyboardCallback);
+		glfwSetMouseButtonCallback(static_cast<GLFWwindow*>(this->m_window), glfwMouseButtonCallback);
+		
 
 		// They are ready to work - BUG on Trello -
 		// glfwSetInputMode(static_cast<GLFWwindow*>(this->m_window), GLFW_CURSOR, GLFW_CURSOR_DISABLED);

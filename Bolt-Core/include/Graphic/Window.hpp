@@ -25,7 +25,8 @@ namespace bolt {
 		u32 m_clearMask = 0;
 
 		// callbacks
-		std::function<void(void *, int, int, int, int)> m_keycallback = nullptr;
+		std::function<void(void *, int, int, int, int)> m_keyCallback = nullptr;
+		std::function<void(void *, int, int, int)> m_mouseButtonCallback = nullptr;
 
 		void updateUserPointer();
 
@@ -69,9 +70,11 @@ namespace bolt {
 
 		void setKeyboardCallback(std::function<void(void *, int, int, int, int)> &&func);
 
-		b8 isKeyboardCallbackDefined() const { return this->m_keycallback != nullptr; }
+		void execKeyboardCallback(void *context, int key, int code, int action, int mods);
 
-		void execKeyboardCallback(void* context, int key, int code, int action, int mod);
+		void setMousebuttonCallback(std::function<void(void *, int, int, int)>);
+
+		void execMouseButtonCallback(void *context, int button, int action, int mods);
 
 		// --- Layer ---
 		virtual void onAttach() override;
