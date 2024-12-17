@@ -23,8 +23,6 @@ namespace bolt {
 		this->m_vao.bind();
 		this->m_vbo.setup(NULL, sizeof(float) * 6 * 4, GL_DYNAMIC_DRAW);
 		this->m_vao.linkAttribFast(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
-		this->m_vbo.unbind();
-		this->m_vao.unbind();
 		this->m_created = true;
 	}
 
@@ -79,7 +77,7 @@ namespace bolt {
 
 	void TextManager::onRender() {
 		textShader.use();
-		textShader.setMat4("proj", Application::getTextProjMatrix());
+		textShader.setMat4("textProj", Application::getTextProjMatrix());
 		for (auto t : this->m_text) {
 			textShader.setVec3("textColor", t->getColor());
 			glActiveTexture(GL_TEXTURE0);
@@ -110,7 +108,7 @@ namespace bolt {
 					{xpos + w, ypos + h, 1.0f, 0.0f}};
 
 				glBindTexture(GL_TEXTURE_2D, ch.textureId);
-				glBindBuffer(GL_ARRAY_BUFFER, t->getVboId());
+				t->bindVBO();
 				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 

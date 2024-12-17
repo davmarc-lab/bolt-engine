@@ -25,8 +25,9 @@ namespace bolt {
 		u32 m_clearMask = 0;
 
 		// callbacks
-		std::function<void(void *, int, int, int, int)> m_keyCallback = nullptr;
-		std::function<void(void *, int, int, int)> m_mouseButtonCallback = nullptr;
+		std::function<void(void *, i32, i32, i32, i32)> m_keyCallback = nullptr;
+		std::function<void(void *, i32, i32, i32)> m_mouseButtonCallback = nullptr;
+		std::function<void(void *, f64, f64)> m_cursorPosCallback = nullptr;
 
 		void updateUserPointer();
 
@@ -68,13 +69,17 @@ namespace bolt {
 
 		inline void setClearColor(const vec4 &color) { this->m_clearColor = color; }
 
-		void setKeyboardCallback(std::function<void(void *, int, int, int, int)> &&func);
+		void setKeyboardCallback(std::function<void(void *, i32, i32, i32, i32)> &&func);
 
-		void execKeyboardCallback(void *context, int key, int code, int action, int mods);
+		void execKeyboardCallback(void *context, i32 key, i32 code, i32 action, i32 mods);
 
-		void setMousebuttonCallback(std::function<void(void *, int, int, int)>);
+		void setMouseButtonCallback(std::function<void(void *, i32, i32, i32)> &&func);
 
-		void execMouseButtonCallback(void *context, int button, int action, int mods);
+		void execMouseButtonCallback(void *context, i32 button, i32 action, i32 mods);
+
+		void setCursorPosCallback(std::function<void(void *, f64, f64)> &&func);
+
+		void execCursorPosCallback(void *context, f64 xpos, f64 ypos);
 
 		// --- Layer ---
 		virtual void onAttach() override;

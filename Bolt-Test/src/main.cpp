@@ -83,16 +83,6 @@ int main(int argc, char *argv[]) {
 		shader->shader->createShaderProgram();
 		scene->addEntity(id);
 	}
-	//
-	// helper.name = "Eye";
-	// helper.position = {400, 400, 0};
-	// helper.colors = factory::mesh::getColorVector(helper.vertex.size(), {0, 1, 0, 1});
-	// auto id = em->createEntity();
-	// factory::mesh::instanceMesh(id, helper);
-	// auto shader = em->addComponent<ShaderComponent>(id);
-	// shader->shader = CreateUnique<ShaderProgram>("shader/vertexShader.glsl", "shader/fragmentShader.glsl", 0);
-	// shader->shader->createShaderProgram();
-	// scene->addEntity(id);
 
 	Application::enableImGui();
 	const auto ig = CreateShared<ImGuiLayer>(w);

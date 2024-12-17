@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="include\ImGuiHerm.hpp" />
+    <Content Include="resources\fonts\arial.ttf" />
     <Content Include="resources\shader\defaultFragShader.glsl" />
     <Content Include="resources\shader\defaultOrthoVertShader.glsl" />
     <Content Include="resources\shader\defaultPerspVertShader.glsl" />

@@ -114,7 +114,7 @@ namespace bolt {
 		/* BT_INFO_CORE("Window resized: w={0}, h={1}", width, height); */
 	}
 
-	static void glfwKeyboardCallback(GLFWwindow *window, int key, int code, int action, int mod) {
+	static void glfwKeyboardCallback(GLFWwindow *window, i32 key, i32 code, i32 action, i32 mod) {
 		auto pt = glfwGetWindowUserPointer(window);
 		if (pt != nullptr) {
 			auto cast = static_cast<Window *>(pt);
@@ -138,25 +138,30 @@ namespace bolt {
 		}
 	}
 
-	static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+	static void glfwMouseButtonCallback(GLFWwindow *window, i32 button, i32 action, i32 mods) {
 		auto pt = glfwGetWindowUserPointer(window);
 		if (pt != nullptr) {
-			auto cast = static_cast<Window*>(pt);
+			auto cast = static_cast<Window *>(pt);
 			cast->execMouseButtonCallback(window, button, action, mods);
 		}
 	}
 
-	static void glfwMouseMovementCallback(GLFWwindow *window, double x, double y) {
-		if (mouse.firstMouse) {
-			mouse.lastX = x;
-			mouse.lastY = y;
-			mouse.firstMouse = false;
+	static void glfwMouseMovementCallback(GLFWwindow *window, f64 x, f64 y) {
+		auto pt = glfwGetWindowUserPointer(window);
+		if (pt != nullptr) {
+			auto cast = static_cast<Window *>(pt);
+			cast->execCursorPosCallback(window, x, y);
 		}
-
-		standardCamera.processMouseMovement(x - mouse.lastX, y - mouse.lastY);
-
-		mouse.lastX = x;
-		mouse.lastY = y;
+		// if (mouse.firstMouse) {
+		// 	mouse.lastX = x;
+		// 	mouse.lastY = y;
+		// 	mouse.firstMouse = false;
+		// }
+		//
+		// standardCamera.processMouseMovement(x - mouse.lastX, y - mouse.lastY);
+		//
+		// mouse.lastX = x;
+		// mouse.lastY = y;
 	}
 
 	bool Window::shouldWindowClose() const { return glfwWindowShouldClose(static_cast<GLFWwindow *>(this->m_window)); }
@@ -171,27 +176,35 @@ namespace bolt {
 		}
 	}
 
-	void Window::setKeyboardCallback(std::function<void(void *, int, int, int, int)> &&func) {
+	void Window::setKeyboardCallback(std::function<void(void *, i32, i32, i32, i32)> &&func) {
 		this->m_keyCallback = std::move(func);
 		this->updateUserPointer();
 	}
 
-	void Window::execKeyboardCallback(void *context, int key, int code, int action, int mods) {
+	void Window::execKeyboardCallback(void *context, i32 key, i32 code, i32 action, i32 mods) {
 		if (this->m_keyCallback != nullptr)
 			this->m_keyCallback(context, key, code, action, mods);
 	}
 
-	void Window::setMousebuttonCallback(std::function<void(void *, int, int, int)> func) {
+	void Window::setMouseButtonCallback(std::function<void(void *, i32, i32, i32)> &&func) {
 		this->m_mouseButtonCallback = std::move(func);
 		this->updateUserPointer();
 	}
 
-
-	void Window::execMouseButtonCallback(void *context, int button, int action, int mods) {
+	void Window::execMouseButtonCallback(void *context, i32 button, i32 action, i32 mods) {
 		if (this->m_mouseButtonCallback != nullptr)
 			this->m_mouseButtonCallback(context, button, action, mods);
 	}
 
+	void Window::setCursorPosCallback(std::function<void(void *, f64, f64)> &&func) {
+		this->m_cursorPosCallback = std::move(func);
+		this->updateUserPointer();
+	}
+
+	void Window::execCursorPosCallback(void *context, f64 xpos, f64 ypos) {
+		if (this->m_cursorPosCallback != nullptr)
+			this->m_cursorPosCallback(context, xpos, ypos);
+	}
 
 	void Window::updateUserPointer() {
 		glfwSetWindowUserPointer(static_cast<GLFWwindow *>(this->m_window), this);
@@ -232,7 +245,7 @@ namespace bolt {
 		// set user pointer for callbacks
 		this->updateUserPointer();
 
-		int width, height, channels;
+		i32 width, height, channels;
 		unsigned char *pixels = stbi_load("../assets/icons/Engine-little.png", &width, &height, &channels, 4);
 		if (pixels != NULL) {
 			GLFWimage icon[1]{};
@@ -255,7 +268,7 @@ namespace bolt {
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
 		{
-			int debugFlags;
+			i32 debugFlags;
 			glGetIntegerv(GL_CONTEXT_FLAGS, &debugFlags);
 
 			if (debugFlags & GL_CONTEXT_FLAG_DEBUG_BIT) {
@@ -274,12 +287,8 @@ namespace bolt {
 		// Callbacks time
 		glfwSetFramebufferSizeCallback(static_cast<GLFWwindow *>(this->m_window), glfwResizeCallback);
 		glfwSetKeyCallback(static_cast<GLFWwindow *>(this->m_window), glfwKeyboardCallback);
-		glfwSetMouseButtonCallback(static_cast<GLFWwindow*>(this->m_window), glfwMouseButtonCallback);
-		
-
-		// They are ready to work - BUG on Trello -
-		// glfwSetInputMode(static_cast<GLFWwindow*>(this->m_window), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		// glfwSetCursorPosCallback(static_cast<GLFWwindow*>(this->m_window), glfwMouseMovementCallback);
+		glfwSetMouseButtonCallback(static_cast<GLFWwindow *>(this->m_window), glfwMouseButtonCallback);
+		glfwSetCursorPosCallback(static_cast<GLFWwindow *>(this->m_window), glfwMouseMovementCallback);
 
 		// Enable some parameters
 		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);

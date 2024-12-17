@@ -42,7 +42,6 @@ int main(int argc, char *argv[]) {
 	properties.maximized = false;
 	properties.vsync = true;
 	properties.backgroundColor = vec4(0.3, 0.3, 0.3, 1);
-	properties.depth = {true, true, GL_LESS};
 
 	ApplicationSetting settings{};
 	settings.type = scene::SCENE_2D;
@@ -68,9 +67,10 @@ int main(int argc, char *argv[]) {
 	ub.setup(sizeof(mat4), 0);
 	auto VP = standardCamera.getViewProjMatrix();
 	ub.update(0, sizeof(mat4), value_ptr(VP));
-	EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&ub](auto &&p) {
+	EventDispatcher::instance()->subscribe(events::shader::ShaderProjectionChanged, [&w, &ub](auto p) {
 		auto VP = standardCamera.getViewProjMatrix();
 		ub.update(0, sizeof(mat4), value_ptr(VP));
+		scene::updateTextProj(-1, 1, -1, 1);
 	});
 	EventDispatcher::instance()->post(events::shader::ShaderProjectionChanged);
 
@@ -254,6 +254,10 @@ int main(int argc, char *argv[]) {
 		});
 	}
 
+	auto tm = CreateShared<TextManager>();
+	tm->onAttach();
+	ls->addCustomLayer(tm);
+
 	Application::enableImGui();
 	const auto ig = CreateShared<ImGuiLayer>(w);
 	ls->addCustomLayer(ig);
@@ -263,7 +267,7 @@ int main(int argc, char *argv[]) {
 
 	auto points = em->getEntityComponent<Mesh>(controlPoints);
 	// set the mouse buttons callback
-	w->setMousebuttonCallback([&points, &he](auto window, auto button, auto action, auto mods) {
+	w->setMouseButtonCallback([&points, &he](auto window, auto button, auto action, auto mods) {
 		// calc mouse pos
 		f64 x, y;
 		glfwGetCursorPos(static_cast<GLFWwindow *>(window), &x, &y);
@@ -298,15 +302,8 @@ int main(int argc, char *argv[]) {
 					}
 				}
 				if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
-					if (currentPointIndex >= 0 && currentPointIndex < static_cast<i32>(points->vertices.size())) {
-						points->vertices.at(currentPointIndex) = {x, y, 0};
-						// merge the first and the last points
-						if (currentPointIndex == 0 || currentPointIndex == static_cast<i32>(points->vertices.size()) - 1) {
-							EventDispatcher::instance()->post(HermMergeFirstLast);
-						}
-						EventDispatcher::instance()->post(UpdateHermite);
-						currentPointIndex = -1;
-					}
+					// reset selected point
+					currentPointIndex = -1;
 				}
 				break;
 			}
@@ -332,7 +329,35 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	});
+	// set the mouse movement callback
+	w->setCursorPosCallback([&points, &he](auto window, auto xpos, auto ypos) {
+		xpos = xpos / (WIDTH / 2) - 1;
+		ypos = (std::abs(ypos - HEIGHT)) / (HEIGHT / 2) - 1;
+		if (he->getMouseMode() == MouseMode::MOVE) {
+			if (currentPointIndex >= 0 && currentPointIndex < static_cast<i32>(points->vertices.size())) {
+				points->vertices.at(currentPointIndex) = {xpos, ypos, 0};
+				// merge the first and the last points
+				if (currentPointIndex == 0 || currentPointIndex == static_cast<i32>(points->vertices.size()) - 1) {
+					EventDispatcher::instance()->post(HermMergeFirstLast);
+				}
+				EventDispatcher::instance()->post(UpdateHermite);
+			}
+			// if some point is selected
+			if (currentPointIndex != -1) {
+				points->vertices[currentPointIndex] = {xpos, ypos, 0};
+				EventDispatcher::instance()->post(UpdateHermite);
+			}
+		}
+	});
 	
+	TextHelper h{};
+	h.position = {0, 0};
+	h.color = {1, 0, 0};
+	h.text = "AAA";
+	auto t = CreateShared<Text>(h);
+	tm->addText(t);
+
+
 	// Start application
 	app->run();
 
