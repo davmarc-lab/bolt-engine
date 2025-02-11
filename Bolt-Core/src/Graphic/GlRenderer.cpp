@@ -96,6 +96,7 @@ namespace bolt {
 
 	void Renderer::drawArrays(const VertexArray &vao, const u32 &mode, const i32 &first, const size_t &count) {
 		vao.bind();
+        // std::cout << mode << ", " << first << ", " << count << "\n";
 		glDrawArrays(mode, first, static_cast<i32>(count));
 		this->m_tracker.drawCalls++;
 	}

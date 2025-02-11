@@ -84,6 +84,7 @@ endif
 
 OBJECTS := \
 	$(OBJDIR)/HermiteFactory.o \
+	$(OBJDIR)/ImGuiHerm.o \
 	$(OBJDIR)/herm.o \
 
 RESOURCES := \
@@ -144,6 +145,9 @@ $(OBJECTS): | $(OBJDIR)
 endif
 
 $(OBJDIR)/HermiteFactory.o: src/HermiteFactory.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/ImGuiHerm.o: src/ImGuiHerm.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/herm.o: src/herm.cpp

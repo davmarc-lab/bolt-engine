@@ -1,6 +1,7 @@
 #include "../../include/Application/Application.hpp"
 #include <array>
 #include <cstddef>
+#include <iostream>
 
 #include "../../include/Core/InputManager.hpp"
 #include "../../include/Core/LayerManager.hpp"

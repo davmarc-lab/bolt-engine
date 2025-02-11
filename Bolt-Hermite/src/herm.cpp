@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
 		auto render = em->addComponent<RenderComponent>(axis);
 
 		auto vao = mesh->vao;
-		mesh->render.setCall([&vao]() {
+		mesh->render.setCall([vao]() {
 			glLineWidth(1.f);
 			RenderApi::instance()->getRenderer()->drawArrays(vao, GL_LINES, 0, axisPoints.size());
 		});
@@ -134,7 +134,7 @@ int main(int argc, char *argv[]) {
 		// default vals -> pos = {0, 0, 0}, scale = {1, 1, 1}, rot = {0, 0, 0}
 		auto t = em->addComponent<Transform>(controlPoints);
 
-		points->render.setCall([&points]() {
+		points->render.setCall([points]() {
 			glLineWidth(2.f);
 			glPointSize(4.f);
 			RenderApi::instance()->getRenderer()->drawArrays(points->vao, GL_POINTS, 0, points->vertices.size());
@@ -164,7 +164,7 @@ int main(int argc, char *argv[]) {
 		s->shader = CreateUnique<ShaderProgram>("shader/vertexShader.glsl", "shader/fragmentShader.glsl", 0);
 		s->shader->createShaderProgram();
 
-		herm->render.setCall([&herm]() {
+		herm->render.setCall([herm]() {
 			glLineWidth(2.f);
 			RenderApi::instance()->getRenderer()->drawArrays(herm->vao, GL_LINE_STRIP, 0, herm->vertices.size());
 		});
@@ -173,7 +173,7 @@ int main(int argc, char *argv[]) {
 		scene->addEntity(curve);
 
 		// custom events initialization
-		EventDispatcher::instance()->subscribe(UpdateHermite, [&points, &herm](auto p) {
+		EventDispatcher::instance()->subscribe(UpdateHermite, [points, herm](auto p) {
 			// update control points
 			points->vao.bind();
 			points->vbo_g.setup(points->vertices, 0);
@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
 			herm->colorComponent.vbo_c.setup(herm->colorComponent.colors, 0);
 			herm->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
 		});
-		EventDispatcher::instance()->subscribe(HermClearPoints, [&points, &herm](auto p) {
+		EventDispatcher::instance()->subscribe(HermClearPoints, [points, herm](auto p) {
 			points->vertices.clear();
 			points->colorComponent.colors.clear();
 			herm->vertices.clear();
@@ -219,7 +219,7 @@ int main(int argc, char *argv[]) {
 			herm->colorComponent.vbo_c.setup(herm->colorComponent.colors, 0);
 			herm->vao.linkAttribFast(SHADER_COLORS_LOCATION, 4, GL_FLOAT, false, 0, (void *)0);
 		});
-		EventDispatcher::instance()->subscribe(HermCloseMesh, [&points](auto p) {
+		EventDispatcher::instance()->subscribe(HermCloseMesh, [points](auto p) {
 			// close only with at least 3 vertices
 			if (points->vertices.size() > 2) {
 				if (points->vertices[0] != points->vertices[points->vertices.size() - 1]) {
@@ -230,21 +230,22 @@ int main(int argc, char *argv[]) {
 				}
 			}
 		});
-		EventDispatcher::instance()->subscribe(HermMergeFirstLast, [&points](auto p) {
+		EventDispatcher::instance()->subscribe(HermMergeFirstLast, [points](auto p) {
 			if (points->vertices.size() > 3) {
 				points->vertices[points->vertices.size() - 1] = points->vertices[0];
 				EventDispatcher::instance()->post(UpdateHermite);
 			}
 		});
-		EventDispatcher::instance()->subscribe(HermSaveMesh, [&points](auto p) {
+		EventDispatcher::instance()->subscribe(HermSaveMesh, [points](auto p) {
 			// write to file (defaultFile)
 			std::ofstream file(defaultFile);
 			for (auto v : points->vertices) {
 				file << v.x << " " << v.y << " " << v.z << "\n";
 			}
+            std::cout << "Done\n";
 			file.close();
 		});
-		EventDispatcher::instance()->subscribe(HermOpenMesh, [&points](auto p) {
+		EventDispatcher::instance()->subscribe(HermOpenMesh, [points](auto p) {
 			// read from file (defaultFile) and load
 			Shared<Curve> fromFile = readDataFromFile(defaultFile);
 			points->vertices = fromFile->CP;
@@ -330,7 +331,7 @@ int main(int argc, char *argv[]) {
 		}
 	});
 	// set the mouse movement callback
-	w->setCursorPosCallback([&points, &he](auto window, auto xpos, auto ypos) {
+	w->setCursorPosCallback([points, he](auto window, auto xpos, auto ypos) {
 		xpos = xpos / (WIDTH / 2) - 1;
 		ypos = (std::abs(ypos - HEIGHT)) / (HEIGHT / 2) - 1;
 		if (he->getMouseMode() == MouseMode::MOVE) {
@@ -356,7 +357,6 @@ int main(int argc, char *argv[]) {
 	h.text = "AAA";
 	auto t = CreateShared<Text>(h);
 	tm->addText(t);
-
 
 	// Start application
 	app->run();
