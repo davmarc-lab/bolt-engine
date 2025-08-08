@@ -8,127 +8,143 @@ ifndef verbose
   SILENT = @
 endif
 
-.PHONY: clean prebuild prelink
-
-ifeq ($(config),debug)
-  ifeq ($(origin CC), default)
-    CC = gcc
-  endif
-  ifeq ($(origin CXX), default)
-    CXX = g++
-  endif
-  ifeq ($(origin AR), default)
-    AR = ar
-  endif
-  RESCOMP = windres
-  TARGETDIR = ../bin/linux-x86_64/Debug/Bolt-Core
-  TARGET = $(TARGETDIR)/libBolt-Core.a
-  OBJDIR = ../bin/int/linux-x86_64/Debug/Bolt-Core
-  DEFINES += -DBT_ENABLE_DEBUG
-  INCLUDES += -I../Bolt-Graphics/include
-  FORCE_INCLUDE +=
-  ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++20
-  ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../bin/linux-x86_64/Debug/Bolt-Graphics/libBolt-Graphics.a ../bin/linux-x86_64/Debug/Bolt-imgui/libBolt-imgui.a
-  LDDEPS += ../bin/linux-x86_64/Debug/Bolt-Graphics/libBolt-Graphics.a ../bin/linux-x86_64/Debug/Bolt-imgui/libBolt-imgui.a
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
-  LINKCMD = $(AR) -rcs "$@" $(OBJECTS)
-  define PREBUILDCMDS
-  endef
-  define PRELINKCMDS
-  endef
-  define POSTBUILDCMDS
-  endef
-all: prebuild prelink $(TARGET)
-	@:
-
-endif
-
-ifeq ($(config),release)
-  ifeq ($(origin CC), default)
-    CC = gcc
-  endif
-  ifeq ($(origin CXX), default)
-    CXX = g++
-  endif
-  ifeq ($(origin AR), default)
-    AR = ar
-  endif
-  RESCOMP = windres
-  TARGETDIR = ../bin/linux-x86_64/Release/Bolt-Core
-  TARGET = $(TARGETDIR)/libBolt-Core.a
-  OBJDIR = ../bin/int/linux-x86_64/Release/Bolt-Core
-  DEFINES +=
-  INCLUDES += -I../Bolt-Graphics/include
-  FORCE_INCLUDE +=
-  ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -g
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -g -std=c++20
-  ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../bin/linux-x86_64/Release/Bolt-Graphics/libBolt-Graphics.a ../bin/linux-x86_64/Release/Bolt-imgui/libBolt-imgui.a
-  LDDEPS += ../bin/linux-x86_64/Release/Bolt-Graphics/libBolt-Graphics.a ../bin/linux-x86_64/Release/Bolt-imgui/libBolt-imgui.a
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
-  LINKCMD = $(AR) -rcs "$@" $(OBJECTS)
-  define PREBUILDCMDS
-  endef
-  define PRELINKCMDS
-  endef
-  define POSTBUILDCMDS
-  endef
-all: prebuild prelink $(TARGET)
-	@:
-
-endif
-
-OBJECTS := \
-	$(OBJDIR)/glad.o \
-	$(OBJDIR)/Application.o \
-	$(OBJDIR)/Collision.o \
-	$(OBJDIR)/Event.o \
-	$(OBJDIR)/InputManager.o \
-	$(OBJDIR)/Layer.o \
-	$(OBJDIR)/LayerManager.o \
-	$(OBJDIR)/Log.o \
-	$(OBJDIR)/PhysicsWorld.o \
-	$(OBJDIR)/Resource.o \
-	$(OBJDIR)/Scene.o \
-	$(OBJDIR)/EntityManager.o \
-	$(OBJDIR)/MeshFactory.o \
-	$(OBJDIR)/PrimitiveManager.o \
-	$(OBJDIR)/System.o \
-	$(OBJDIR)/GlElementBuffer.o \
-	$(OBJDIR)/GlFrameBuffer.o \
-	$(OBJDIR)/GlRenderBuffer.o \
-	$(OBJDIR)/GlUniformBuffer.o \
-	$(OBJDIR)/GlVertexArray.o \
-	$(OBJDIR)/GlVertexBuffer.o \
-	$(OBJDIR)/Camera.o \
-	$(OBJDIR)/GlRenderer.o \
-	$(OBJDIR)/GlfwWindow.o \
-	$(OBJDIR)/ImGuiDebug.o \
-	$(OBJDIR)/ImGuiFactory.o \
-	$(OBJDIR)/ImGuiLayer.o \
-	$(OBJDIR)/GlShader.o \
-	$(OBJDIR)/TextManager.o \
-	$(OBJDIR)/GlTexture.o \
-
-RESOURCES := \
-
-CUSTOMFILES := \
+.PHONY: clean prebuild
 
 SHELLTYPE := posix
-ifeq (.exe,$(findstring .exe,$(ComSpec)))
+ifeq ($(shell echo "test"), "test")
 	SHELLTYPE := msdos
 endif
 
-$(TARGET): $(GCH) ${CUSTOMFILES} $(OBJECTS) $(LDDEPS) $(RESOURCES) | $(TARGETDIR)
+# Configurations
+# #############################################
+
+ifeq ($(origin CC), default)
+  CC = gcc
+endif
+ifeq ($(origin CXX), default)
+  CXX = g++
+endif
+ifeq ($(origin AR), default)
+  AR = ar
+endif
+RESCOMP = windres
+INCLUDES += -I../Bolt-Graphics/include
+FORCE_INCLUDE +=
+ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
+ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
+LINKCMD = $(AR) -rcs "$@" $(OBJECTS)
+define PREBUILDCMDS
+endef
+define PRELINKCMDS
+endef
+define POSTBUILDCMDS
+endef
+
+ifeq ($(config),debug)
+TARGETDIR = ../bin/linux-x86_64/Debug/Bolt-Core
+TARGET = $(TARGETDIR)/libBolt-Core.a
+OBJDIR = ../bin/int/linux-x86_64/Debug/Bolt-Core
+DEFINES += -DBT_ENABLE_DEBUG
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++20
+LIBS += ../bin/linux-x86_64/Debug/Bolt-Graphics/libBolt-Graphics.a ../bin/linux-x86_64/Debug/Bolt-imgui/libBolt-imgui.a
+LDDEPS += ../bin/linux-x86_64/Debug/Bolt-Graphics/libBolt-Graphics.a ../bin/linux-x86_64/Debug/Bolt-imgui/libBolt-imgui.a
+
+else ifeq ($(config),release)
+TARGETDIR = ../bin/linux-x86_64/Release/Bolt-Core
+TARGET = $(TARGETDIR)/libBolt-Core.a
+OBJDIR = ../bin/int/linux-x86_64/Release/Bolt-Core
+DEFINES +=
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -g
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -g -std=c++20
+LIBS += ../bin/linux-x86_64/Release/Bolt-Graphics/libBolt-Graphics.a ../bin/linux-x86_64/Release/Bolt-imgui/libBolt-imgui.a
+LDDEPS += ../bin/linux-x86_64/Release/Bolt-Graphics/libBolt-Graphics.a ../bin/linux-x86_64/Release/Bolt-imgui/libBolt-imgui.a
+
+endif
+
+# Per File Configurations
+# #############################################
+
+
+# File sets
+# #############################################
+
+GENERATED :=
+OBJECTS :=
+
+GENERATED += $(OBJDIR)/Application.o
+GENERATED += $(OBJDIR)/Camera.o
+GENERATED += $(OBJDIR)/Collision.o
+GENERATED += $(OBJDIR)/EntityManager.o
+GENERATED += $(OBJDIR)/Event.o
+GENERATED += $(OBJDIR)/GlElementBuffer.o
+GENERATED += $(OBJDIR)/GlFrameBuffer.o
+GENERATED += $(OBJDIR)/GlRenderBuffer.o
+GENERATED += $(OBJDIR)/GlRenderer.o
+GENERATED += $(OBJDIR)/GlShader.o
+GENERATED += $(OBJDIR)/GlTexture.o
+GENERATED += $(OBJDIR)/GlUniformBuffer.o
+GENERATED += $(OBJDIR)/GlVertexArray.o
+GENERATED += $(OBJDIR)/GlVertexBuffer.o
+GENERATED += $(OBJDIR)/GlfwWindow.o
+GENERATED += $(OBJDIR)/ImGuiDebug.o
+GENERATED += $(OBJDIR)/ImGuiFactory.o
+GENERATED += $(OBJDIR)/ImGuiLayer.o
+GENERATED += $(OBJDIR)/InputManager.o
+GENERATED += $(OBJDIR)/Layer.o
+GENERATED += $(OBJDIR)/LayerManager.o
+GENERATED += $(OBJDIR)/Log.o
+GENERATED += $(OBJDIR)/MeshFactory.o
+GENERATED += $(OBJDIR)/PhysicsWorld.o
+GENERATED += $(OBJDIR)/PrimitiveManager.o
+GENERATED += $(OBJDIR)/Resource.o
+GENERATED += $(OBJDIR)/Scene.o
+GENERATED += $(OBJDIR)/System.o
+GENERATED += $(OBJDIR)/TextManager.o
+GENERATED += $(OBJDIR)/glad.o
+OBJECTS += $(OBJDIR)/Application.o
+OBJECTS += $(OBJDIR)/Camera.o
+OBJECTS += $(OBJDIR)/Collision.o
+OBJECTS += $(OBJDIR)/EntityManager.o
+OBJECTS += $(OBJDIR)/Event.o
+OBJECTS += $(OBJDIR)/GlElementBuffer.o
+OBJECTS += $(OBJDIR)/GlFrameBuffer.o
+OBJECTS += $(OBJDIR)/GlRenderBuffer.o
+OBJECTS += $(OBJDIR)/GlRenderer.o
+OBJECTS += $(OBJDIR)/GlShader.o
+OBJECTS += $(OBJDIR)/GlTexture.o
+OBJECTS += $(OBJDIR)/GlUniformBuffer.o
+OBJECTS += $(OBJDIR)/GlVertexArray.o
+OBJECTS += $(OBJDIR)/GlVertexBuffer.o
+OBJECTS += $(OBJDIR)/GlfwWindow.o
+OBJECTS += $(OBJDIR)/ImGuiDebug.o
+OBJECTS += $(OBJDIR)/ImGuiFactory.o
+OBJECTS += $(OBJDIR)/ImGuiLayer.o
+OBJECTS += $(OBJDIR)/InputManager.o
+OBJECTS += $(OBJDIR)/Layer.o
+OBJECTS += $(OBJDIR)/LayerManager.o
+OBJECTS += $(OBJDIR)/Log.o
+OBJECTS += $(OBJDIR)/MeshFactory.o
+OBJECTS += $(OBJDIR)/PhysicsWorld.o
+OBJECTS += $(OBJDIR)/PrimitiveManager.o
+OBJECTS += $(OBJDIR)/Resource.o
+OBJECTS += $(OBJDIR)/Scene.o
+OBJECTS += $(OBJDIR)/System.o
+OBJECTS += $(OBJDIR)/TextManager.o
+OBJECTS += $(OBJDIR)/glad.o
+
+# Rules
+# #############################################
+
+all: $(TARGET)
+	@:
+
+$(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
+	$(PRELINKCMDS)
 	@echo Linking Bolt-Core
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
-
-$(CUSTOMFILES): | $(OBJDIR)
 
 $(TARGETDIR):
 	@echo Creating $(TARGETDIR)
@@ -150,119 +166,128 @@ clean:
 	@echo Cleaning Bolt-Core
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
+	$(SILENT) rm -rf $(GENERATED)
 	$(SILENT) rm -rf $(OBJDIR)
 else
 	$(SILENT) if exist $(subst /,\\,$(TARGET)) del $(subst /,\\,$(TARGET))
+	$(SILENT) if exist $(subst /,\\,$(GENERATED)) del /s /q $(subst /,\\,$(GENERATED))
 	$(SILENT) if exist $(subst /,\\,$(OBJDIR)) rmdir /s /q $(subst /,\\,$(OBJDIR))
 endif
 
-prebuild:
+prebuild: | $(OBJDIR)
 	$(PREBUILDCMDS)
 
-prelink: $(OBJECTS)
-	$(PRELINKCMDS)
-
 ifneq (,$(PCH))
-$(OBJECTS): $(GCH) $(PCH) | $(OBJDIR)
-$(GCH): $(PCH) | $(OBJDIR)
+$(OBJECTS): $(GCH) | $(PCH_PLACEHOLDER)
+$(GCH): $(PCH) | prebuild
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) -x c++-header $(ALL_CXXFLAGS) -o "$@" -MF "$(@:%.gch=%.d)" -c "$<"
+$(PCH_PLACEHOLDER): $(GCH) | $(OBJDIR)
+ifeq (posix,$(SHELLTYPE))
+	$(SILENT) touch "$@"
 else
-$(OBJECTS): | $(OBJDIR)
+	$(SILENT) echo $null >> "$@"
+endif
+else
+$(OBJECTS): | prebuild
 endif
 
+
+# File Rules
+# #############################################
+
 $(OBJDIR)/glad.o: ../Bolt-Graphics/src/glad/src/glad.c
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Application.o: src/Application/Application.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Collision.o: src/Core/Collision.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Event.o: src/Core/Event.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/InputManager.o: src/Core/InputManager.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Layer.o: src/Core/Layer.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/LayerManager.o: src/Core/LayerManager.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Log.o: src/Core/Log.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/PhysicsWorld.o: src/Core/PhysicsWorld.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Resource.o: src/Core/Resource.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Scene.o: src/Core/Scene.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/EntityManager.o: src/ECS/EntityManager.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/MeshFactory.o: src/ECS/MeshFactory.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/PrimitiveManager.o: src/ECS/PrimitiveManager.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/System.o: src/ECS/System.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlElementBuffer.o: src/Graphic/Buffer/GlElementBuffer.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlFrameBuffer.o: src/Graphic/Buffer/GlFrameBuffer.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlRenderBuffer.o: src/Graphic/Buffer/GlRenderBuffer.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlUniformBuffer.o: src/Graphic/Buffer/GlUniformBuffer.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlVertexArray.o: src/Graphic/Buffer/GlVertexArray.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlVertexBuffer.o: src/Graphic/Buffer/GlVertexBuffer.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Camera.o: src/Graphic/Camera/Camera.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlRenderer.o: src/Graphic/GlRenderer.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlfwWindow.o: src/Graphic/GlfwWindow.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ImGuiDebug.o: src/Graphic/ImGui/ImGuiDebug.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ImGuiFactory.o: src/Graphic/ImGuiFactory.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ImGuiLayer.o: src/Graphic/ImGuiLayer.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlShader.o: src/Graphic/Shader/GlShader.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/TextManager.o: src/Graphic/Text/TextManager.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GlTexture.o: src/Graphic/Texture/GlTexture.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)
 ifneq (,$(PCH))
-  -include $(OBJDIR)/$(notdir $(PCH)).d
+  -include $(PCH_PLACEHOLDER).d
 endif

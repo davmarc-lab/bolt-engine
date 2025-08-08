@@ -10,6 +10,8 @@ enum MouseMode {
 
 BT_AUTOCONST HermCloseMesh = bolt::Event("Close Herm Mesh");
 BT_AUTOCONST HermMergeFirstLast = bolt::Event("Merge First Last Points");
+BT_AUTOCONST HermReflectPointsX = bolt::Event("X-Reflect Mesh Points");
+BT_AUTOCONST HermReflectPointsY = bolt::Event("Y-Reflect Mesh Points");
 BT_AUTOCONST HermClearPoints = bolt::Event("Clear Mesh Points");
 BT_AUTOCONST HermSaveMesh = bolt::Event("Save Herm Mesh");
 BT_AUTOCONST HermOpenMesh = bolt::Event("Open Herm Mesh");
@@ -28,7 +30,7 @@ public:
 
 	ImGuiHerm() = delete;
 
-	ImGuiHerm(const Shared<bolt::Window>& window, const u32 &id) :
+	ImGuiHerm(const Shared<bolt::Window> &window, const u32 &id) :
 		m_window(window), m_id(id) {}
 
 	virtual ~ImGuiHerm() override = default;

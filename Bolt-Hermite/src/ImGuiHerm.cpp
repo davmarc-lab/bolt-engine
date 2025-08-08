@@ -10,11 +10,17 @@ void ImGuiHerm::onRender() {
 	}
 
 	ImGui::Text("Mouse mode");
-	if (ImGui::RadioButton("Insert", this->m_mode == MouseMode::INSERT)) { this->m_mode = MouseMode::INSERT; }
+	if (ImGui::RadioButton("Insert", this->m_mode == MouseMode::INSERT)) {
+		this->m_mode = MouseMode::INSERT;
+	}
 	ImGui::SameLine();
-	if (ImGui::RadioButton("Move", this->m_mode == MouseMode::MOVE)) { this->m_mode = MouseMode::MOVE; }
+	if (ImGui::RadioButton("Move", this->m_mode == MouseMode::MOVE)) {
+		this->m_mode = MouseMode::MOVE;
+	}
 	ImGui::SameLine();
-	if (ImGui::RadioButton("Remove", this->m_mode == MouseMode::REMOVE)) { this->m_mode = MouseMode::REMOVE; }
+	if (ImGui::RadioButton("Remove", this->m_mode == MouseMode::REMOVE)) {
+		this->m_mode = MouseMode::REMOVE;
+	}
 
 	if (ImGui::Button("Close Mesh")) {
 		bolt::EventDispatcher::instance()->post(HermCloseMesh);
@@ -22,6 +28,14 @@ void ImGuiHerm::onRender() {
 	ImGui::SameLine();
 	if (ImGui::Button("Merge First/Last")) {
 		bolt::EventDispatcher::instance()->post(HermMergeFirstLast);
+	}
+
+	if (ImGui::Button("X-Reflect Points")) {
+		bolt::EventDispatcher::instance()->post(HermReflectPointsX);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Y-Reflect Points")) {
+		bolt::EventDispatcher::instance()->post(HermReflectPointsY);
 	}
 
 	if (ImGui::Button("Clear Points")) {

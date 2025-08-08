@@ -8,102 +8,93 @@ ifndef verbose
   SILENT = @
 endif
 
-.PHONY: clean prebuild prelink
-
-ifeq ($(config),debug)
-  ifeq ($(origin CC), default)
-    CC = gcc
-  endif
-  ifeq ($(origin CXX), default)
-    CXX = g++
-  endif
-  ifeq ($(origin AR), default)
-    AR = ar
-  endif
-  RESCOMP = windres
-  TARGETDIR = ../bin/linux-x86_64/Debug/Bolt-Test
-  TARGET = $(TARGETDIR)/Bolt-Test
-  OBJDIR = ../bin/int/linux-x86_64/Debug/Bolt-Test
-  DEFINES += -DBT_ENABLE_DEBUG
-  INCLUDES += -Iinclude -I../Bolt-Core/include
-  FORCE_INCLUDE +=
-  ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++20
-  ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../bin/linux-x86_64/Debug/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Debug/Bolt-imgui/libBolt-imgui.a -lglfw -lfreetype
-  LDDEPS += ../bin/linux-x86_64/Debug/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Debug/Bolt-imgui/libBolt-imgui.a
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
-  LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
-  define PREBUILDCMDS
-  endef
-  define PRELINKCMDS
-  endef
-  define POSTBUILDCMDS
-  endef
-all: prebuild prelink $(TARGET)
-	@:
-
-endif
-
-ifeq ($(config),release)
-  ifeq ($(origin CC), default)
-    CC = gcc
-  endif
-  ifeq ($(origin CXX), default)
-    CXX = g++
-  endif
-  ifeq ($(origin AR), default)
-    AR = ar
-  endif
-  RESCOMP = windres
-  TARGETDIR = ../bin/linux-x86_64/Release/Bolt-Test
-  TARGET = $(TARGETDIR)/Bolt-Test
-  OBJDIR = ../bin/int/linux-x86_64/Release/Bolt-Test
-  DEFINES +=
-  INCLUDES += -Iinclude -I../Bolt-Core/include
-  FORCE_INCLUDE +=
-  ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -g
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -g -std=c++20
-  ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../bin/linux-x86_64/Release/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Release/Bolt-imgui/libBolt-imgui.a -lglfw -lfreetype
-  LDDEPS += ../bin/linux-x86_64/Release/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Release/Bolt-imgui/libBolt-imgui.a
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
-  LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
-  define PREBUILDCMDS
-  endef
-  define PRELINKCMDS
-  endef
-  define POSTBUILDCMDS
-  endef
-all: prebuild prelink $(TARGET)
-	@:
-
-endif
-
-OBJECTS := \
-	$(OBJDIR)/ImGuiConfig.o \
-	$(OBJDIR)/ImGuiFilePicker.o \
-	$(OBJDIR)/ImGuiInfo.o \
-	$(OBJDIR)/MeshParser.o \
-	$(OBJDIR)/main.o \
-
-RESOURCES := \
-
-CUSTOMFILES := \
+.PHONY: clean prebuild
 
 SHELLTYPE := posix
-ifeq (.exe,$(findstring .exe,$(ComSpec)))
+ifeq ($(shell echo "test"), "test")
 	SHELLTYPE := msdos
 endif
 
-$(TARGET): $(GCH) ${CUSTOMFILES} $(OBJECTS) $(LDDEPS) $(RESOURCES) | $(TARGETDIR)
+# Configurations
+# #############################################
+
+ifeq ($(origin CC), default)
+  CC = gcc
+endif
+ifeq ($(origin CXX), default)
+  CXX = g++
+endif
+ifeq ($(origin AR), default)
+  AR = ar
+endif
+RESCOMP = windres
+INCLUDES += -Iinclude -I../Bolt-Core/include
+FORCE_INCLUDE +=
+ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
+ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
+LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
+define PREBUILDCMDS
+endef
+define PRELINKCMDS
+endef
+define POSTBUILDCMDS
+endef
+
+ifeq ($(config),debug)
+TARGETDIR = ../bin/linux-x86_64/Debug/Bolt-Test
+TARGET = $(TARGETDIR)/Bolt-Test
+OBJDIR = ../bin/int/linux-x86_64/Debug/Bolt-Test
+DEFINES += -DBT_ENABLE_DEBUG
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++20
+LIBS += ../bin/linux-x86_64/Debug/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Debug/Bolt-imgui/libBolt-imgui.a -lglfw -lfreetype
+LDDEPS += ../bin/linux-x86_64/Debug/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Debug/Bolt-imgui/libBolt-imgui.a
+
+else ifeq ($(config),release)
+TARGETDIR = ../bin/linux-x86_64/Release/Bolt-Test
+TARGET = $(TARGETDIR)/Bolt-Test
+OBJDIR = ../bin/int/linux-x86_64/Release/Bolt-Test
+DEFINES +=
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -g
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -g -std=c++20
+LIBS += ../bin/linux-x86_64/Release/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Release/Bolt-imgui/libBolt-imgui.a -lglfw -lfreetype
+LDDEPS += ../bin/linux-x86_64/Release/Bolt-Core/libBolt-Core.a ../bin/linux-x86_64/Release/Bolt-imgui/libBolt-imgui.a
+
+endif
+
+# Per File Configurations
+# #############################################
+
+
+# File sets
+# #############################################
+
+GENERATED :=
+OBJECTS :=
+
+GENERATED += $(OBJDIR)/ImGuiConfig.o
+GENERATED += $(OBJDIR)/ImGuiFilePicker.o
+GENERATED += $(OBJDIR)/ImGuiInfo.o
+GENERATED += $(OBJDIR)/MeshParser.o
+GENERATED += $(OBJDIR)/main.o
+OBJECTS += $(OBJDIR)/ImGuiConfig.o
+OBJECTS += $(OBJDIR)/ImGuiFilePicker.o
+OBJECTS += $(OBJDIR)/ImGuiInfo.o
+OBJECTS += $(OBJDIR)/MeshParser.o
+OBJECTS += $(OBJDIR)/main.o
+
+# Rules
+# #############################################
+
+all: $(TARGET)
+	@:
+
+$(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
+	$(PRELINKCMDS)
 	@echo Linking Bolt-Test
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
-
-$(CUSTOMFILES): | $(OBJDIR)
 
 $(TARGETDIR):
 	@echo Creating $(TARGETDIR)
@@ -125,44 +116,53 @@ clean:
 	@echo Cleaning Bolt-Test
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
+	$(SILENT) rm -rf $(GENERATED)
 	$(SILENT) rm -rf $(OBJDIR)
 else
 	$(SILENT) if exist $(subst /,\\,$(TARGET)) del $(subst /,\\,$(TARGET))
+	$(SILENT) if exist $(subst /,\\,$(GENERATED)) del /s /q $(subst /,\\,$(GENERATED))
 	$(SILENT) if exist $(subst /,\\,$(OBJDIR)) rmdir /s /q $(subst /,\\,$(OBJDIR))
 endif
 
-prebuild:
+prebuild: | $(OBJDIR)
 	$(PREBUILDCMDS)
 
-prelink: $(OBJECTS)
-	$(PRELINKCMDS)
-
 ifneq (,$(PCH))
-$(OBJECTS): $(GCH) $(PCH) | $(OBJDIR)
-$(GCH): $(PCH) | $(OBJDIR)
+$(OBJECTS): $(GCH) | $(PCH_PLACEHOLDER)
+$(GCH): $(PCH) | prebuild
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) -x c++-header $(ALL_CXXFLAGS) -o "$@" -MF "$(@:%.gch=%.d)" -c "$<"
+$(PCH_PLACEHOLDER): $(GCH) | $(OBJDIR)
+ifeq (posix,$(SHELLTYPE))
+	$(SILENT) touch "$@"
 else
-$(OBJECTS): | $(OBJDIR)
+	$(SILENT) echo $null >> "$@"
+endif
+else
+$(OBJECTS): | prebuild
 endif
 
+
+# File Rules
+# #############################################
+
 $(OBJDIR)/ImGuiConfig.o: src/ImGuiConfig.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ImGuiFilePicker.o: src/ImGuiFilePicker.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ImGuiInfo.o: src/ImGuiInfo.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/MeshParser.o: src/MeshParser.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/main.o: src/main.cpp
-	@echo $(notdir $<)
+	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)
 ifneq (,$(PCH))
-  -include $(OBJDIR)/$(notdir $(PCH)).d
+  -include $(PCH_PLACEHOLDER).d
 endif

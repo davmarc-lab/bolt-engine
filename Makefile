@@ -15,14 +15,17 @@ ifeq ($(config),debug)
   Bolt_Test_config = debug
   Bolt_Hermite_config = debug
   Bolt_Pong_config = debug
-endif
-ifeq ($(config),release)
+
+else ifeq ($(config),release)
   Bolt_Graphics_config = release
   Bolt_imgui_config = release
   Bolt_Core_config = release
   Bolt_Test_config = release
   Bolt_Hermite_config = release
   Bolt_Pong_config = release
+
+else
+  $(error "invalid configuration $(config)")
 endif
 
 PROJECTS := Bolt-Graphics Bolt-imgui Bolt-Core Bolt-Test Bolt-Hermite Bolt-Pong

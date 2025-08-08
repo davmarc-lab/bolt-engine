@@ -31,7 +31,7 @@ std::vector<vec4> axisColors{
 };
 
 vec4 pointColor = {0, 0, 0, 1};
-vec4 curveColor = {1, 0, 0, 1};
+vec4 curveColor = {1, 0, 0, 0.4};
 
 i32 currentPointIndex = -1;
 
@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
 
 		herm->render.setCall([herm]() {
 			glLineWidth(2.f);
-			RenderApi::instance()->getRenderer()->drawArrays(herm->vao, GL_LINE_STRIP, 0, herm->vertices.size());
+			RenderApi::instance()->getRenderer()->drawArrays(herm->vao, GL_TRIANGLE_FAN, 0, herm->vertices.size());
 		});
 
 		herm->instanced = true;
@@ -236,13 +236,33 @@ int main(int argc, char *argv[]) {
 				EventDispatcher::instance()->post(UpdateHermite);
 			}
 		});
+		EventDispatcher::instance()->subscribe(HermReflectPointsX, [points](auto p) {
+			if (points->vertices.size() >= 3) {
+				auto size = points->vertices.size();
+				for (auto i = size - 1; i > 0; i--) {
+					points->vertices.push_back(points->vertices[i] * vec3(1, -1, 1));
+					points->colorComponent.colors.push_back(points->colorComponent.colors.at(0));
+				}
+				EventDispatcher::instance()->post(UpdateHermite);
+			}
+		});
+		EventDispatcher::instance()->subscribe(HermReflectPointsY, [points](auto p) {
+			if (points->vertices.size() >= 3) {
+				auto size = points->vertices.size();
+				for (auto i = size - 1; i > 0; i--) {
+					points->vertices.push_back(points->vertices[i] * vec3(-1, 1, 1));
+					points->colorComponent.colors.push_back(points->colorComponent.colors.at(0));
+				}
+				EventDispatcher::instance()->post(UpdateHermite);
+			}
+		});
 		EventDispatcher::instance()->subscribe(HermSaveMesh, [points](auto p) {
 			// write to file (defaultFile)
 			std::ofstream file(defaultFile);
 			for (auto v : points->vertices) {
 				file << v.x << " " << v.y << " " << v.z << "\n";
 			}
-            std::cout << "Done\n";
+			std::cout << "Done\n";
 			file.close();
 		});
 		EventDispatcher::instance()->subscribe(HermOpenMesh, [points](auto p) {
@@ -350,7 +370,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	});
-	
+
 	TextHelper h{};
 	h.position = {0, 0};
 	h.color = {1, 0, 0};
